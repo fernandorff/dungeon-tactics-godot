@@ -23,7 +23,7 @@ func _initialize() -> void:
 	for a in OS.get_cmdline_user_args():
 		filter = a
 	var started := Time.get_ticks_msec()
-	for suite in [GoldenTests, UnitTests, CrawlTests, EquipmentTests, GameTests, SoundTests, MapTests]:
+	for suite in [GoldenTests, UnitTests, CrawlTests, EquipmentTests, GameTests, SoundTests, SettingsTests, MapTests]:
 		for m in suite.new().get_method_list():
 			var name: String = m.name
 			if not name.begins_with("test_") or (filter != "" and not name.contains(filter)):
