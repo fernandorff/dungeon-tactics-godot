@@ -209,3 +209,17 @@ func test_heroes_play_through_the_menu() -> String:
 			Command.cancel_step(b, {"k": "facing"})
 			b.end_turn()
 	return "" if b.over() else "no end in 300 turns"
+
+
+## Agir stays on the menu with both actions spent, greyed like a spent Move (Fernando, Nov 21)
+func test_act_greys_out_when_spent() -> String:
+	var b := Battle.start(Half.halve(Content.scenarios[Content.data.first_battle]), 9)
+	if not Command.enabled(b, "act"):
+		return "Agir greyed with both actions free"
+	b.state.turn.main = "strike"
+	if not Command.enabled(b, "act"):
+		return "Agir greyed with the bonus still free"
+	b.state.turn.bonus = "ether"
+	if Command.enabled(b, "act") or not Command.menu_rows(b).has("act"):
+		return "Agir must stay, greyed, with no action left"
+	return ""

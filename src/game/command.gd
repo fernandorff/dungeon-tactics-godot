@@ -37,6 +37,9 @@ static func enabled(b: Battle, c: String) -> bool:
 		return b.reach().size() > 0
 	if c == "undo":
 		return can_undo_move(b)
+	# greyed like Move once no action is left, and choosing it says no (Fernando, Nov 21; it used to open to look)
+	if c == "act":
+		return can_act(b)
 	return true
 
 
