@@ -54,9 +54,10 @@ static func put(k: String, v: String) -> void:
 ## missing or broken text = null; each reader rebuilds what it gets
 static func json(k: String) -> Variant:
 	var s := get_key(k)
-	if s == "":
+	var j := JSON.new() # its parse only returns the error: JSON.parse_string also logs one for every broken save
+	if s == "" or j.parse(s) != OK:
 		return null
-	return Util.ints(JSON.parse_string(s))
+	return Util.ints(j.data)
 
 
 static func _flush() -> void:
