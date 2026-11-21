@@ -12,7 +12,7 @@ func _ready() -> void:
 	Content.ensure()
 	_input_map()
 	Sound.attach(self)
-	OptionsWindow.load_volume()
+	Sound.load_levels()
 	set_anchors_and_offsets_preset(PRESET_FULL_RECT)
 	var args := OS.get_cmdline_user_args()
 	var i := args.find("--shot")
