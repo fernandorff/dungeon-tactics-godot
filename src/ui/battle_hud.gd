@@ -6,7 +6,9 @@ extends Control
 
 var screen_ref: BattleScreen
 var _turns: VBoxContainer
-var _card: Label
+var _card: VBoxContainer
+var _height: Label
+var _tile: Label
 var _menu: VBoxContainer
 var _menu_title: Label
 var _info: Label
@@ -22,15 +24,14 @@ func _ready() -> void:
 	tl.add_child(Kit.label(Texts.t("Ordem dos turnos", "Turn order"), 14, Kit.MUTED))
 	_turns = VBoxContainer.new()
 	tl.add_child(_turns)
-	var card := Kit.panel(self, Vector2(16, -16), Vector2(330, 0), PRESET_BOTTOM_LEFT)
-	_card = Kit.label("", 16)
-	card.add_child(_card)
-	var menu := Kit.panel(self, Vector2(-16, 120), Vector2(360, 0), PRESET_TOP_RIGHT)
+	_card = Kit.panel(self, Vector2(16, -16), Vector2(330, 0), PRESET_BOTTOM_LEFT)
+	# the menu by the bottom right, as the web game's; the top right keeps the map's name and the tile under the cursor
+	var menu := Kit.panel(self, Vector2(-16, -16), Vector2(360, 0), PRESET_BOTTOM_RIGHT)
 	_menu_title = Kit.label("", 15, Kit.MUTED)
 	menu.add_child(_menu_title)
 	_menu = VBoxContainer.new()
 	menu.add_child(_menu)
-	var info := Kit.panel(self, Vector2(0, -16), Vector2(620, 0), PRESET_CENTER_BOTTOM)
+	var info := Kit.panel(self, Vector2(-10, -16), Vector2(500, 0), PRESET_CENTER_BOTTOM)
 	_info = Kit.label("", 15)
 	info.add_child(_info)
 	_log = Kit.label("", 14, Kit.ACCENT)
@@ -43,47 +44,36 @@ func _ready() -> void:
 	top.add_child(title)
 	var pause := Kit.button(Texts.t("Menu (Esc)", "Menu (Esc)"), open_pause)
 	top.add_child(pause)
+	var where := Kit.panel(self, Vector2(-16, 132), Vector2(360, 0), PRESET_TOP_RIGHT)
+	_height = Kit.label("", 30, Kit.ACCENT)
+	where.add_child(_height)
+	_tile = Kit.label("", 14)
+	where.add_child(_tile)
 
 
 func refresh() -> void:
 	if screen_ref == null or _turns == null:
 		return
 	var b := screen_ref.battle
-	(find_child("Title", true, false) as Label).text = Texts.t(screen_ref.scenario.get("name", ""), screen_ref.scenario.get("en", ""))
+	var name := Texts.t(screen_ref.scenario.get("name", ""), screen_ref.scenario.get("en", ""))
+	if String(screen_ref.scenario.get("id", "")).begins_with(Survival.ID):
+		name += Texts.t(" · amanhece em %d turnos", " · dawn in %d turns") % Survival.turns_left(b.state)
+	(find_child("Title", true, false) as Label).text = name
+	var at: Vector2i = screen_ref.cursor
+	if b.grid.in_bounds(at):
+		_height.text = Texts.t("Altura %d", "Height %d") % HudBits.tile_height(b.grid, at)
+		_tile.text = HudBits.tile_info(b.grid, at)
 	for c in _turns.get_children():
 		c.queue_free()
-	for e in TurnQueue.preview_order(b.state, 8):
+	for e in TurnQueue.preview_order(b.state, 6):
 		var u := Combat.find_unit(b.state, e.unit)
 		if u.is_empty():
 			continue
-		var col: Color = Kit.HERO if u.team == "hero" else Kit.FOE
-		var ab: String = e.get("ability", "")
-		var line := "%s  %d/%d" % [Texts.unit_name(u.def), u.hp, Content.units[u.def].hp]
-		if ab != "":
-			line = "⏳ %s: %s" % [Texts.unit_name(u.def), Texts.ability_name(ab)]
-		_turns.add_child(Kit.label(line, 14, col))
+		_turns.add_child(HudBits.turn_entry(u, e.get("ability", "")))
 	if not b.over():
-		_card.text = _card_text(b.actor())
+		HudBits.card(_card, b.actor(), b.state.turn)
 	_log.text = screen_ref.last_log
 	_draw_menu()
-
-
-func _card_text(u: Dictionary) -> String:
-	var def: Dictionary = Content.units[u.def]
-	var cls := Roster.class_of(u.def)
-	var head := Texts.unit_name(u.def)
-	if cls != "":
-		head += " · " + Texts.unit_name(cls)
-	var lines: Array = [head, "%s %d/%d" % [Texts.t("Vida", "HP"), u.hp, def.hp]]
-	for k in Content.RESOURCES:
-		if def.get("vars", {}).get(k, 0):
-			lines.append("%s %d/%d" % ["Mana" if k == "mana" else "Stamina", Combat.pool_of(u, k), def.vars[k]])
-	var turn: Dictionary = screen_ref.battle.state.turn
-	var acts: Array = []
-	acts.append(Texts.t("principal ", "main ") + ("✗" if turn.main else "✓"))
-	acts.append(Texts.t("secundária ", "bonus ") + ("✗" if turn.bonus else "✓"))
-	lines.append(" · ".join(acts))
-	return "\n".join(lines)
 
 
 func _row(text: String, on: bool, focused: bool, note: String, pick: Callable, hover: Callable) -> void:

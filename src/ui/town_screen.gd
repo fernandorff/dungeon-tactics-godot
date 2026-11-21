@@ -37,7 +37,7 @@ func _ready() -> void:
 	vp.add_child(view)
 	_name_people()
 	view.build(sc.grid, st)
-	view.zoom = 0.7
+	view.zoom = 0.95
 	for p in TownMap.town().places:
 		var l := Label3D.new()
 		l.text = Texts.t(p.name[0], p.name[1])

@@ -167,6 +167,8 @@ func _open_shot(what: String) -> void:
 			expedition_map()
 		"act":
 			skirmish(Content.data.first_battle)
+		"dawn":
+			survival()
 		_:
 			title()
 	await get_tree().create_timer(2.5).timeout
