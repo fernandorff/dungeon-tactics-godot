@@ -156,7 +156,9 @@ func survival() -> void:
 	show_screen(s)
 
 
-func _open_shot(what: String) -> void:
+func _open_shot(shot: String) -> void:
+	# "map+ui_right+ui_accept": the screen, then the actions pressed one by one before the picture
+	var what := shot.get_slice("+", 0)
 	match what:
 		"title":
 			title()
@@ -173,6 +175,22 @@ func _open_shot(what: String) -> void:
 			Saves.new_game(1)
 			CrawlFlow.depart(7)
 			expedition_map()
+		"trail":
+			# a descent under way: the first floor's room that leads to the chest cleared, the chest in reach
+			Saves.new_game(1)
+			var e := CrawlFlow.depart(7)
+			var m := Expedition.map_of(e.seed)
+			for i in Expedition.open_nodes(m, []):
+				if m[i].next.any(func(k: int) -> bool: return m[k].chest):
+					e = Expedition.win_room(e, i, {})
+			Store.set_key(Saves.CRAWL_KEY, JSON.stringify(e))
+			expedition_map()
+		"lost":
+			# a room left mid-fight: the town says the expedition was lost
+			Saves.new_game(1)
+			CrawlFlow.depart(7)
+			Store.set_key(Saves.ROOM_KEY, "{}")
+			home()
 		"act", "esc":
 			skirmish(Content.data.first_battle)
 		"dawn":
@@ -187,6 +205,15 @@ func _open_shot(what: String) -> void:
 		bs.choose(Command.index_of("act"))
 		bs.key("confirm")
 		await get_tree().create_timer(0.8).timeout
+	for a in shot.split("+").slice(1):
+		var ev := InputEventAction.new()
+		ev.action = a
+		ev.pressed = true
+		Input.parse_input_event(ev)
+		var up := ev.duplicate() # buttons act on the release
+		up.pressed = false
+		Input.parse_input_event(up)
+		await get_tree().create_timer(0.4).timeout
 	if what == "esc" and _screen is BattleScreen:
 		(_screen as BattleScreen).key("cancel")
 		await get_tree().create_timer(0.5).timeout

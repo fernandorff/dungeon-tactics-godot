@@ -200,3 +200,25 @@ func test_map_command_text() -> String:
 	var e := Util.diff(MapLayout.command_text("Travel", "", false), {"plaque": "Travel", "help": ""}, "plain")
 	e += Util.diff(MapLayout.command_text("Travel", "off", false), {"plaque": "Travel", "help": "Travel: off"}, "off")
 	return e + Util.diff(MapLayout.command_text("Confirm: ends it", "", true), {"plaque": "Confirm", "help": "Confirm: ends it"}, "armed")
+
+
+func test_map_facts() -> String:
+	var was := Texts.lang
+	Texts.lang = "en"
+	var map := Expedition.map_of(77)
+	var lead := _lead(map)
+	var chest: int = map[lead].next.filter(func(c: int) -> bool: return map[c].chest)[0]
+	var f := MapFacts.facts_of(map, chest, "open", lead)
+	var e := Util.diff(f.name, "Chest", "chest name")
+	e += Util.diff(f.facts[0], ["Battle", "none: the party walks to the chest"], "chest battle")
+	var lo := int(Expedition.run().chest[0])
+	var hi := int(Expedition.run().chest[1])
+	e += Util.diff(f.facts[1][1], "%d to %d gold" % [lo, hi], "chest reward")
+	var room := MapFacts.facts_of(map, lead, "cleared", lead)
+	e += Util.diff(room.facts[1][1], "%d gold, already found" % Expedition.node_gold(map[lead]), "cleared reward")
+	e += Util.diff(room.facts[2][1], "cleared · the party is here · leads to the chest", "cleared way")
+	var boss := map.size() - 1
+	e += Util.diff(MapFacts.facts_of(map, boss, "ahead", -1).facts[2][1], "opens after the one before · beating it ends the expedition", "boss way")
+	e += Util.diff([MapFacts.mark(map[boss], "ahead"), MapFacts.mark(map[chest], "open"), MapFacts.mark(map[lead], "cleared"), MapFacts.mark(map[lead], "skipped")], ["", "", "✓", "✕"], "marks")
+	Texts.lang = was
+	return e
