@@ -162,3 +162,21 @@ func _act_read(b: Battle, want: Dictionary, label: String) -> String:
 		if d != "":
 			return d
 	return ""
+
+
+## the AI's plan with one ability alone (Shove, Throw sand, Focus, Shield bash): the same score and choice as the web AI
+func test_ai_abilities() -> String:
+	var probes: Array = Util.load_json("res://tests/golden/ai_abilities.json")
+	for i in probes.size():
+		var r: Dictionary = probes[i]
+		var sc := _scenario(r.scenario)
+		var state: Dictionary = Util.vecs(r.state)
+		var def: Dictionary = Content.units[Combat.find_unit(state, state.turn.actor).def]
+		var all: Array = def.abilities
+		def.abilities = [r.ability]
+		var plan := Ai.choose_turn(sc.grid, state, state.turn.actor)
+		def.abilities = all
+		var d := Util.diff(Util.plain(plan), r.plan, "%s probe %d %s" % [r.scenario, i, r.ability])
+		if d != "":
+			return d
+	return ""

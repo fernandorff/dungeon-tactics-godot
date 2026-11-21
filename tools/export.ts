@@ -158,4 +158,34 @@ for (const sc of scen.MAPS.slice(0, 4)) {
   }
 }
 writeFileSync(resolve(golden, 'reads.json'), JSON.stringify(reads));
+
+// the AI's plan with one ability alone, for the abilities the AI battles above rarely or never pick (Nov 21: Shove, Throw
+// sand, Focus and the stunning Shield bash): the unit's list is narrowed in memory only, so the score of each shows
+const PROBED = ['shove', 'sand', 'focus', 'shield_bash'];
+const unitsMod = await mod('src/shared/battle/units.ts');
+const aiPlans: unknown[] = [];
+const seen = new Map<string, number>();
+for (const sc of scen.MAPS) {
+  const h = half.halve(sc);
+  const b = battleMod.Battle.start(h, 5);
+  while (!b.over && b.state.turnsPlayed < 200) {
+    const def = unitsMod.UNIT_DEFS[b.actor.def];
+    const probed = def.abilities.filter((a: string) => PROBED.includes(a) && (seen.get(a) ?? 0) < 5);
+    // only a unit in melee: a foe within 4 cells (2 whole tiles), so a range-1 ability can land after a short walk
+    const me = b.actor;
+    const engaged = b.state.units.some(
+      (u: { team: string; pos: { x: number; y: number } }) =>
+        u.team !== me.team && Math.max(Math.abs(u.pos.x - me.pos.x), Math.abs(u.pos.y - me.pos.y)) <= 4,
+    );
+    for (const id of engaged ? probed : []) {
+      seen.set(id, (seen.get(id) ?? 0) + 1);
+      const all = def.abilities;
+      def.abilities = [id];
+      aiPlans.push({ scenario: h.id, state: structuredClone(b.state), ability: id, plan: ai.chooseTurn(b.grid, b.state, b.actor.id) });
+      def.abilities = all;
+    }
+    ai.playAiTurn(b);
+  }
+}
+writeFileSync(resolve(golden, 'ai_abilities.json'), JSON.stringify(aiPlans));
 console.log('content and golden files written');
