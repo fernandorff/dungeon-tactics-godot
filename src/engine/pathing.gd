@@ -96,19 +96,6 @@ static func gap(a: Array[Vector2i], b: Array[Vector2i]) -> int:
 	return Grid.dist(c[0], c[1])
 
 
-## ranges and radii in whole tiles, measured in cells on the split map
-static func far_cells(g: Grid, r: int) -> int:
-	return 0 if r <= 0 else g.sub * (r - 1) + 1
-
-
-static func near_cells(g: Grid, r: int) -> int:
-	return maxi(r, g.sub * (r - 1))
-
-
-static func whole_tiles(g: Grid, d: int) -> int:
-	return Util.ceil_div(d + g.sub - 1, g.sub)
-
-
 static func area_of(grid: Grid, state: Dictionary, center: Vector2i) -> Array[Vector2i]:
 	if grid.sub == 1:
 		return [center]
@@ -132,7 +119,7 @@ static func aim_ends(grid: Grid, state: Dictionary, actor: Dictionary, center: V
 
 
 static func in_area(grid: Grid, area: Array[Vector2i], radius: int, cells: Array[Vector2i]) -> bool:
-	return gap(area, cells) <= far_cells(grid, radius)
+	return gap(area, cells) <= Reach.far_cells(grid, radius)
 
 
 ## the unit standing on `p` (any cell of its body), or an empty Dictionary
@@ -407,13 +394,3 @@ static func reachable(grid: Grid, state: Dictionary, unit_id: String, budget: in
 static func path_to(reach: Dictionary, target: Vector2i) -> Variant:
 	var s: Variant = reach.get(Grid.pos_key(target))
 	return s.path if s != null else null
-
-
-static func max_range(grid: Grid, ability: Dictionary, from: Vector2i, to: Vector2i) -> int:
-	var up := maxi(0, Grid.stand_h(grid.tile(from)) - Grid.stand_h(grid.tile(to))) if ability.heightRange else 0
-	return far_cells(grid, ability.range[1] + up)
-
-
-static func in_ability_range(grid: Grid, ability: Dictionary, from: Vector2i, to: Vector2i) -> bool:
-	var d := Grid.dist(from, to)
-	return d >= near_cells(grid, ability.range[0]) and d <= max_range(grid, ability, from, to)

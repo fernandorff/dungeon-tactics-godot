@@ -6,7 +6,7 @@ content and behaviour are copied here, and the tests prove the copy plays the sa
 ## Rules
 
 - **Typed GDScript** everywhere (`var x: int`, typed returns). Static rule classes with `class_name` (no autoloads for logic).
-- **Everything in English**: code, comments, commits. Player text stays bilingual through `Tr.t("português", "English")`.
+- **Everything in English**: code, comments, commits. Player text stays bilingual through `Texts.t("português", "English")`.
 - **Comments explain why**, in one short line; the port keeps the web game's reasons where they still apply.
 - **Content is data**: never hand-copy numbers; run `node tools/export.ts ../dungeon-tactics` to refresh `data/content.json`.
 - **Determinism**: battle randomness only through `Rng` with its state in the battle state, in the web game's order.

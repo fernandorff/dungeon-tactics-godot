@@ -12,12 +12,16 @@ must give the same events, turn by turn.
 ```sh
 node tools/export.ts ../dungeon-tactics   # content (data/content.json) and reference runs (tests/golden) from the web game
 sh tools/test.sh [filter]                  # headless tests (GODOT=path to the Godot 4.7.2 executable)
+godot --path .                             # play: title, town, expedition, rooms, quick battles, Until Dawn
+godot --path . -- --shot town out.png      # one screenshot of a screen (title, town, map, room, battle, act), then quit
 ```
 
 ## Layout
 
 - `src/engine/`: the battle rules (grid, half tiles, pathing, combat, shots, pushes, counters, turn queue, AI, items, saves).
 - `src/crawl/`: the procedural rooms and the expedition.
+- `src/game/`: the screens' rules without nodes (saves, party, chest, expedition flow, the turn menu, the town walk).
+- `src/ui/`: the screens, built in code: simple 3D (boxes for tiles, capsules for units) and Control panels.
 - `src/content.gd`: the game's data, read from `data/content.json`.
 - `tests/`: the golden replays and unit tests.
 

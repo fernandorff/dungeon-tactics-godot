@@ -96,7 +96,7 @@ static func in_deep(grid: Grid, u: Dictionary) -> bool:
 static func hit_chance(grid: Grid, ability: Dictionary, from: Vector2i, to: Vector2i, side: String = "front") -> int:
 	if is_heal(ability):
 		return 100
-	var d := Pathing.whole_tiles(grid, Grid.dist(from, to))
+	var d := Reach.whole_tiles(grid, Grid.dist(from, to))
 	var dh := Grid.stand_h(grid.tile(from)) - Grid.stand_h(grid.tile(to))
 	var cover := COVER_PENALTY if d > 1 and Grid.cover(grid.tile(to)) else 0
 	var flank := BACK_BONUS if side == "back" else (SIDE_BONUS if side == "side" else 0)
@@ -189,7 +189,7 @@ static func preview(grid: Grid, state: Dictionary, actor_id: String, ability_id:
 	if not charged and in_deep(grid, actor):
 		return _fail("water", center)
 	var ends := Pathing.aim_ends(grid, state, actor, center)
-	if not Pathing.in_ability_range(grid, ability, ends[0], ends[1]):
+	if not Reach.in_ability_range(grid, ability, ends[0], ends[1]):
 		return _fail("range", center)
 	var shot: Variant = Shot.trace(grid, state, actor, center, ability.get("arc", false)) if ability.needsSight else null
 	var stop: Variant = shot.stop if shot != null else null

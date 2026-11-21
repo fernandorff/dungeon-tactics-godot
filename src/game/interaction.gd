@@ -77,7 +77,7 @@ static func threat(b: Battle, unit_id: String) -> Array:
 			for s in spots:
 				var ends := Pathing.closest(Pathing.cells_of(s, size), area)
 				for a in def.abilities:
-					if Pathing.in_ability_range(b.grid, Content.abilities[a], ends[0], ends[1]):
+					if Reach.in_ability_range(b.grid, Content.abilities[a], ends[0], ends[1]):
 						hit = true
 						break
 				if hit:

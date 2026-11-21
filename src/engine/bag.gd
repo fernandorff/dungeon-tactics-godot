@@ -22,7 +22,7 @@ static func item_effect(grid: Grid, state: Dictionary, id: String, item: String,
 	var moved: Dictionary = actor.duplicate()
 	moved.pos = origin if origin != null else actor.pos
 	var from := Pathing.footprint(moved)
-	if u.id != id and Pathing.gap(from, Pathing.footprint(u)) > Pathing.far_cells(grid, Content.data.item_range):
+	if u.id != id and Pathing.gap(from, Pathing.footprint(u)) > Reach.far_cells(grid, Content.data.item_range):
 		return {}
 	return _effect_on(Content.consumable[item], u)
 

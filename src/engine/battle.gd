@@ -192,6 +192,8 @@ func save() -> String:
 
 ## a save may be old, edited or broken: any doubt returns null
 static func load_save(json: String) -> Battle:
+	if json == "":
+		return null
 	var raw: Variant = JSON.parse_string(json)
 	if typeof(raw) != TYPE_DICTIONARY:
 		return null

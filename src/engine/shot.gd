@@ -51,7 +51,7 @@ static func trace(grid: Grid, state: Dictionary, shooter: Dictionary, center: Ve
 	var fall := 0.0
 	if arc:
 		var ae := Pathing.aim_ends(grid, state, shooter, center)
-		var tiles := Pathing.whole_tiles(grid, Grid.dist(ae[0], ae[1]))
+		var tiles := Reach.whole_tiles(grid, Grid.dist(ae[0], ae[1]))
 		var top: float = maxf(from.h, to.h) + mini(3, maxi(1, tiles / 3))
 		var d: float = top - from.h
 		var e: float = top - to.h

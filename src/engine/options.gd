@@ -50,7 +50,7 @@ static func action_options(grid: Grid, state: Dictionary, id: String) -> Array:
 		if origins.is_empty():
 			result.append({"ability": ability_id, "enabled": false, "reason": "water", "targets": []})
 			continue
-		var far: int = Pathing.far_cells(grid, a.range[1] + (span if a.heightRange else 0)) + slack
+		var far: int = Reach.far_cells(grid, a.range[1] + (span if a.heightRange else 0)) + slack
 		var found := {}
 		var blocked := false
 		var unwanted := false
@@ -62,7 +62,7 @@ static func action_options(grid: Grid, state: Dictionary, id: String) -> Array:
 			found[key].spots.append({"pos": o.pos, "cost": o.cost, "preview": p})
 		var centered: bool = a.range[1] == 0
 		var ground := {}
-		var r := Pathing.far_cells(grid, a.radius)
+		var r := Reach.far_cells(grid, a.radius)
 		if not centered and a.radius > 0:
 			for u in state.units:
 				var end: int = r + Pathing.size_of(u.def) - 1

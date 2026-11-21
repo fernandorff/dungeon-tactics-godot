@@ -23,7 +23,7 @@ static func can_counter(actor: Dictionary, ability_id: String, u: Dictionary) ->
 
 static func in_contact(grid: Grid, state: Dictionary, foe: Dictionary, pos: Vector2i) -> bool:
 	var e := Pathing.aim_ends(grid, state, foe, pos)
-	return Grid.dist(e[0], e[1]) < Pathing.near_cells(grid, Content.abilities[basic_of(foe.def)].range[0])
+	return Grid.dist(e[0], e[1]) < Reach.near_cells(grid, Content.abilities[basic_of(foe.def)].range[0])
 
 
 ## the counters a move of the actor to `to` owes: [{unit, at, preview}]
