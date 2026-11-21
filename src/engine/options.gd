@@ -44,13 +44,14 @@ static func action_options(grid: Grid, state: Dictionary, id: String) -> Array:
 		if state.turn.actor == id and Slots.slot_for(state.turn, a) == "":
 			result.append({"ability": ability_id, "enabled": false, "reason": "used", "targets": []})
 			continue
-		if not Combat.can_pay(actor, a):
-			result.append({"ability": ability_id, "enabled": false, "reason": "spent", "pool": a.cost[0], "missing": a.cost[1] - Combat.pool_of(actor, a.cost[0]), "targets": []})
+		if not Pools.can_pay(actor, a):
+			result.append({"ability": ability_id, "enabled": false, "reason": "spent", "pool": a.cost[0], "missing": a.cost[1] - Pools.pool_of(actor, a.cost[0]), "targets": []})
 			continue
 		if origins.is_empty():
 			result.append({"ability": ability_id, "enabled": false, "reason": "water", "targets": []})
 			continue
-		var far: int = Reach.far_cells(grid, a.range[1] + (span if a.heightRange else 0)) + slack
+		# a melee reach is measured by the longer axis (Reach.is_melee): its diagonal is twice that in steps
+		var far: int = (Reach.far_cells(grid, a.range[1] + (span if a.heightRange else 0)) + slack) * (2 if Reach.is_melee(a) else 1)
 		var found := {}
 		var blocked := false
 		var unwanted := false

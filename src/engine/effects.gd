@@ -1,6 +1,7 @@
 class_name Effects
-## Timed effects from items (port of effects.ts): Fire oil and Stone potion change a unit's sheet for a few of its own turns.
-## The state keeps only who, which item and the turns left; what each gives is the item's `buff`.
+## Timed effects (port of effects.ts): Fire oil and Stone potion change a unit's sheet for a few of its own turns; since Nov 21
+## abilities leave them too (stun, sand, focus). The state keeps only who, which item or ability and the turns left; what
+## each gives is its `buff`.
 
 
 static func _buffs_of(state: Dictionary, id: String) -> Array:
@@ -33,19 +34,58 @@ static func hit_element(state: Dictionary, id: String) -> String:
 	return el
 
 
-## movement points this turn: the sheet's plus its effects' (x2 on the split map), never below 0
+## the % an effect field adds up to, from 100: 75 under sand, 125 focused
+static func _share(state: Dictionary, id: String, k: String) -> int:
+	var s := 100
+	for b in _buffs_of(state, id):
+		s += b.get(k, 0)
+	return s
+
+
+static func hit_share(state: Dictionary, id: String) -> int:
+	return _share(state, id, "accuracy")
+
+
+static func damage_share(state: Dictionary, id: String) -> int:
+	return _share(state, id, "damage")
+
+
+## stunned: no actions this turn, only walking or waiting
+static func stunned(state: Dictionary, id: String) -> bool:
+	for b in _buffs_of(state, id):
+		if b.get("stun", false):
+			return true
+	return false
+
+
+## movement points this turn: the sheet's plus its effects' (x2 on the split map), then their share (half when stunned,
+## 75% under sand), never below 0
 static func move_of(state: Dictionary, u: Dictionary) -> int:
 	var d: Dictionary = Content.units[u.def]
 	var scale := 2 if String(d.id).ends_with(Content.HALF) else 1
 	var extra := 0
 	for b in _buffs_of(state, u.id):
 		extra += b.get("move", 0)
-	return maxi(0, d.move + scale * extra)
+	var base := maxi(0, d.move + scale * extra)
+	return Util.floor_div(base * maxi(0, _share(state, u.id, "moveShare")), 100)
 
 
-static func add_effect(state: Dictionary, unit: String, item: String) -> void:
+## an attack spends the effects that last until it (Focus)
+static func spend_once(state: Dictionary, id: String) -> void:
+	var left: Array = []
+	for e in state.get("effects", []):
+		if e.unit != id or not Content.buffs.get(e.item, {}).get("once", false):
+			left.append(e)
+	if left.is_empty():
+		state.erase("effects")
+	else:
+		state.effects = left
+
+
+## false when the item or ability leaves no effect
+static func add_effect(state: Dictionary, unit: String, item: String) -> bool:
 	if not Content.buffs.has(item):
-		return
+		return false
 	var buff: Dictionary = Content.buffs[item]
 	var rest: Array = []
 	for e in state.get("effects", []):
@@ -53,6 +93,7 @@ static func add_effect(state: Dictionary, unit: String, item: String) -> void:
 			rest.append(e)
 	rest.append({"unit": unit, "item": item, "turns": buff.turns + (1 if unit == state.turn.actor else 0)})
 	state.effects = rest
+	return true
 
 
 static func tick_effects(state: Dictionary, actor: String) -> void:

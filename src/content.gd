@@ -36,6 +36,10 @@ static func ensure() -> void:
 		consumable[c.id] = c
 		if c.has("buff"):
 			buffs[c.id] = c.buff
+	# abilities leave timed effects too (Nov 21: stun, sand, focus), after the items as in effects.ts
+	for a in data.abilities:
+		if a.has("buff"):
+			buffs[a.id] = a.buff
 	for m in data.maps:
 		var sc := scenario_from(m)
 		scenarios[sc.id] = sc

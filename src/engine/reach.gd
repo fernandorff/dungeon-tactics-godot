@@ -21,6 +21,28 @@ static func max_range(grid: Grid, ability: Dictionary, from: Vector2i, to: Vecto
 	return far_cells(grid, ability.range[1] + up)
 
 
+## a melee ability (no flight, reach up to one tile) counts the 8 tiles around (Fernando, Nov 21): the king's distance
+static func is_melee(a: Dictionary) -> bool:
+	return not a.needsSight and a.range[1] <= 1
+
+
+static func king(p: Vector2i, q: Vector2i) -> int:
+	return maxi(absi(p.x - q.x), absi(p.y - q.y))
+
+
+## the nearest king's distance between two sets of cells (a melee area, the Spin)
+static func king_gap(a: Array, b: Array) -> int:
+	var best := 1 << 30
+	for p in a:
+		for q in b:
+			best = mini(best, king(p, q))
+	return best
+
+
+static func reach_dist(a: Dictionary, p: Vector2i, q: Vector2i) -> int:
+	return king(p, q) if is_melee(a) else Grid.dist(p, q)
+
+
 static func in_ability_range(grid: Grid, ability: Dictionary, from: Vector2i, to: Vector2i) -> bool:
-	var d := Grid.dist(from, to)
+	var d := reach_dist(ability, from, to)
 	return d >= near_cells(grid, ability.range[0]) and d <= max_range(grid, ability, from, to)

@@ -149,7 +149,7 @@ static func new_battle(scenario: Dictionary, seed: int, room: Variant = null) ->
 		if room.get("bag", {}).size():
 			b.state.bag = room.bag.duplicate()
 	# the first to act got its regen on the full pool: again on the carried ones
-	Combat.regen(b.actor())
+	Pools.regen(b.actor())
 	return b
 
 
@@ -168,7 +168,7 @@ static func settle_room(room: Dictionary, won: bool, state: Dictionary) -> Varia
 		var u := Combat.find_unit(state, spawn)
 		if not u.is_empty():
 			left[room.heroes[spawn].id] = u.hp
-			mana_left[room.heroes[spawn].id] = Combat.pool_of(u, "mana")
+			mana_left[room.heroes[spawn].id] = Pools.pool_of(u, "mana")
 	var next: Variant = Expedition.win_room(exp, room.node, left, mana_left, state.get("bag", {}).duplicate()) if won else null
 	var done: bool = next != null and Expedition.cleared(map, next.path)
 	var banked := 0

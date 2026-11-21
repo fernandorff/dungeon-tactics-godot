@@ -46,7 +46,7 @@ static func start_next_turn(grid: Grid, state: Dictionary) -> Array:
 		for s in slots:
 			if s.ct >= THRESHOLD:
 				state.turn = {"actor": s.id, "moved": false, "main": null, "bonus": null}
-				events.append_array(Combat.regen(Combat.find_unit(state, s.id)))
+				events.append_array(Pools.regen(Combat.find_unit(state, s.id)))
 				return events
 		var to_turn := Util.BIG
 		for s in slots:

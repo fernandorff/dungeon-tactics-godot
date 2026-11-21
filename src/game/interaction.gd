@@ -161,13 +161,13 @@ static func facing_highlights(b: Battle) -> Array:
 
 
 ## every cell of the whole tiles an area touches
-static func area_cells(grid: Grid, area: Array, radius: int) -> Array:
+static func area_cells(grid: Grid, area: Array, radius: int, square: bool = false) -> Array:
 	var k := grid.sub
 	var out: Array = []
 	for y in range(0, grid.height, k):
 		for x in range(0, grid.width, k):
 			var tile := Pathing.cells_of(Vector2i(x, y), k)
-			if Pathing.in_area(grid, area, radius, tile):
+			if Pathing.in_area(grid, area, radius, tile, square):
 				out.append_array(tile)
 	return out
 
@@ -176,7 +176,7 @@ static func area_cells(grid: Grid, area: Array, radius: int) -> Array:
 static func attack_marks(b: Battle, a: Dictionary, target: Vector2i) -> Array:
 	var out: Array = [{"pos": target, "kind": "target"}]
 	if a.radius > 0:
-		for p in area_cells(b.grid, Pathing.area_of(b.grid, b.state, Pathing.aim_tile(b.grid, b.state, target)), a.radius):
+		for p in area_cells(b.grid, Pathing.area_of(b.grid, b.state, Pathing.aim_tile(b.grid, b.state, target)), a.radius, Reach.is_melee(a)):
 			if p != target:
 				out.append({"pos": p, "kind": "area"})
 	return out
@@ -193,6 +193,6 @@ static func charge_danger(grid: Grid, state: Dictionary) -> Dictionary:
 			if shot.ok:
 				center = shot.center
 		var area := Pathing.area_of(grid, state, Pathing.aim_tile(grid, state, center))
-		for p in area_cells(grid, area, Content.abilities[c.ability].radius):
+		for p in area_cells(grid, area, Content.abilities[c.ability].radius, Reach.is_melee(Content.abilities[c.ability])):
 			out[Grid.pos_key(p)] = c.ability
 	return out

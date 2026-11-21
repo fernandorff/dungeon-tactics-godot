@@ -12,6 +12,7 @@
     "heavy_strike",
     "shield_bash",
     "spin",
+    "shove",
     "gust"
    ],
    "vars": {
@@ -38,6 +39,8 @@
     "shot",
     "aimed_shot",
     "knock_shot",
+    "sand",
+    "focus",
     "dagger",
     "gust"
    ],
@@ -545,7 +548,7 @@
     20,
     25
    ],
-   "push": 2,
+   "push": 0,
    "charge": 0,
    "heightRange": false,
    "needsSight": false,
@@ -557,9 +560,41 @@
     1
    ],
    "accuracy": 95,
+   "buff": {
+    "turns": 1,
+    "stun": true,
+    "moveShare": -50
+   },
    "cost": [
     "stamina",
     10
+   ]
+  },
+  {
+   "radius": 0,
+   "heal": [
+    0,
+    0
+   ],
+   "damage": [
+    0,
+    0
+   ],
+   "push": 1,
+   "charge": 0,
+   "heightRange": false,
+   "needsSight": false,
+   "id": "shove",
+   "name": "Empurrar",
+   "en": "Shove",
+   "range": [
+    1,
+    1
+   ],
+   "accuracy": 95,
+   "cost": [
+    "stamina",
+    5
    ]
   },
   {
@@ -668,6 +703,72 @@
    "cost": [
     "stamina",
     15
+   ]
+  },
+  {
+   "radius": 0,
+   "heal": [
+    0,
+    0
+   ],
+   "damage": [
+    0,
+    0
+   ],
+   "push": 0,
+   "charge": 0,
+   "heightRange": false,
+   "needsSight": false,
+   "id": "sand",
+   "name": "Jogar areia",
+   "en": "Throw sand",
+   "range": [
+    1,
+    1
+   ],
+   "accuracy": 90,
+   "buff": {
+    "turns": 1,
+    "accuracy": -25,
+    "moveShare": -25
+   },
+   "cost": [
+    "stamina",
+    5
+   ]
+  },
+  {
+   "radius": 0,
+   "heal": [
+    0,
+    0
+   ],
+   "damage": [
+    0,
+    0
+   ],
+   "push": 0,
+   "charge": 0,
+   "heightRange": false,
+   "needsSight": false,
+   "id": "focus",
+   "name": "Focar",
+   "en": "Focus",
+   "range": [
+    0,
+    0
+   ],
+   "accuracy": 100,
+   "ally": true,
+   "buff": {
+    "turns": 99,
+    "damage": 25,
+    "accuracy": 25,
+    "once": true
+   },
+   "cost": [
+    "stamina",
+    5
    ]
   },
   {

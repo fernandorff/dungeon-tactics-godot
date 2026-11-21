@@ -28,39 +28,6 @@ static func find_unit(state: Dictionary, id: String) -> Dictionary:
 	return {}
 
 
-## what a unit has left of a counter (mana, stamina): absent reads as the sheet's start value
-static func pool_of(u: Dictionary, k: String) -> int:
-	var v: Dictionary = u.get("vars", {})
-	if v.has(k):
-		return v[k]
-	return Content.units[u.def].get("vars", {}).get(k, 0)
-
-
-static func can_pay(u: Dictionary, a: Dictionary) -> bool:
-	return not a.has("cost") or pool_of(u, a.cost[0]) >= a.cost[1]
-
-
-static func pay(u: Dictionary, a: Dictionary) -> void:
-	if a.has("cost"):
-		var v: Dictionary = u.get("vars", {}).duplicate()
-		v[a.cost[0]] = pool_of(u, a.cost[0]) - a.cost[1]
-		u.vars = v
-
-
-## pools and life back at the start of each of the unit's turns, never above the sheet's max
-static func regen(u: Dictionary) -> Array:
-	var d: Dictionary = Content.units[u.def]
-	for k in d.get("regen", {}):
-		var v: Dictionary = u.get("vars", {}).duplicate()
-		v[k] = mini(d.get("vars", {}).get(k, 0), pool_of(u, k) + d.regen[k])
-		u.vars = v
-	var amount := mini(d.get("hpRegen", 0), d.hp - u.hp)
-	if amount <= 0:
-		return []
-	u.hp += amount
-	return [{"k": "regen", "unit": u.id, "amount": amount}]
-
-
 static func _with_power(state: Dictionary, actor: Dictionary, a: Dictionary) -> Array:
 	var d: Dictionary = Content.units[actor.def]
 	var p := 0
@@ -96,7 +63,7 @@ static func in_deep(grid: Grid, u: Dictionary) -> bool:
 static func hit_chance(grid: Grid, ability: Dictionary, from: Vector2i, to: Vector2i, side: String = "front") -> int:
 	if is_heal(ability):
 		return 100
-	var d := Reach.whole_tiles(grid, Grid.dist(from, to))
+	var d := Reach.whole_tiles(grid, Reach.reach_dist(ability, from, to))
 	var dh := Grid.stand_h(grid.tile(from)) - Grid.stand_h(grid.tile(to))
 	var cover := COVER_PENALTY if d > 1 and Grid.cover(grid.tile(to)) else 0
 	var flank := BACK_BONUS if side == "back" else (SIDE_BONUS if side == "side" else 0)
@@ -109,7 +76,7 @@ static func _affected(grid: Grid, state: Dictionary, actor: Dictionary, ability:
 		var area := Pathing.area_of(grid, state, center)
 		var out: Array = []
 		for u in state.units:
-			if u.id != actor.id and Pathing.in_area(grid, area, ability.radius, Pathing.footprint(u)):
+			if u.id != actor.id and Pathing.in_area(grid, area, ability.radius, Pathing.footprint(u), Reach.is_melee(ability)):
 				out.append(u)
 		return out
 	var u := Pathing.unit_at(state, center)
@@ -142,14 +109,22 @@ static func facing_side(actor: Dictionary, u: Dictionary) -> String:
 	return "front" if not u.has("facing") else Grid.side_of(c[1], Grid.FACING[u.facing], c[0])
 
 
+## a blow with no damage (the Shove, the sand) lands none; the attacker's effects' damage share applies (Focus, Nov 21)
 static func _landed(state: Dictionary, actor: Dictionary, a: Dictionary, u: Dictionary, roll: int, scale: float = 1.0) -> int:
-	var keep := _defence(state, actor, a, u)
+	if a.damage[1] == 0:
+		return 0
+	var keep := _defence(state, actor, a, u) * Effects.damage_share(state, actor.id)
 	var flank: int = 100 + Content.units[actor.def].get("flankDamage", {}).get(facing_side(actor, u), 0)
-	return maxi(1, floori(float(roll * keep) * scale * _side_share(actor, u, false) * flank / 1000000.0))
+	return maxi(1, floori(float(roll * keep) * scale * _side_share(actor, u, false) * flank / 100000000.0))
 
 
 static func after_dodge(chance: int, dodge: int, side: String) -> int:
 	return maxi(MIN_CHANCE, Util.floor_div(chance * (10000 - dodge * DODGE_BY_SIDE[side]) + 5000, 10000))
+
+
+## the attacker's effects' share of the hit chance (sand 75%, Focus 125%; Nov 21), rounded down inside the bounds
+static func _aimed(share: int, chance: int) -> int:
+	return chance if share == 100 else maxi(MIN_CHANCE, mini(MAX_CHANCE, Util.floor_div(chance * share, 100)))
 
 
 static func damage_range(state: Dictionary, actor: Dictionary, a: Dictionary, u: Dictionary, scale: float = 1.0) -> Array:
@@ -184,10 +159,12 @@ static func preview(grid: Grid, state: Dictionary, actor_id: String, ability_id:
 	if actor.is_empty() or ability.is_empty() or not Content.units[actor.def].abilities.has(ability_id) or not grid.in_bounds(center):
 		return _fail("unknown", center)
 	center = Pathing.aim_tile(grid, state, center)
-	if not charged and not can_pay(actor, ability):
+	if not charged and not Pools.can_pay(actor, ability):
 		return _fail("spent", center)
 	if not charged and in_deep(grid, actor):
 		return _fail("water", center)
+	if Effects.stunned(state, actor.id):
+		return _fail("stunned", center)  # no actions, counters and charges included (Nov 21)
 	var ends := Pathing.aim_ends(grid, state, actor, center)
 	if not Reach.in_ability_range(grid, ability, ends[0], ends[1]):
 		return _fail("range", center)
@@ -214,7 +191,7 @@ static func preview(grid: Grid, state: Dictionary, actor_id: String, ability_id:
 			chance = 100
 		else:
 			var base := mini(MAX_CHANCE, hit_chance(grid, ability, c[0], c[1], side) + Content.units[actor.def].get("hit", 0))
-			chance = after_dodge(base, Content.dodge_of(Content.units[u.def]), side)
+			chance = _aimed(Effects.hit_share(state, actor.id), after_dodge(base, Content.dodge_of(Content.units[u.def]), side))
 		targets.append({
 			"unit": u.id,
 			"side": side,
@@ -242,11 +219,12 @@ static func resolve(grid: Grid, state: Dictionary, actor_id: String, ability_id:
 		attack.shot = p.shot
 	var events: Array = [attack]
 	if not charged:
-		pay(actor, ability)
+		Pools.pay(actor, ability)
 	for t in p.targets:
 		var unit := find_unit(state, t.unit)
 		if is_heal(ability):
 			if ability.heal[1] == 0:
+				_leave_effect(state, unit, ability_id, events)
 				continue
 			var hr := _heal_range(actor, ability)
 			var r := Rng.roll_int(state.rng, hr[0], hr[1])
@@ -270,9 +248,12 @@ static func resolve(grid: Grid, state: Dictionary, actor_id: String, ability_id:
 		var dr := Rng.roll_int(state.rng, wp[0], wp[1])
 		state.rng = dr[1]
 		var dmg2 := _landed(state, actor, ability, unit, dr[0], scale)
-		events.append({"k": "hit", "unit": unit.id, "dmg": dmg2, "chance": t.chance})
+		# a blow with no damage (the Shove, the sand) shows no −0 (Nov 21)
+		if ability.damage[1] > 0:
+			events.append({"k": "hit", "unit": unit.id, "dmg": dmg2, "chance": t.chance})
 		if not _hurt(state, unit, dmg2, events):
 			continue
+		_leave_effect(state, unit, ability_id, events)
 		if ability.push == 0:
 			continue
 		if ability.has("pushChance"):
@@ -281,8 +262,16 @@ static func resolve(grid: Grid, state: Dictionary, actor_id: String, ability_id:
 			if float(pr[0]) * 100 >= ability.pushChance:
 				continue
 		_push(grid, state, unit, p.center, actor.pos, ability.push, events)
-	state.outcome = check_outcome(state)
+	if ability.damage[1] > 0:
+		Effects.spend_once(state, actor.id)  # the attack Focus was waiting for
+	state.outcome = Outcome.check(state)
 	return events
+
+
+## an ability's timed effect, if it leaves one (stun, sand, focus), said in the log and over the unit
+static func _leave_effect(state: Dictionary, unit: Dictionary, ability_id: String, events: Array) -> void:
+	if Effects.add_effect(state, unit.id, ability_id):
+		events.append({"k": "effect", "unit": unit.id, "item": ability_id, "turns": Content.buffs[ability_id].turns})
 
 
 ## removes life; false if the unit died (and left the list)
@@ -295,14 +284,16 @@ static func _hurt(state: Dictionary, unit: Dictionary, dmg: int, events: Array) 
 		if not is_same(u, unit):
 			units.append(u)
 	state.units = units
-	var fp := Pathing.footprint(unit)
-	var corpses: Array = state.get("corpses", []).duplicate()
-	corpses.append_array(fp)
-	state.corpses = corpses
-	var defs: Dictionary = state.get("corpseDefs", {}).duplicate()
-	for c in fp:
-		defs[Grid.pos_key(c)] = unit.def
-	state.corpseDefs = defs
+	# only bodies of a whole tile and up stay (Fernando, Nov 21): a half-tile creature (a rat, a bat) leaves its ground free
+	if Content.units[Content.base_def(unit.def)].get("halfSize", 2) >= 2:
+		var fp := Pathing.footprint(unit)
+		var corpses: Array = state.get("corpses", []).duplicate()
+		corpses.append_array(fp)
+		state.corpses = corpses
+		var defs: Dictionary = state.get("corpseDefs", {}).duplicate()
+		for c in fp:
+			defs[Grid.pos_key(c)] = unit.def
+		state.corpseDefs = defs
 	if state.turn.has("engaged"):
 		var turn: Dictionary = state.turn
 		var left: Array = []
@@ -347,32 +338,3 @@ static func _push(grid: Grid, state: Dictionary, unit: Dictionary, center: Vecto
 	events.append_array(r.events)
 	if r.dmg > 0:
 		_hurt(state, unit, r.dmg, events)
-
-
-## Victory: no enemies. Defeat: the target to protect fell or all heroes died
-static func check_outcome(state: Dictionary) -> String:
-	var sc: Dictionary = Content.scenarios.get(state.scenario, {})
-	var rules: Dictionary = sc.get("rules", {})
-	if rules.has("outcome"):
-		return rules.outcome.call(state)
-	var heroes := 0
-	var objective := false
-	var enemies := false
-	for u in state.units:
-		if u.team == "hero" and not Content.is_objective(u.def):
-			heroes += 1
-		if Content.is_objective(u.def):
-			objective = true
-		if u.team == "enemy":
-			enemies = true
-	var had_objective := true
-	if not sc.is_empty():
-		had_objective = false
-		for s in sc.spawns:
-			if Content.is_objective(s.def):
-				had_objective = true
-	if (had_objective and not objective) or heroes == 0:
-		return "defeat"
-	if not enemies:
-		return "victory"
-	return "ongoing"

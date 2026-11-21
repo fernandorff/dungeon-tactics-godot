@@ -79,7 +79,7 @@ func move(to: Vector2i) -> Array:
 	var hit := Counter.play(grid, state, id, first)
 	if hit.size():
 		history = []
-	state.outcome = Combat.check_outcome(state)
+	state.outcome = Outcome.check(state)
 	if Combat.find_unit(state, id).is_empty() or over():
 		return hit
 	var turn: Dictionary = state.turn
@@ -95,7 +95,7 @@ func move(to: Vector2i) -> Array:
 	var shot := Counter.play(grid, state, id, later)
 	if shot.size():
 		history = []
-	state.outcome = Combat.check_outcome(state)
+	state.outcome = Outcome.check(state)
 	return hit + [walk] + shot
 
 
@@ -114,7 +114,7 @@ func act(ability_id: String, target: Vector2i, lock: String = "", as_slot: Strin
 	var events: Array
 	var turn: Dictionary = state.turn
 	if ability.charge > 0:
-		Combat.pay(a, ability)
+		Pools.pay(a, ability)
 		var left := maxi(0, Effects.move_of(state, a) - turn.get("spent", 0))
 		turn.spent = turn.get("spent", 0) + Util.ceil_div(left, 2)
 		var lk := lock if lock != "" else ("tile" if ability.get("panel", false) else "unit")
@@ -166,7 +166,7 @@ func end_turn() -> Array:
 		return []
 	var spiked := Combat.spike_at_turn_end(grid, state)
 	TurnQueue.finish_turn(state)
-	state.outcome = Combat.check_outcome(state)
+	state.outcome = Outcome.check(state)
 	return spiked + ([] if over() else TurnQueue.start_next_turn(grid, state))
 
 

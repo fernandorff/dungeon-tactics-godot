@@ -159,11 +159,11 @@ static func _position_score(grid: Grid, state: Dictionary, actor: Dictionary, at
 			far = maxi(far, Content.abilities[a].range[1])
 		var reach: float = def.move / sub + far
 		var ready: Dictionary = o.duplicate()
-		Combat.regen(ready)
+		Pools.regen(ready)
 		if Grid.dist(at, o.pos) / sub <= reach:
 			var worst := 0.0
 			for a in def.abilities:
-				if Combat.can_pay(ready, Content.abilities[a]):
+				if Pools.can_pay(ready, Content.abilities[a]):
 					worst = maxf(worst, _avg(Combat.damage_range(state, o, Content.abilities[a], actor)))
 			score -= THREAT * worst
 	var key := Grid.pos_key(at)
@@ -223,7 +223,8 @@ static func choose_turn(grid: Grid, state: Dictionary, unit_id: String) -> Dicti
 	var far := {}
 	for id in Content.units[actor.def].abilities:
 		var a: Dictionary = Content.abilities[id]
-		far[id] = Reach.far_cells(grid, a.range[1] + (hi - lo if a.heightRange else 0)) + 2 * (grid.sub - 1)
+		# a melee reach is the king's distance (Reach.is_melee): its diagonal is twice that in steps
+		far[id] = (Reach.far_cells(grid, a.range[1] + (hi - lo if a.heightRange else 0)) + 2 * (grid.sub - 1)) * (2 if Reach.is_melee(a) else 1)
 	var plans: Array = []
 	for i in spots.size():
 		var spot: Vector2i = spots[i]

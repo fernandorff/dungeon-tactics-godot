@@ -143,6 +143,7 @@ static func act_reason(a: Dictionary) -> String:
 		"sight": t("sem linha de visão", "no line of sight"),
 		"no-target": t("não atinge este alvo", "cannot reach this target"),
 		"water": t("nadando: só anda ou espera", "swimming: only walk or wait"),
+		"stunned": t("atordoado: só anda ou espera", "stunned: only walk or wait"),
 		"none": t("acabou", "none left"),
 	}
 	return words.get(a.get("reason", ""), "")
@@ -179,7 +180,10 @@ static func event_log(events: Array, state: Dictionary) -> String:
 			"mana":
 				parts.append(t("%s +%d de mana", "%s +%d mana") % [name.call(e.unit), e.amount])
 			"effect":
-				parts.append(t("%s por %d turnos", "%s for %d turns") % [name.call(e.unit), e.turns])
+				if Content.abilities.has(e.item):
+					parts.append("%s %s: %s" % [name.call(e.unit), effect_word(e.item).to_lower(), effect_text(e.item)])
+				else:
+					parts.append(t("%s por %d turnos", "%s for %d turns") % [name.call(e.unit), e.turns])
 			"charge":
 				flush.call()
 				out.append(t("%s carrega %s", "%s charges %s") % [name.call(e.unit), ability_name(e.ability)])
@@ -205,6 +209,31 @@ static func event_log(events: Array, state: Dictionary) -> String:
 				parts.append(t("%s caiu", "%s is down") % name.call(e.unit))
 	flush.call()
 	return " | ".join(out)
+
+
+## a timed effect an ability leaves (Nov 21): the word over the unit
+static func effect_word(source: String) -> String:
+	var f: Dictionary = Content.abilities.get(source, {}).get("buff", {})
+	if f.get("stun", false):
+		return t("Atordoado", "Stunned")
+	if f.get("damage", 0) > 0:
+		return t("Focado", "Focused")
+	if f.get("accuracy", 0) < 0:
+		return t("Ofuscado", "Blinded")
+	return ability_name(source)
+
+
+## what an ability's timed effect does, for the log: "sem ações, −50% de movimento"
+static func effect_text(source: String) -> String:
+	var f: Dictionary = Content.abilities.get(source, {}).get("buff", {})
+	var parts: Array = []
+	if f.get("stun", false):
+		parts.append(t("sem ações", "no actions"))
+	for k in [["accuracy", "acerto", "aim"], ["damage", "dano", "damage"], ["moveShare", "movimento", "move"]]:
+		var v: int = f.get(k[0], 0)
+		if v:
+			parts.append(t("%s de %s" % [signed(v), k[1]], "%s %s" % [signed(v), k[2]]))
+	return ", ".join(parts)
 
 
 static func _tiles(n: int, half: bool) -> String:
@@ -243,7 +272,7 @@ static func unit_status(state: Dictionary, unit_id: String) -> Array:
 	var rows: Array = [[t("Lado", "Side"), side_name(u.team)], [t("Vida", "HP"), hp]]
 	for k in Content.RESOURCES:
 		if def.get("vars", {}).get(k, 0):
-			var line := "%d/%d" % [Combat.pool_of(u, k), def.vars[k]]
+			var line := "%d/%d" % [Pools.pool_of(u, k), def.vars[k]]
 			if def.get("regen", {}).get(k, 0):
 				line += t(", +%d de %s por turno", ", +%d %s per turn") % [def.regen[k], k]
 			rows.append(["Mana" if k == "mana" else "Stamina", line])

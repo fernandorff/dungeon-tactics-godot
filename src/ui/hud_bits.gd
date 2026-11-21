@@ -42,8 +42,8 @@ static func _gauges(u: Dictionary, size: int, width: float) -> VBoxContainer:
 	var mp_max: int = def.get("vars", {}).get("mana", 0)
 	var st_max: int = def.get("vars", {}).get("stamina", 0)
 	var rows := [
-		[["HP", u.hp, def.hp, HP], ["MP", Combat.pool_of(u, "mana"), mp_max, MANA]],
-		[["ST", Combat.pool_of(u, "stamina"), st_max, ST], ["CT", mini(u.ct, TurnQueue.THRESHOLD), TurnQueue.THRESHOLD, CT]],
+		[["HP", u.hp, def.hp, HP], ["MP", Pools.pool_of(u, "mana"), mp_max, MANA]],
+		[["ST", Pools.pool_of(u, "stamina"), st_max, ST], ["CT", mini(u.ct, TurnQueue.THRESHOLD), TurnQueue.THRESHOLD, CT]],
 	]
 	var v := VBoxContainer.new()
 	v.add_theme_constant_override("separation", 1)

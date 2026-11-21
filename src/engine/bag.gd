@@ -33,7 +33,7 @@ static func _effect_on(c: Dictionary, u: Dictionary) -> Dictionary:
 	return {
 		"unit": u.id,
 		"heal": maxi(0, mini(c.get("heal", 0), d.hp - u.hp)),
-		"mana": maxi(0, mini(c.get("mana", 0), mana_max - Combat.pool_of(u, "mana"))) if mana_max else 0,
+		"mana": maxi(0, mini(c.get("mana", 0), mana_max - Pools.pool_of(u, "mana"))) if mana_max else 0,
 		"turns": c.get("buff", {}).get("turns", 0),
 	}
 
@@ -52,7 +52,7 @@ static func apply_item(grid: Grid, state: Dictionary, id: String, item: String, 
 	u.hp += fx.heal
 	if fx.mana:
 		var v: Dictionary = u.get("vars", {}).duplicate()
-		v.mana = Combat.pool_of(u, "mana") + fx.mana
+		v.mana = Pools.pool_of(u, "mana") + fx.mana
 		u.vars = v
 	state.turn[Slots.free_slot(state.turn, "bonus")] = item
 	var events: Array = [{"k": "item", "unit": id, "item": item, "target": target}]

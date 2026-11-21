@@ -118,8 +118,9 @@ static func aim_ends(grid: Grid, state: Dictionary, actor: Dictionary, center: V
 	return closest(footprint(actor), area_of(grid, state, aim_tile(grid, state, center)))
 
 
-static func in_area(grid: Grid, area: Array[Vector2i], radius: int, cells: Array[Vector2i]) -> bool:
-	return gap(area, cells) <= Reach.far_cells(grid, radius)
+## `square`: a melee area (the Spin) counts the diagonal neighbours too (Nov 21)
+static func in_area(grid: Grid, area: Array[Vector2i], radius: int, cells: Array[Vector2i], square: bool = false) -> bool:
+	return (Reach.king_gap(area, cells) if square else gap(area, cells)) <= Reach.far_cells(grid, radius)
 
 
 ## the unit standing on `p` (any cell of its body), or an empty Dictionary
