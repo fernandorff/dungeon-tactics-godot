@@ -11,6 +11,8 @@ var state: Dictionary
 var undos_left: int
 ## [{before: state without rng, paid: bool}]
 var history: Array
+var _reach_memo: Variant = null
+var _reach_key := 0
 
 
 func _init(g: Grid, s: Dictionary, undos: int = UNDO_LIMIT, hist: Array = []) -> void:
@@ -52,8 +54,13 @@ func can_undo() -> bool:
 func reach() -> Dictionary:
 	if over():
 		return {}
-	var left: int = Effects.move_of(state, actor()) - state.turn.get("spent", 0)
-	return {} if left <= 0 else Pathing.reachable(grid, state, actor().id, left)
+	# a 2x2 token's walk costs ~120 ms and the screens ask for it several times a key press: once per state
+	var key := state.hash()
+	if _reach_memo == null or key != _reach_key:
+		var left: int = Effects.move_of(state, actor()) - state.turn.get("spent", 0)
+		_reach_memo = {} if left <= 0 else Pathing.reachable(grid, state, actor().id, left)
+		_reach_key = key
+	return _reach_memo
 
 
 func preview(ability_id: String, target: Vector2i) -> Dictionary:

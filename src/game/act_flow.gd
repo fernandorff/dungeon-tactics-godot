@@ -119,6 +119,18 @@ static func _off(base: Dictionary, o: Dictionary) -> Dictionary:
 
 ## the actions for a target: every ability of the unit in its own order, then the items in the bag
 static func act_actions(b: Battle, target: Dictionary) -> Array:
+	return _cached(b, "actions " + str(target), func() -> Array: return _actions(b, target))
+
+
+## a list worked out once per battle state, as the options (the Agir screens rebuild it on every key: ~100 ms)
+static func _cached(b: Battle, key: String, make: Callable) -> Array:
+	var m := _options(b)
+	if not m.has(key):
+		m[key] = make.call()
+	return m[key]
+
+
+static func _actions(b: Battle, target: Dictionary) -> Array:
 	if target.k == "side":
 		return []
 	var id: String = b.actor().id
@@ -195,6 +207,10 @@ static func group_of(b: Battle, r: Dictionary) -> String:
 ## the Agir list: "Escolher alvo", the basic attack, then Técnicas, Magias and Itens (an empty one left out)
 ## rows: {k: "pick", enabled} | {k: "group", group, enabled, reach} | an action
 static func act_list(b: Battle) -> Array:
+	return _cached(b, "list", func() -> Array: return _list(b))
+
+
+static func _list(b: Battle) -> Array:
 	var rows := _act_rows(b)
 	var out: Array = [{"k": "pick", "enabled": _all_targets(b).size() > 0}]
 	for r in rows:

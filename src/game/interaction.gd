@@ -58,8 +58,21 @@ static func confirm(b: Battle, ui: Dictionary) -> Dictionary:
 	return {"events": events, "ui": fresh_ui(b) if events.size() and alive else ui}
 
 
+static var _threat_key := 0
+static var _threat: Array = []
+
+
 ## what the unit can hit on its next turn: walk, then any ability (a wide warning, sight not checked)
 static func threat(b: Battle, unit_id: String) -> Array:
+	# ~100 ms on a half map, asked again on every cell of a foe the cursor crosses: once per state and unit
+	var key := hash([b.state.hash(), unit_id, b.grid.width, b.grid.height])
+	if key != _threat_key:
+		_threat = _threat_of(b, unit_id)
+		_threat_key = key
+	return _threat
+
+
+static func _threat_of(b: Battle, unit_id: String) -> Array:
 	var u := Combat.find_unit(b.state, unit_id)
 	var def: Dictionary = Content.units[u.def]
 	if def.abilities.is_empty():
@@ -68,23 +81,42 @@ static func threat(b: Battle, unit_id: String) -> Array:
 	for s in Pathing.reachable(b.grid, b.state, unit_id).values():
 		spots.append(s.pos)
 	var size: int = def.get("size", 1)
+	# the farthest any ability reaches with the map's biggest drop: a spot farther than that (in king steps, which
+	# neither range measure undercuts) cannot hit, so it is skipped (a hover on a foe took 1.3 s on a half map)
+	var lo := 1 << 30
+	var hi := -(1 << 30)
+	for t in b.grid.tiles:
+		lo = mini(lo, Grid.stand_h(t))
+		hi = maxi(hi, Grid.stand_h(t))
+	var far := 0
+	for a in def.abilities:
+		var ab: Dictionary = Content.abilities[a]
+		far = maxi(far, Reach.far_cells(b.grid, ab.range[1] + (hi - lo if ab.heightRange else 0)))
+	var by_area := {} # the cells of one whole tile share its area: worked out once
 	var out: Array = []
 	for y in b.grid.height:
 		for x in b.grid.width:
 			var t := Vector2i(x, y)
 			var area := Pathing.area_of(b.grid, b.state, Pathing.aim_tile(b.grid, b.state, t))
-			var hit := false
-			for s in spots:
-				var ends := Pathing.closest(Pathing.cells_of(s, size), area)
-				for a in def.abilities:
-					if Reach.in_ability_range(b.grid, Content.abilities[a], ends[0], ends[1]):
-						hit = true
-						break
-				if hit:
-					break
-			if hit:
+			if not by_area.has(area[0]):
+				by_area[area[0]] = _threatens(b, def, spots, size, area, far)
+			if by_area[area[0]]:
 				out.append(t)
 	return out
+
+
+static func _threatens(b: Battle, def: Dictionary, spots: Array, size: int, area: Array[Vector2i], far: int) -> bool:
+	var lo: Vector2i = area[0]
+	var hi: Vector2i = area.back()
+	for s in spots:
+		var gap := maxi(maxi(0, maxi(lo.x - (s.x + size - 1), s.x - hi.x)), maxi(0, maxi(lo.y - (s.y + size - 1), s.y - hi.y)))
+		if gap > far:
+			continue
+		var ends := Pathing.closest(Pathing.cells_of(s, size), area)
+		for a in def.abilities:
+			if Reach.in_ability_range(b.grid, Content.abilities[a], ends[0], ends[1]):
+				return true
+	return false
 
 
 static func _mark(tiles: Dictionary, pos: Vector2i, kind: String) -> void:
