@@ -30,6 +30,7 @@ var _tiles: Node3D
 var _marks: Node3D
 var _units := {} # unit id → Node3D
 var _mats := {}
+var _plates := {} # plate width → its mesh
 var _float: Node3D
 var names := {} # unit id → a label in place of name and life (the town's people)
 
@@ -279,10 +280,13 @@ func show_marks(tiles: Array, path: Variant = null, cursor: Variant = null, size
 func _plate(p: Vector2i, col: Color, w: float, lift: float) -> void:
 	if not grid.in_bounds(p):
 		return
+	# one shared plate mesh per width: the marks are rebuilt on every cursor step
+	if not _plates.has(w):
+		var bm := BoxMesh.new()
+		bm.size = Vector3(w, 0.03, w)
+		_plates[w] = bm
 	var mi := MeshInstance3D.new()
-	var bm := BoxMesh.new()
-	bm.size = Vector3(w, 0.03, w)
-	mi.mesh = bm
+	mi.mesh = _plates[w]
 	mi.material_override = _mat(col)
 	mi.position = Vector3(p.x + 0.5, top_of(p) + lift, p.y + 0.5)
 	_marks.add_child(mi)

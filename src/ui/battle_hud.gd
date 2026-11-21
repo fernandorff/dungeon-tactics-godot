@@ -15,6 +15,7 @@ var _info: Label
 var _log: Label
 var _help: Label
 var _window: Control
+var _drawn := 0 # the state hash the turn list and the card show
 
 
 func _ready() -> void:
@@ -63,15 +64,19 @@ func refresh() -> void:
 	if b.grid.in_bounds(at):
 		_height.text = Texts.t("Altura %d", "Height %d") % HudBits.tile_height(b.grid, at)
 		_tile.text = HudBits.tile_info(b.grid, at)
-	for c in _turns.get_children():
-		c.queue_free()
-	for e in TurnQueue.preview_order(b.state, 6):
-		var u := Combat.find_unit(b.state, e.unit)
-		if u.is_empty():
-			continue
-		_turns.add_child(HudBits.turn_entry(u, e.get("ability", "")))
-	if not b.over():
-		HudBits.card(_card, b.actor(), b.state.turn)
+	# the turn list and the card only change with the state (and the language), not with the cursor: rebuilt once each
+	var key := hash([b.state.hash(), Texts.current()])
+	if key != _drawn:
+		_drawn = key
+		for c in _turns.get_children():
+			c.queue_free()
+		for e in TurnQueue.preview_order(b.state, 6):
+			var u := Combat.find_unit(b.state, e.unit)
+			if u.is_empty():
+				continue
+			_turns.add_child(HudBits.turn_entry(u, e.get("ability", "")))
+		if not b.over():
+			HudBits.card(_card, b.actor(), b.state.turn)
 	_log.text = screen_ref.last_log
 	_draw_menu()
 
@@ -97,6 +102,10 @@ func _draw_menu() -> void:
 	_help.text = Texts.t("Setas/clique: escolher · Enter/A: confirmar · Esc/B: voltar · Q/E: girar · F: virar · Z: desfazer", "Arrows/click: choose · Enter/A: confirm · Esc/B: back · Q/E: turn · F: face · Z: undo")
 	if b.over() or not sr.is_hero_turn():
 		_menu_title.text = Texts.t("Vez do inimigo", "Enemy turn") if not b.over() else ""
+		return
+	# while a hero's action plays, the screen it came from is stale: drawing it rebuilt the Agir lists (~450 ms)
+	if sr.busy:
+		_menu_title.text = ""
 		return
 	var s := sr.screen
 	match s.k:
