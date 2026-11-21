@@ -15,10 +15,11 @@ func _ready() -> void:
 	Music.attach(self)
 	Sound.load_levels()
 	set_anchors_and_offsets_preset(PRESET_FULL_RECT)
+	add_child(FpsCounter.new())
 	var args := OS.get_cmdline_user_args()
 	var i := args.find("--shot")
 	if i >= 0 and args.size() > i + 2:
-		_shot = [args[i + 1], args[i + 2]]
+		_shot = args.slice(i + 1) # screen, file and, for options, the category (help: the Help row) to show
 		Store.reset_memory()
 		Sound.volume = 0.0
 		_open_shot(_shot[0])
@@ -46,6 +47,9 @@ func show_screen(n: Node) -> void:
 		_screen.queue_free()
 	_screen = n
 	add_child(n)
+	move_child(n, 0) # under the fps counter
+	# the fast battle (Options) speeds a battle's every tween and timer; any other screen runs at its pace
+	Engine.time_scale = Settings.FAST if n is BattleScreen and Settings.fast() else 1.0
 
 
 func title() -> void:
@@ -202,6 +206,8 @@ func _open_shot(shot: String) -> void:
 			skirmish(Content.data.first_battle)
 		"dawn":
 			survival()
+		"options", "help":
+			skirmish(Content.data.first_battle)
 		_:
 			title()
 	await get_tree().create_timer(2.5).timeout
@@ -223,6 +229,15 @@ func _open_shot(shot: String) -> void:
 		await get_tree().create_timer(0.4).timeout
 	if what == "esc" and _screen is BattleScreen:
 		(_screen as BattleScreen).key("cancel")
+		await get_tree().create_timer(0.5).timeout
+	if what in ["options", "help"] and _screen is BattleScreen:
+		var w := OptionsWindow.open(_screen, func() -> void: pass)
+		await get_tree().create_timer(0.5).timeout
+		var n := int(_shot[2]) if _shot.size() > 2 else 0
+		w._tabs[3 if what == "help" else n].grab_focus()
+		await get_tree().create_timer(0.3).timeout
+		if what == "help":
+			w._rows[n].opt.run.call(w._rows[n])
 		await get_tree().create_timer(0.5).timeout
 	var img := get_viewport().get_texture().get_image()
 	img.save_png(_shot[1])
