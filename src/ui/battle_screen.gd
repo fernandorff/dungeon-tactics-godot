@@ -210,12 +210,14 @@ func _act_key(a: String) -> void:
 	var r: Dictionary
 	if a == "confirm":
 		var st := ActTurn.step_of(screen)
-		r = ActTurn.pick(battle, screen, st.rows.find(st.at) if not st.is_empty() else screen.index)
+		r = ActTurn.pick(battle, screen, st.rows.find(st.at) if not st.is_empty() else screen.get("index", 0))
+	elif screen.k == "aim" and a in ["up", "down", "left", "right"]:
+		r = BattleKeys.step_aim(self, a)
 	elif a == "up" or a == "down":
 		r = ActTurn.step(battle, screen, -1 if a == "up" else 1)
 	elif (a == "left" or a == "right" or a == "info") and screen.k in ["actions", "acts", "group"]:
 		r = ActTurn.page(screen, -1 if a == "left" else 1)
-	elif (a == "left" or a == "right") and screen.k in ["aim", "spot", "targets"]:
+	elif (a == "left" or a == "right") and screen.k in ["spot", "targets"]:
 		r = BattleKeys.walk_on_screen(self, a)
 	else:
 		return
@@ -357,6 +359,10 @@ func hover(p: Vector2i) -> void:
 	if busy or not is_hero_turn() or p == cursor or screen.k == "facing":
 		return
 	cursor = p
+	if screen.k == "aim":
+		if Pathing.aim_tile(battle.grid, battle.state, p) != Pathing.aim_tile(battle.grid, battle.state, screen.at):
+			_apply(ActTurn.aim_to(screen, p, false))
+		return
 	if ActTurn.is_act(screen) and not (screen.k in ["actions", "group", "acts"]):
 		var i := ActTurn.index_at(battle, screen, p)
 		if i >= 0 and i != screen.index:

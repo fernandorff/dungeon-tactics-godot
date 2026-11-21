@@ -223,3 +223,30 @@ func test_act_greys_out_when_spent() -> String:
 	if Command.enabled(b, "act") or not Command.menu_rows(b).has("act"):
 		return "Agir must stay, greyed, with no action left"
 	return ""
+
+
+## the free area aim (Fernando, Nov 21): it snaps on the picked target, then lands wherever the area reaches this turn,
+## whoever it hits; where it cannot land Confirm says no and stays
+func test_free_area_aim() -> String:
+	var gs: Array = UnitTests.new()._flat([["m", "mage", "hero", Vector2i(0, 0)], ["s", "soldier", "enemy", Vector2i(4, 0)], ["t", "soldier", "enemy", Vector2i(1, 4)]])
+	var b := Battle.new(gs[0], gs[1])
+	var target := {"k": "unit", "unit": "s", "pos": Vector2i(4, 0)}
+	var acts := ActFlow.act_actions(b, target)
+	var i := -1
+	for k in acts.size():
+		if acts[k].id == "blast":
+			i = k
+	var r := ActTurn.pick(b, {"k": "actions", "target": target, "index": i}, i)
+	if r.screen.k != "aim" or r.screen.at != Vector2i(4, 0):
+		return "aim did not snap on the target: %s" % [r.screen]
+	var away: Dictionary = ActTurn.aim_to(r.screen, Vector2i(1, 3)).screen
+	var picked := ActTurn.pick(b, away, 0)
+	if picked.screen.k != "spot" or picked.screen.aim != Vector2i(1, 3):
+		return "the area did not land away from the target: %s" % [picked.screen]
+	if Command.cancel_step(b, picked.screen) != {"k": "aim", "target": target, "action": i, "at": Vector2i(1, 3)}:
+		return "cancel from the tile choice lost the aim"
+	# a bare tile no option aims at: nowhere the area lands this turn
+	var own := ActTurn.pick(b, ActTurn.aim_to(r.screen, Vector2i(2, 2)).screen, 0)
+	if own.sound != "cancel" or own.screen.k != "aim":
+		return "an aim out of reach was taken: %s" % [own.screen]
+	return ""

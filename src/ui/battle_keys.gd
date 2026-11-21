@@ -31,6 +31,30 @@ static func handle(s: BattleScreen, ev: InputEvent) -> void:
 			return
 
 
+## the aim step's free cursor: the whole tile next to it that the arrow points to on screen, anywhere on the map (port
+## of stepAim: of the 8 neighbours, the one most that way)
+static func step_aim(s: BattleScreen, dir: String) -> Dictionary:
+	var at: Vector2i = s.screen.at
+	var k := s.battle.grid.sub
+	var here := s.view.screen_at(at)
+	var want: Vector2 = {"up": Vector2(0, -1), "down": Vector2(0, 1), "left": Vector2(-1, 0), "right": Vector2(1, 0)}[dir]
+	var best: Variant = null
+	var best_d := INF
+	for dy in [-1, 0, 1]:
+		for dx in [-1, 0, 1]:
+			var p := at + Vector2i(dx, dy) * k
+			if (dx == 0 and dy == 0) or not s.battle.grid.in_bounds(p):
+				continue
+			var d := s.view.screen_at(p) - here
+			if d.dot(want) <= 0.0:
+				continue
+			var score := d.length() + absf(d.dot(Vector2(want.y, want.x))) * 2.0
+			if score < best_d:
+				best_d = score
+				best = p
+	return ActTurn.aim_to(s.screen, best) if best != null else {"screen": s.screen, "sound": ""}
+
+
 ## on a map screen an arrow goes to the nearest aim, tile or listed unit that way on screen
 static func walk_on_screen(s: BattleScreen, dir: String) -> Dictionary:
 	var pts: Array = []

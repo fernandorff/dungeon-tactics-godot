@@ -2,7 +2,7 @@ class_name Command
 ## The turn menu FFT style (port of command.ts): Agir · Move · Undo move · Wait · Status, and where Cancel leads from each
 ## screen. Pure: the battle screen executes and draws. A screen is a Dictionary:
 ## {k: "menu", index} | {k: "map"} (Move) | {k: "facing"} | {k: "acts", index} | {k: "group", group, index} |
-## {k: "targets", index, only?, other?} | {k: "actions", target, index} | {k: "aim", target, action, index, only?} |
+## {k: "targets", index, only?, other?} | {k: "actions", target, index} | {k: "aim", target, action, at, only?} |
 ## {k: "spot", target, action, index, lock?, slot?, aim?, only?}
 
 const COMMANDS := ["act", "move", "undo", "wait", "status"]
@@ -105,8 +105,7 @@ static func cancel_step(b: Battle, s: Dictionary) -> Variant:
 		return back
 	if not s.has("aim"):
 		return out
-	var aims := ActFlow.act_aims(ActFlow.act_actions(b, s.target)[s.action])
-	var aim := {"k": "aim", "target": s.target, "action": s.action, "index": maxi(0, aims.find(s.aim))}
+	var aim := {"k": "aim", "target": s.target, "action": s.action, "at": s.aim}
 	if not only.is_empty():
 		aim.only = only
 	return aim

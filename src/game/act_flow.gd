@@ -286,6 +286,25 @@ static func act_aims(a: Dictionary) -> Array:
 	return out if out.size() > 1 else []
 
 
+## an area on the free aim (Fernando, Nov 21: "snap on the chosen target first, then free on the grid"): every place it
+## can land this turn, whoever it hits, not only where it hits the picked target
+static func free_area(b: Battle, a: Dictionary) -> Dictionary:
+	if a.k != "ability" or Content.abilities[a.id].radius == 0:
+		return a
+	var spots: Array = []
+	for o in _options(b).abilities:
+		if o.ability != a.id:
+			continue
+		for t in o.targets:
+			for s in t.spots:
+				spots.append({"pos": s.pos, "cost": s.cost, "aim": s.pos if t.kind == "self" else t.pos, "preview": s.preview})
+	if spots.is_empty():
+		return a
+	var out := a.duplicate()
+	out.spots = spots
+	return out
+
+
 static func with_aim(a: Dictionary, aim: Vector2i) -> Dictionary:
 	var out := a.duplicate()
 	out.spots = a.spots.filter(func(s: Dictionary) -> bool: return s.aim == aim)

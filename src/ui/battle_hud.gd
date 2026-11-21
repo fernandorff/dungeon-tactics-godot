@@ -152,8 +152,8 @@ func _draw_act(s: Dictionary) -> void:
 		_info.text = _preview_text(sr.preview())
 		return
 	if s.k == "aim" or s.k == "spot":
-		var pts := ActTurn.map_points(b, s)
 		var a := ActTurn.screen_action(b, s)
+		var pts: Array = ActFlow.act_aims(a) if s.k == "aim" else ActTurn.map_points(b, s)
 		var name := _action_name(a)
 		_menu.add_child(Kit.label("%s · %d %s" % [name, pts.size(), Texts.t("opções", "options")], 15))
 		_menu.add_child(Kit.label(Texts.t("Setas ou clique no mapa · Enter confirma", "Arrows or click on the map · Enter confirms"), 13, Kit.MUTED))

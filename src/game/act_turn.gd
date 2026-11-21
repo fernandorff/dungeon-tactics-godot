@@ -1,7 +1,7 @@
 class_name ActTurn
 ## The keys, taps and rows of the Agir screens on a hero's turn (port of act-turn.ts and act-marks.ts). Pure: each call
 ## takes the battle and the screen and returns what follows: {screen, focus?: Vector2i, run?: {action, spot, lock, slot},
-## sound: "cursor"/"confirm"/"cancel"/""}. The battle screen applies it.
+## sound: "cursor"/"confirm"/"cancel"/""}. The battle screen applies it. The aim step holds a free cursor `at`.
 
 const LOCKS := ["unit", "tile"]
 const SLOT_ROWS := ["main", "bonus"]
@@ -48,7 +48,32 @@ static func screen_action(b: Battle, s: Dictionary) -> Dictionary:
 	if i < 0 or i >= acts.size():
 		return {}
 	var a: Dictionary = acts[i]
-	return ActFlow.with_aim(a, s.aim) if s.k == "spot" and s.has("aim") else a
+	# past the aim step the area may land anywhere it reaches, not only on the picked target (free_area)
+	if s.k == "aim":
+		return ActFlow.free_area(b, a)
+	return ActFlow.with_aim(ActFlow.free_area(b, a), s.aim) if s.k == "spot" and s.has("aim") else a
+
+
+## the aim under the free cursor of the aim step, or null where the area cannot land this turn
+static func aim_at(b: Battle, s: Dictionary) -> Variant:
+	var a := screen_action(b, s)
+	if a.is_empty():
+		return null
+	for aim in ActFlow.act_aims(a):
+		if aim_cells(b, aim).has(s.at):
+			return aim
+	return null
+
+
+## the aim step's free cursor moved to `p` (anywhere on the map; Nov 21: it used to jump between the target's aims only)
+static func aim_to(s: Dictionary, p: Vector2i, follow: bool = true) -> Dictionary:
+	var n := s.duplicate()
+	n.at = p
+	return _out(n, "cursor", p if follow else null)
+
+
+static func _same_aim(b: Battle, p: Vector2i, q: Vector2i) -> bool:
+	return Pathing.aim_tile(b.grid, b.state, p) == Pathing.aim_tile(b.grid, b.state, q)
 
 
 static func rows_of(b: Battle, s: Dictionary) -> Array:
@@ -93,7 +118,7 @@ static func step(b: Battle, s: Dictionary, dir: int) -> Dictionary:
 	var st := step_of(s)
 	if not st.is_empty():
 		return hover(b, s, 0 if dir < 0 else 1)
-	if s.k == "aim" or s.k == "spot":
+	if s.k == "spot":
 		var pts := map_points(b, s)
 		if pts.is_empty():
 			return _out(s)
@@ -124,7 +149,7 @@ static func hover(b: Battle, s: Dictionary, index: int) -> Dictionary:
 		return _out(s)
 	if not is_act(s) or s.index == index:
 		return _out(s)
-	if s.k == "spot" or s.k == "aim":
+	if s.k == "spot":
 		if index < 0 or index >= map_points(b, s).size():
 			return _out(s)
 		n.index = index
@@ -152,15 +177,13 @@ static func page(s: Dictionary, dir: int) -> Dictionary:
 	return _out(n, "cursor")
 
 
-## what the arrows walk on a map screen (the aims, or the tiles to act from)
+## what the arrows walk on the tile choice (the tiles to act from); empty elsewhere
 static func map_points(b: Battle, s: Dictionary) -> Array:
-	if s.k != "aim" and s.k != "spot":
+	if s.k != "spot":
 		return []
 	var a := screen_action(b, s)
 	if a.is_empty():
 		return []
-	if s.k == "aim":
-		return ActFlow.act_aims(a)
 	return a.spots.map(func(sp: Dictionary) -> Vector2i: return sp.pos)
 
 
@@ -170,11 +193,6 @@ static func index_at(b: Battle, s: Dictionary, p: Vector2i) -> int:
 		return ActFlow.target_at(rows_of(b, s), b, p)
 	if s.k == "spot" and step_of(s).is_empty():
 		return ActFlow.spot_at(screen_action(b, s), p, Content.units[b.actor().def].get("size", 1))
-	if s.k == "aim":
-		var aims := ActFlow.act_aims(screen_action(b, s))
-		for i in aims.size():
-			if aim_cells(b, aims[i]).has(p):
-				return i
 	return -1
 
 
@@ -182,6 +200,8 @@ static func index_at(b: Battle, s: Dictionary, p: Vector2i) -> int:
 static func tap(b: Battle, s: Dictionary, p: Vector2i) -> Variant:
 	if not is_act(s):
 		return null
+	if s.k == "aim":
+		return pick(b, s, 0) if _same_aim(b, p, s.at) else aim_to(s, p, false)
 	var i := index_at(b, s, p)
 	if i < 0:
 		return _out(s)
@@ -233,13 +253,13 @@ static func pick(b: Battle, s: Dictionary, index: int) -> Dictionary:
 			return _out(s, "cancel")
 		return _open_action(b, s.target, index)
 	if s.k == "aim":
-		var all := screen_action(b, s)
-		var aims := ActFlow.act_aims(all) if not all.is_empty() else []
-		if index < 0 or index >= aims.size():
+		# the free cursor may stand where the area cannot land: it says no
+		var aim: Variant = aim_at(b, s)
+		if aim == null:
 			return _out(s, "cancel")
-		var a := ActFlow.with_aim(all, aims[index])
+		var a := ActFlow.with_aim(screen_action(b, s), aim)
 		var best := ActFlow.best_spot(a, b)
-		var n := {"k": "spot", "target": s.target, "action": s.action, "index": best, "aim": aims[index]}
+		var n := {"k": "spot", "target": s.target, "action": s.action, "index": best, "aim": aim}
 		if s.has("only"):
 			n.only = s.only
 		return _out(n, "confirm", a.spots[best].pos)
@@ -276,16 +296,17 @@ static func _open_targets(b: Battle, only: Dictionary, other: bool = false) -> D
 
 static func _open_action(b: Battle, target: Dictionary, action: int, only: Dictionary = {}) -> Dictionary:
 	var a: Dictionary = ActFlow.act_actions(b, target)[action]
-	var aims := ActFlow.act_aims(a)
+	# several aims (an area): where it lands first, the free cursor starting on the best aim at the picked target
+	var area := ActFlow.act_aims(ActFlow.free_area(b, a)).size() > 0
 	var best: Dictionary = a.spots[ActFlow.best_spot(a, b)]
 	var s: Dictionary
-	if aims.size():
-		s = {"k": "aim", "target": target, "action": action, "index": aims.find(best.aim)}
+	if area:
+		s = {"k": "aim", "target": target, "action": action, "at": best.aim}
 	else:
 		s = {"k": "spot", "target": target, "action": action, "index": ActFlow.best_spot(a, b)}
 	if not only.is_empty():
 		s.only = only
-	return _out(s, "confirm", best.aim if aims.size() else best.pos)
+	return _out(s, "confirm", best.aim if area else best.pos)
 
 
 static func _mark(tiles: Array, cells: Array, kind: String) -> void:
@@ -323,16 +344,17 @@ static func marks(b: Battle, s: Dictionary) -> Dictionary:
 		return {"tiles": tiles, "path": null, "preview": null}
 	var a := screen_action(b, s)
 	if s.k == "aim" and not a.is_empty():
-		var aims := ActFlow.act_aims(a)
-		for i in aims.size():
-			if i != s.index:
-				_mark(tiles, aim_cells(b, aims[i]), "range")
+		# where it can land, and the area under the free cursor (with its best tile's preview when it can land there)
+		var on: Variant = aim_at(b, s)
+		for p in ActFlow.act_aims(a):
+			if on == null or p != on:
+				_mark(tiles, aim_cells(b, p), "range")
 		_mark(tiles, _cells_of_target(b, s.target), "target")
 		_mark(tiles, Pathing.footprint(me), "actor")
+		tiles.append_array(Interaction.attack_marks(b, Content.abilities[a.id], on if on != null else Pathing.aim_tile(b.grid, b.state, s.at)))
 		var preview: Variant = null
-		if s.index >= 0 and s.index < aims.size():
-			tiles.append_array(Interaction.attack_marks(b, Content.abilities[a.id], aims[s.index]))
-			var here := ActFlow.with_aim(a, aims[s.index])
+		if on != null:
+			var here := ActFlow.with_aim(a, on)
 			var bi := ActFlow.best_spot(here, b)
 			if bi >= 0:
 				preview = here.spots[bi].get("preview")
