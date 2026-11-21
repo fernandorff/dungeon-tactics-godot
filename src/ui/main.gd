@@ -191,6 +191,13 @@ func _open_shot(shot: String) -> void:
 			CrawlFlow.depart(7)
 			Store.set_key(Saves.ROOM_KEY, "{}")
 			home()
+		"end":
+			# the board after the first room, won with everyone down: the life carried and the way on
+			Saves.new_game(1)
+			var e := CrawlFlow.depart(7)
+			var node: int = Expedition.open_nodes(Expedition.map_of(e.seed), [])[0]
+			Store.set_key(Saves.ROOM_KEY, "{}")
+			_room_end({"node": node, "heroes": {}}, true, {"units": [], "bag": {}})
 		"act", "esc":
 			skirmish(Content.data.first_battle)
 		"dawn":
