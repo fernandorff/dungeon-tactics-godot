@@ -2,8 +2,8 @@ class_name Sound
 ## The interface's short sounds (cursor, confirm, cancel, hit), made at run time as plain tones so the port needs no audio
 ## files. Four volume bars as in sound.ts since Nov 21 (music, interface, world, dialogue), saved in dt:sound; `volume` is
 ## the master switch the test runner and the shot mode turn off.
-## shortcut: synthesized beeps stand in for the web game's sound effects, swap for real samples when assets come over;
-## the port has no music or speech yet, so those two bars are only kept for when they come
+## The music bar drives music.gd. shortcut: synthesized beeps stand in for the web game's sound effects, swap for real
+## samples when assets come over; the port has no typed dialogue yet, so the dialogue bar waits for its speech blip
 
 const SOUND_KEY := "dt:sound"
 const OLD_KEY := "dt:sfx" # the single effects bar before the split, 0 to 1
@@ -33,6 +33,7 @@ static func load_levels() -> void:
 static func set_level(k: String, pct: int) -> void:
 	levels[k] = pct
 	Store.set_key(SOUND_KEY, JSON.stringify(levels))
+	Music.apply()
 
 
 static func attach(parent: Node) -> void:

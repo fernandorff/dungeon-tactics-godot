@@ -135,3 +135,18 @@ func test_battle_faces() -> String:
 	var hurt := {"def": "warrior", "hp": 10}
 	return "" if Portraits.expression_of(hurt) == "wounded" else "a unit under 30% of life is not wounded"
 
+
+## the music's volume: the bar × 0.8 × 0.6 × the track's gain, nothing with the master switch off or an unknown track
+func test_music_level() -> String:
+	var keep := [Sound.volume, Sound.levels.music]
+	Sound.volume = 1.0
+	Sound.levels.music = 25
+	var title := Music.level("title")
+	var battle := Music.level("battle")
+	Sound.volume = 0.0
+	var off := Music.level("battle")
+	Sound.volume = keep[0]
+	Sound.levels.music = keep[1]
+	if absf(title - 0.072) > 1e-9 or absf(battle - 0.12) > 1e-9 or off != 0.0 or Music.level("nope") != 0.0:
+		return "levels %f %f %f" % [title, battle, off]
+	return ""

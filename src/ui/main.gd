@@ -12,6 +12,7 @@ func _ready() -> void:
 	Content.ensure()
 	_input_map()
 	Sound.attach(self)
+	Music.attach(self)
 	Sound.load_levels()
 	set_anchors_and_offsets_preset(PRESET_FULL_RECT)
 	var args := OS.get_cmdline_user_args()
@@ -48,11 +49,13 @@ func show_screen(n: Node) -> void:
 
 
 func title() -> void:
+	Music.play("title")
 	show_screen(TitleScreen.new(self))
 
 
 func town(note: String = "") -> void:
 	var t := TownScreen.new(self)
+	Music.play("world") # Pastoral D, the town's music (Fernando, Nov 15)
 	show_screen(t)
 	if note != "":
 		t.notice(note)
@@ -76,6 +79,7 @@ func expedition_map() -> void:
 	if exp == null:
 		town()
 		return
+	Music.play("crypt")
 	show_screen(ExpeditionScreen.new(self, exp))
 
 
@@ -102,6 +106,7 @@ func room(node: int) -> void:
 	s.setup(cast.scenario, b, Saves.ROOM_KEY, cast.room)
 	s.finished.connect(func(won: bool) -> void: _room_end(cast.room, won, s.battle.state))
 	s.left_battle.connect(func() -> void: home())
+	Music.play("battle")
 	show_screen(s)
 
 
@@ -125,6 +130,7 @@ func skirmish(map_id: String) -> void:
 		Store.set_key(key, "")
 		var d := Kit.dialog(s, Texts.t("Vitória!", "Victory!") if won else Texts.t("Derrota", "Defeat"), "", [[Texts.t("Voltar ao título", "Back to the title"), title]]))
 	s.left_battle.connect(title)
+	Music.play("battle") # every battle plays its own track, Until Dawn too, as the web's entry.ts
 	show_screen(s)
 
 
@@ -145,6 +151,7 @@ func survival() -> void:
 		var text := Texts.t("Turnos: %d de %d · Recorde: %s", "Turns: %d of %d · Record: %s") % [lasted, Survival.SURVIVE_TURNS, Texts.t("%d, novo!", "%d, new!") % lasted if lasted > best else str(best)]
 		Kit.dialog(s, Texts.t("Amanheceu!", "Dawn came!") if won else Texts.t("Derrota", "Defeat"), text, [[Texts.t("Voltar ao título", "Back to the title"), title]]))
 	s.left_battle.connect(title)
+	Music.play("battle") # every battle plays its own track, Until Dawn too, as the web's entry.ts
 	show_screen(s)
 
 

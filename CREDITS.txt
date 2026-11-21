@@ -8,3 +8,14 @@ assets/faces/barbarian, knight, lancer, mage, ranger, rogue_hooded and skeleton_
 assets/faces/skeleton_minion, skeleton_rogue and skeleton_warrior.webp
   Rendered from the KayKit skeletons (KayKit Character Pack: Skeletons 1.0, by Kay Lousberg, www.kaylousberg.com, CC0)
   by the web game's scripts/assets/pixel-faces.mjs.
+
+== Music (assets/music/*.ogg, the web game's public/music, Nov 13, 2026) ==
+assets/music/title.ogg (title screen)
+  CodeManu, "A Legend Will Rise (Orchestral)" - https://opengameart.org/content/a-legend-will-rise-orchestral - CC0
+assets/music/city_pastoral_rica.ogg (town)
+  Our own composition (the web game's scripts/music/pastoral_rica_B.py), rendered with the MuseScore General SoundFont (MIT).
+assets/music/crypt.ogg (expedition map)
+  nene, "Evil Approach" - https://opengameart.org/content/evil-approach - CC0
+assets/music/battle_dark.ogg (battles)
+  Our own composition (the web game's scripts/music/battle_dark.py), rendered with the SGM-V2.01 SoundFont by Shan.
+  Licence of SGM-V2.01: not settled (sources disagree: credit / CC BY / own text); to confirm before launch.
