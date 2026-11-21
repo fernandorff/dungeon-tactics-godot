@@ -51,6 +51,45 @@ func test_crawl_battles() -> String:
 	return ""
 
 
+## the procedural rooms: same seed, same layout, same number of tries and the same enemy group
+func test_crawl_rooms() -> String:
+	var rooms: Array = Util.load_json("res://tests/golden/crawl_rooms.json")
+	for r in rooms:
+		var label := "room %d" % r.seed
+		var built := CrawlGen.build_room(r.seed, r.opts)
+		if built.is_empty():
+			return label + ": no room passed"
+		if built.tries != r.tries:
+			return "%s: %d tries, want %d" % [label, built.tries, r.tries]
+		var room: Dictionary = built.room.duplicate()
+		room.grid = room.grid.to_dict()
+		var d := Util.diff(Util.plain(room), r.room, label)
+		if d != "":
+			return d
+		d = Util.diff(CrawlGen.room_group(r.seed, r.opts).group, r.group, label + " group")
+		if d != "":
+			return d
+	return ""
+
+
+## the expedition map, each node's gold and each chest's item
+func test_expeditions() -> String:
+	var runs: Array = Util.load_json("res://tests/golden/expeditions.json")
+	for e in runs:
+		var map := Expedition.map_of(e.seed)
+		var label := "expedition %d" % e.seed
+		var d := Util.diff(map, e.map, label + " map")
+		if d != "":
+			return d
+		for i in map.size():
+			if Expedition.node_gold(map[i]) != e.gold[i]:
+				return "%s node %d: gold %d, want %d" % [label, i, Expedition.node_gold(map[i]), e.gold[i]]
+			var want: Variant = e.chest[i]
+			if map[i].chest and Expedition.chest_item(map[i]) != want:
+				return "%s node %d: chest %s, want %s" % [label, i, Expedition.chest_item(map[i]), want]
+	return ""
+
+
 ## the comparison is not blind: the same run with another seed must differ
 func test_replay_detects_a_change() -> String:
 	var runs: Array = Util.load_json("res://tests/golden/battles.json")
