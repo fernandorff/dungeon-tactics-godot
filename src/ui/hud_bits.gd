@@ -62,16 +62,31 @@ static func _gauges(u: Dictionary, size: int, width: float) -> VBoxContainer:
 	return v
 
 
+## a row of the turn list: the face (36 px, as the web's .queue-row) beside the name and gauges; a charge row shows the
+## caster's face too
 static func turn_entry(u: Dictionary, ability: String) -> Control:
 	var v := VBoxContainer.new()
 	v.add_theme_constant_override("separation", 0)
 	var col: Color = Kit.HERO if u.team == "hero" else Kit.FOE
 	if ability != "":
 		v.add_child(Kit.label("⏳ %s: %s" % [Texts.unit_name(u.def), Texts.ability_name(ability)], 14, col))
-		return v
-	v.add_child(Kit.label(Texts.unit_name(u.def), 15, col))
-	v.add_child(_gauges(u, 12, 104.0))
-	return v
+	else:
+		v.add_child(Kit.label(Texts.unit_name(u.def), 15, col))
+		v.add_child(_gauges(u, 12, 104.0))
+	return _with_face(u, 36, v)
+
+
+## the unit's painted face (Portraits) left of `body`; a unit without a sheet keeps the body alone
+static func _with_face(u: Dictionary, px: int, body: Control) -> Control:
+	var f := Portraits.face(u, px)
+	if f == null:
+		return body
+	var h := HBoxContainer.new()
+	h.add_theme_constant_override("separation", 8)
+	f.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	h.add_child(f)
+	h.add_child(body)
+	return h
 
 
 static func card(parent: Control, u: Dictionary, turn: Dictionary) -> void:
@@ -79,12 +94,15 @@ static func card(parent: Control, u: Dictionary, turn: Dictionary) -> void:
 		c.queue_free()
 	var head := Texts.unit_name(u.def)
 	var cls := Roster.class_of(u.def)
-	parent.add_child(Kit.label(head, 20, Kit.HERO if u.team == "hero" else Kit.FOE))
+	var v := VBoxContainer.new()
+	v.add_child(Kit.label(head, 20, Kit.HERO if u.team == "hero" else Kit.FOE))
 	if cls != "" and Texts.unit_name(cls) != head:
-		parent.add_child(Kit.label(Texts.unit_name(cls), 14, Kit.MUTED))
-	parent.add_child(_gauges(u, 15, 140.0))
+		v.add_child(Kit.label(Texts.unit_name(cls), 14, Kit.MUTED))
+	v.add_child(_gauges(u, 15, 140.0))
 	var acts := Texts.t("principal ", "main ") + ("✗" if turn.main else "✓") + " · " + Texts.t("secundária ", "bonus ") + ("✗" if turn.bonus else "✓")
-	parent.add_child(Kit.label(acts, 14, Kit.MUTED))
+	v.add_child(Kit.label(acts, 14, Kit.MUTED))
+	# the acting unit's face at 64 px, half the 128 px paint, so it stays crisp (the web's .battle-face)
+	parent.add_child(_with_face(u, 64, v))
 
 
 ## the height the tile line shows: in shallow water the one a unit stands at (port of tileHeight)

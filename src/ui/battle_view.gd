@@ -165,6 +165,8 @@ func _unit_node(u: Dictionary) -> Node3D:
 	label.position.y = cap.height + 0.35
 	n.add_child(label)
 	n.set_meta("size", size)
+	n.set_meta("height", cap.height)
+	n.set_meta("def", u.def)
 	return n
 
 
@@ -212,51 +214,39 @@ func walk(unit: String, path: Array, speed: float = 0.09) -> void:
 	await tw.finished
 
 
-## a floating number over a unit
-func float_text(unit: String, text: String, col: Color) -> void:
+## a floating number or word over a unit's chest (port of float-numbers.ts): `px` is its height in screen px at 1080p,
+## whatever the zoom, as the web's are; a strong strike gets the gold edge. It pops, holds to be read and fades in 1.5 s
+func float_text(unit: String, text: String, col: Color, px: int = 26, strong: bool = false) -> void:
 	if not _units.has(unit):
 		return
 	var l := Label3D.new()
 	l.text = text
 	l.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	l.no_depth_test = true
-	l.font_size = 64
-	l.pixel_size = 0.008
-	l.outline_size = 12
+	# fixed size: as seen from 1 m, where the 35° view is 0.63 m tall; px * 2 * 0.0003 gives px at 1080p on any window
+	l.fixed_size = true
+	l.font_size = px * 2
+	l.pixel_size = 0.0003
+	l.outline_size = 16 if strong else 10
+	l.outline_modulate = Color("#ffc531") if strong else Color.BLACK
 	l.modulate = col
-	l.position = _units[unit].position + Vector3(0, 2.2, 0)
+	var n: Node3D = _units[unit]
+	l.position = n.position + Vector3(0, 0.7 * n.get_meta("height") + 0.3, 0)
 	_float.add_child(l)
 	var tw := create_tween()
-	tw.tween_property(l, "position:y", l.position.y + 0.8, 0.8)
-	tw.parallel().tween_property(l, "modulate:a", 0.0, 0.8).set_delay(0.3)
+	tw.tween_property(l, "position:y", l.position.y + 0.5, 1.5).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	tw.parallel().tween_property(l, "modulate:a", 0.0, 0.4).set_delay(1.1)
 	tw.tween_callback(l.queue_free)
 
 
-## the events in order: walks tweened, numbers and words floating (moved from battle_screen.gd, at its 400 lines)
+## the sheet a unit on the board uses ("" for none), read while its node is still there (a fallen one until the sync)
+func def_of(unit: String) -> String:
+	return _units[unit].get_meta("def") if _units.has(unit) else ""
+
+
+## the events in order: walks tweened, numbers and words floating (battle_events.gd)
 func play_events(events: Array) -> void:
-	for e in events:
-		match e.k:
-			"move":
-				await walk(e.unit, e.path)
-			"hit":
-				float_text(e.unit, "−%d" % e.dmg, Color(1, 0.4, 0.35))
-				Sound.play("hit")
-				await get_tree().create_timer(0.25).timeout
-			"miss":
-				float_text(e.unit, Texts.t("Errou", "Miss"), Color(0.85, 0.85, 0.9))
-				await get_tree().create_timer(0.2).timeout
-			"effect":
-				# an ability's effect says its word, as a miss says Miss (Nov 21: stunned, blinded, focused); items stay quiet
-				if Content.abilities.has(e.item):
-					float_text(e.unit, Texts.effect_word(e.item), Color(0.85, 0.85, 0.9))
-					await get_tree().create_timer(0.25).timeout
-			"heal", "regen":
-				float_text(e.unit, "+%d" % e.amount, Color(0.4, 1, 0.5))
-			"bump", "fall", "spike":
-				float_text(e.unit, "−%d" % e.dmg, Color(1, 0.6, 0.2))
-				await get_tree().create_timer(0.2).timeout
-			"die":
-				await get_tree().create_timer(0.2).timeout
+	await BattleEvents.play(self, events)
 
 
 ## the marks: [{pos, kind}] plus an optional path and the cursor cell

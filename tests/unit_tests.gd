@@ -114,3 +114,24 @@ func test_sound_bars_parse() -> String:
 		return "old bar: %s" % [Sound.parse(null, "0.3")]
 	var bad := Sound.parse({"music": 7, "ui": 150, "world": "x", "voice": 40}, "")
 	return "" if Util.diff(bad, {"music": 25, "ui": 50, "world": 50, "voice": 40}) == "" else "bad values: %s" % [bad]
+
+
+## the floating numbers' size by the share of life (hit-weight.ts numberPx) and what makes a strike strong
+func test_number_sizes() -> String:
+	if BattleEvents.number_px(10, 100, false) != 26 or BattleEvents.number_px(100, 100, false) != 56 or BattleEvents.number_px(30, 100, true) != 59:
+		return "sizes %d %d %d" % [BattleEvents.number_px(10, 100, false), BattleEvents.number_px(100, 100, false), BattleEvents.number_px(30, 100, true)]
+	if not BattleEvents.is_big({"k": "hit", "dmg": 25}, 100) or BattleEvents.is_big({"k": "fall", "dmg": 90}, 100):
+		return "only an attack's hit of 25% or more is strong"
+	return ""
+
+
+## the battle faces: the Warrior wears the barbarian's, the Archer the ranger's, a snake none; a small skeleton's sheet
+## has no wounded frame and stays on neutral
+func test_battle_faces() -> String:
+	if Portraits.sheet_of("warrior½") != "barbarian" or Portraits.sheet_of("archer") != "ranger" or Portraits.sheet_of("snake") != "":
+		return "sheets %s %s %s" % [Portraits.sheet_of("warrior½"), Portraits.sheet_of("archer"), Portraits.sheet_of("snake")]
+	if Portraits.frame_of(Content.data.faces.knight, "wounded") != 5 or Portraits.frame_of(Content.data.faces.skeleton_minion, "wounded") != 0:
+		return "frames"
+	var hurt := {"def": "warrior", "hp": 10}
+	return "" if Portraits.expression_of(hurt) == "wounded" else "a unit under 30% of life is not wounded"
+

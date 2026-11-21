@@ -1,0 +1,10 @@
+ASSET CREDITS (copied from the web game's public/CREDITS.txt; the same files, unchanged)
+
+== Faces (assets/faces/*.webp, the web game's public/chars/px, since Nov 15, 2026) ==
+assets/faces/barbarian, knight, lancer, mage, ranger, rogue_hooded and skeleton_mage.webp
+  AI-generated (Microsoft Copilot image output from our own prompts, with the KayKit renders as reference), aligned and
+  retouched in the design lab, resampled to 128 px. LICENCE STILL TO BE CONFIRMED before launch: the service terms on
+  commercial use of the output have not been checked yet.
+assets/faces/skeleton_minion, skeleton_rogue and skeleton_warrior.webp
+  Rendered from the KayKit skeletons (KayKit Character Pack: Skeletons 1.0, by Kay Lousberg, www.kaylousberg.com, CC0)
+  by the web game's scripts/assets/pixel-faces.mjs.
