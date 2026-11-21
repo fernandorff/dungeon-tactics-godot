@@ -106,6 +106,8 @@ func _draw_menu() -> void:
 			for c in rows:
 				var i := Command.index_of(c)
 				_row(Texts.command_name(c), Command.enabled(b, c), s.index == i, "", func() -> void: sr.choose(i), func() -> void: pass)
+				if c == "move":
+					_move_gauge(b)
 		"map":
 			_menu_title.text = Texts.t("Mover: escolha a casa", "Move: pick the tile")
 			_info.text = Texts.t("Enter ou clique de novo para andar até lá.", "Enter or click again to walk there.")
@@ -114,6 +116,14 @@ func _draw_menu() -> void:
 			_info.text = Texts.t("Setas para virar · Enter termina o turno", "Arrows to turn · Enter ends the turn")
 		_:
 			_draw_act(s)
+
+
+## under Move: the half tiles still walkable this turn against the turn's full movement (Fernando, Nov 21)
+func _move_gauge(b: Battle) -> void:
+	var most: int = Effects.move_of(b.state, b.actor())
+	var left := maxi(0, most - b.state.turn.get("spent", 0))
+	_menu.add_child(Kit.label(Texts.t("Movimento: %d de %d meias casas", "Movement: %d of %d half tiles") % [left, most], 13, Kit.MUTED))
+	_menu.add_child(HudBits.bar(left, most, Kit.HERO, 330.0))
 
 
 func _draw_act(s: Dictionary) -> void:
@@ -233,8 +243,12 @@ func open_pause() -> void:
 	_close_window()
 	screen_ref.paused = true
 	var leave := Texts.t("Sair da sala (perde a expedição)", "Leave the room (loses the expedition)") if screen_ref.room != null else Texts.t("Voltar ao título", "Back to the title")
-	_window = Kit.dialog(self, Texts.t("Pausa", "Pause"), "", [
+	_window = Kit.dialog(self, Texts.t("Menu", "Menu"), "", [
 		[Texts.t("Continuar", "Resume"), _close_window],
+		[Texts.t("Opções", "Options"), func() -> void:
+			_close_window()
+			screen_ref.paused = true
+			_window = OptionsWindow.open(self, _close_window)],
 		[Texts.t("Recomeçar a batalha", "Restart the battle"), func() -> void:
 			_close_window()
 			screen_ref.restart()],

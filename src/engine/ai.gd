@@ -213,15 +213,38 @@ static func choose_turn(grid: Grid, state: Dictionary, unit_id: String) -> Dicti
 	for s in Pathing.reachable(grid, state, unit_id).values():
 		spots.append(s.pos)
 	var walk := walk_map(grid, state, actor)
+	# how far each ability can possibly reach (the tallest drop counted): a target past it fails the range check anyway,
+	# so it is skipped before the costly preview; the same bound action_options uses, decisions unchanged
+	var lo := Util.BIG
+	var hi := -Util.BIG
+	for t in grid.tiles:
+		lo = mini(lo, Grid.stand_h(t))
+		hi = maxi(hi, Grid.stand_h(t))
+	var far := {}
+	for id in Content.units[actor.def].abilities:
+		var a: Dictionary = Content.abilities[id]
+		far[id] = Reach.far_cells(grid, a.range[1] + (hi - lo if a.heightRange else 0)) + 2 * (grid.sub - 1)
 	var plans: Array = []
 	for i in spots.size():
 		var spot: Vector2i = spots[i]
 		var moved := _with_unit_at(state, actor, spot)
 		var me := Combat.find_unit(moved, unit_id)
+		var body := 0
+		for c in Pathing.footprint(me):
+			body = maxi(body, Grid.dist(spot, c))
 		var attack: Variant = null
 		var attack_best := 0.0
 		for id in Content.units[actor.def].abilities:
+			# a preview reads only the whole tile a target stands for: the first cell of each tile scores it, and a later
+			# cell of the same tile can only tie, which never replaces the plan
+			var tried := {}
 			for target in _candidate_targets(grid, moved, me, Content.abilities[id]):
+				if Grid.dist(spot, target) - body > far[id]:
+					continue
+				var aim := Pathing.aim_tile(grid, moved, target)
+				if tried.has(aim):
+					continue
+				tried[aim] = true
 				var s := attack_score(grid, moved, me, id, target)
 				if s > attack_best:
 					attack_best = s

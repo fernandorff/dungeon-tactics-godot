@@ -68,7 +68,8 @@ static func _row_of(rows: Array, pred: Callable) -> int:
 static func cancel_step(b: Battle, s: Dictionary) -> Variant:
 	match s.k:
 		"menu":
-			return "undo" if can_undo_move(b) else {}
+			# Esc on the bare menu opens the settings menu (Fernando, Nov 21); undoing a move stays on Z
+			return {}
 		"map":
 			return {"k": "menu", "index": index_of("move")}
 		"facing":

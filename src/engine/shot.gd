@@ -16,11 +16,6 @@ static func _sight_h(grid: Grid, cells: Array[Vector2i]) -> int:
 	return best
 
 
-static func _block_top(grid: Grid, p: Vector2i) -> int:
-	var t := grid.tile(p)
-	return t.h + Grid.blocks_of(t)
-
-
 static func sight_ends(grid: Grid, state: Dictionary, actor: Dictionary, center: Vector2i) -> Array[Vector2i]:
 	var k := grid.sub
 	if k == 1:
@@ -60,24 +55,21 @@ static func trace(grid: Grid, state: Dictionary, shooter: Dictionary, center: Ve
 	var shot := {"from": from, "to": to, "rise": rise, "fall": fall, "stop": null}
 	var tu := Pathing.unit_at(state, b)
 	var target: Variant = tu.id if not tu.is_empty() else null
-	var bodies: Array = []
+	# the bodies in flat arrays: read for every cell the shot crosses
+	var bx := PackedInt32Array()
+	var by := PackedInt32Array()
+	var bs := PackedInt32Array()
+	var btop := PackedFloat64Array()
+	var bid: Array = []
 	for u in state.units:
 		if u.id != shooter.id and u.id != target:
-			bodies.append({"u": u, "size": Pathing.size_of(u.def), "top": _sight_h(grid, Pathing.footprint(u)) + BODY_H})
+			bx.append(u.pos.x)
+			by.append(u.pos.y)
+			bs.append(Pathing.size_of(u.def))
+			btop.append(_sight_h(grid, Pathing.footprint(u)) + BODY_H)
+			bid.append(u.id)
+	var nb := bid.size()
 	var fh: float = from.h
-	var h := func(k: float) -> float:
-		return fh + rise * k - fall * k * k
-	var under := func(top: float, k0: float, k1: float) -> Variant:
-		if h.call(k0) < top:
-			return k0
-		if h.call(k1) >= top:
-			return null
-		var k: float
-		if fall != 0.0:
-			k = (rise + sqrt(rise * rise - 4 * fall * (top - fh))) / (2 * fall)
-		else:
-			k = (top - fh) / rise
-		return minf(k1, maxf(k0, k))
 	var ks: Array = [0.0, 1.0]
 	for pq in [[from.x, to.x], [from.y, to.y]]:
 		var p: float = pq[0]
@@ -87,42 +79,59 @@ static func trace(grid: Grid, state: Dictionary, shooter: Dictionary, center: Ve
 			ks.append((v - p) / (q - p))
 			v += 1
 	ks.sort()
-	var own := func(x: int, y: int) -> bool:
-		for p in [a, b]:
-			if x >= p.x and x < p.x + n and y >= p.y and y < p.y + n:
-				return true
-		return false
+	var fx: float = from.x
+	var fy: float = from.y
+	var dx: float = to.x - fx
+	var dy: float = to.y - fy
+	# plain loops and floats instead of closures and a point Dictionary per step: the AI traces hundreds of shots a turn
 	for i in range(1, ks.size()):
 		var k0: float = ks[i - 1]
 		var k1: float = ks[i]
 		if k0 == k1:
 			continue
-		var m := at(shot, (k0 + k1) / 2)
+		var km := (k0 + k1) / 2
+		var mx := fx + dx * km
+		var my := fy + dy * km
+		var stop_k := -1.0
 		var stop: Variant = null
-		for y in _sides(m.y):
-			for x in _sides(m.x):
+		for y in _sides(my):
+			for x in _sides(mx):
 				var c := Vector2i(x, y)
 				if not grid.in_bounds(c):
 					continue
-				var ground: float = grid.tile(c).h if own.call(x, y) else _block_top(grid, c)
-				var kt: Variant = under.call(ground, k0, k1)
-				if kt != null and (stop == null or kt < stop.k):
+				var own: bool = (x >= a.x and x < a.x + n and y >= a.y and y < a.y + n) or (x >= b.x and x < b.x + n and y >= b.y and y < b.y + n)
+				var t := grid.tile(c)
+				var ground: float = t.h if own else t.h + Grid.blocks_of(t)
+				var kt := _under(fh, rise, fall, ground, k0, k1)
+				if kt >= 0.0 and (stop == null or kt < stop_k):
+					stop_k = kt
 					stop = {"k": kt, "pos": Vector2i(x - x % n, y - y % n), "unit": null}
-				var body: Variant = null
-				for bd in bodies:
-					var up: Vector2i = bd.u.pos
-					if x >= up.x and x < up.x + bd.size and y >= up.y and y < up.y + bd.size:
-						body = bd
+				for j in nb:
+					if x >= bx[j] and x < bx[j] + bs[j] and y >= by[j] and y < by[j] + bs[j]:
+						var kb := _under(fh, rise, fall, btop[j], k0, k1)
+						if kb >= 0.0 and (stop == null or kb < stop_k):
+							stop_k = kb
+							stop = {"k": kb, "pos": c, "unit": bid[j]}
 						break
-				if body != null:
-					var kb: Variant = under.call(body.top, k0, k1)
-					if kb != null and (stop == null or kb < stop.k):
-						stop = {"k": kb, "pos": c, "unit": body.u.id}
 		if stop != null:
 			var out := shot.duplicate()
 			out.stop = stop
 			return out
 	return shot
+
+
+## where the shot first goes under `top` inside [k0, k1], or -1 when it stays above
+static func _under(fh: float, rise: float, fall: float, top: float, k0: float, k1: float) -> float:
+	if fh + rise * k0 - fall * k0 * k0 < top:
+		return k0
+	if fh + rise * k1 - fall * k1 * k1 >= top:
+		return -1.0
+	var k: float
+	if fall != 0.0:
+		k = (rise + sqrt(rise * rise - 4 * fall * (top - fh))) / (2 * fall)
+	else:
+		k = (top - fh) / rise
+	return minf(k1, maxf(k0, k))
 
 
 static func _sides(v: float) -> Array:

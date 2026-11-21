@@ -165,7 +165,7 @@ func _open_shot(what: String) -> void:
 			Saves.new_game(1)
 			CrawlFlow.depart(7)
 			expedition_map()
-		"act":
+		"act", "esc":
 			skirmish(Content.data.first_battle)
 		"dawn":
 			survival()
@@ -179,6 +179,9 @@ func _open_shot(what: String) -> void:
 		bs.choose(Command.index_of("act"))
 		bs.key("confirm")
 		await get_tree().create_timer(0.8).timeout
+	if what == "esc" and _screen is BattleScreen:
+		(_screen as BattleScreen).key("cancel")
+		await get_tree().create_timer(0.5).timeout
 	var img := get_viewport().get_texture().get_image()
 	img.save_png(_shot[1])
 	print("shot saved: ", _shot[1])
