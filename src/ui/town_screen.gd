@@ -90,8 +90,9 @@ func _name_people() -> void:
 			view.names[u.id] = Party.member(g, u.id.substr(2)).get("name", "")
 
 
-func notice(text: String) -> void:
-	_open(Kit.dialog(self, Texts.t("Aviso", "Notice"), text, [[Texts.t("Ok", "Ok"), _close_overlay]]))
+## a notice window over the town (Notices): `make.call(self, done)`, `done` run when it closes
+func notice(make: Callable) -> void:
+	_open(make.call(self, _close_overlay))
 
 
 func _open(c: Control) -> void:

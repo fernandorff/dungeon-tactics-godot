@@ -48,8 +48,9 @@ func _build(said: String = "") -> void:
 		if first == null:
 			first = b
 	var back := Kit.button(Texts.t("Voltar à cidade (leva o ouro achado)", "Back to town (brings the gold found)"), func() -> void:
-		var home := CrawlFlow.retreat(exp)
-		main.town(Texts.t("O grupo voltou com %d de ouro.", "The party came back with %d gold.") % home))
+		# the web game says nothing here: the town's gold counter shows it
+		CrawlFlow.retreat(exp)
+		main.town())
 	v.add_child(back)
 	(first if first else back).call_deferred("grab_focus")
 

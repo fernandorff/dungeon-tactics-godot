@@ -53,19 +53,20 @@ func title() -> void:
 	show_screen(TitleScreen.new(self))
 
 
-func town(note: String = "") -> void:
+## `notice`: a window over the town, made by notice.call(town, done) (Notices.lost, Notices.no_room)
+func town(notice: Callable = Callable()) -> void:
 	var t := TownScreen.new(self)
 	Music.play("world") # Pastoral D, the town's music (Fernando, Nov 15)
 	show_screen(t)
-	if note != "":
-		t.notice(note)
+	if notice.is_valid():
+		t.notice(notice)
 
 
 ## ?home: the town, the expedition lost if the party left a room behind
 func home(expedition: bool = false) -> void:
 	var lost := CrawlFlow.left_room()
 	if lost >= 0:
-		town(Texts.t("A expedição foi perdida: o grupo saiu de uma sala antes do fim. %d de ouro voltou à cidade.", "The expedition was lost: the party left a room before it ended. %d gold came back to town.") % lost)
+		town(func(t: Control, done: Callable) -> Control: return Notices.lost(t, lost, done))
 		return
 	var exp: Variant = CrawlFlow.live_expedition()
 	if expedition and exp != null:
@@ -92,7 +93,7 @@ func room(node: int) -> void:
 		return
 	var built := CrawlFlow.room_scenario(map[node])
 	if built.is_empty():
-		town(Texts.t("A sala não abriu. Tente outra.", "The room would not open. Try another."))
+		town(Notices.no_room)
 		return
 	var held: Variant = Store.json(Saves.ROOM_KEY)
 	var held_id: Variant = held.get("state", {}).get("scenario") if typeof(held) == TYPE_DICTIONARY else null
