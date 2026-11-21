@@ -28,6 +28,7 @@ const queue = await mod('src/shared/battle/turn-queue.ts');
 const options = await mod('src/shared/battle/options.ts');
 const bag = await mod('src/shared/battle/bag.ts');
 const flooded = await mod('src/content/maps/flooded-crypt.ts');
+const act = await mod('src/client/act-flow.ts');
 
 const content = {
   units: units.UNIT_LIST,
@@ -116,6 +117,28 @@ for (const seed of [1, 42, 99991, -5]) {
 }
 writeFileSync(resolve(golden, 'expeditions.json'), JSON.stringify(expeditions));
 
+// the Agir screens for a battle state: the target list, the Agir list, each target's actions with the spot picked first,
+// and each action's own target list on both sides
+const actRead = (b: unknown) => {
+  const targets = act.actTargets(b);
+  const list = act.actList(b);
+  const refs = list.filter((r: { k: string }) => r.k === 'ability' || r.k === 'item');
+  for (const g of act.GROUPS) refs.push(...act.actGroup(b, g));
+  return {
+    targets,
+    list,
+    groups: act.GROUPS.map((g: string) => act.actGroup(b, g)),
+    actions: targets.map((t: unknown) =>
+      act.actActions(b, t).map((a: unknown) => ({ ...(a as object), best: act.bestSpot(a, b), aims: act.actAims(a) })),
+    ),
+    only: refs.map((r: { k: string; id: string }) => ({
+      ref: { k: r.k, id: r.id },
+      own: act.actTargets(b, { k: r.k, id: r.id }),
+      other: act.actTargets(b, { k: r.k, id: r.id }, true),
+    })),
+  };
+};
+
 // the turn list projection and the Agir options at the start of some battles
 const reads: unknown[] = [];
 for (const sc of scen.MAPS.slice(0, 4)) {
@@ -129,6 +152,7 @@ for (const sc of scen.MAPS.slice(0, 4)) {
       options: options.actionOptions(b.grid, b.state, b.actor.id),
       items: bag.itemOptions(b.grid, { ...b.state, bag: { life_potion: 2, ether: 1 } }, b.actor.id),
       reach: [...b.reach().values()],
+      act: actRead(new battleMod.Battle(b.grid, structuredClone({ ...b.state, bag: { life_potion: 2, ether: 1 } }))),
     });
     ai.playAiTurn(b);
   }

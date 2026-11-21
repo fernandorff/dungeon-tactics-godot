@@ -122,4 +122,43 @@ func test_reads() -> String:
 		d = Util.diff(Util.plain(b.reach().values()), r.reach, label + " reach")
 		if d != "":
 			return d
+		d = _act_read(Battle.new(sc.grid, with_bag.duplicate(true)), r.act, label)
+		if d != "":
+			return d
+	return ""
+
+
+## the Agir screens on the same state: targets, list, groups, each target's actions with the spot picked first, and
+## each action's own target list on both sides
+func _act_read(b: Battle, want: Dictionary, label: String) -> String:
+	var targets := ActFlow.act_targets(b)
+	var d := Util.diff(Util.plain(targets), want.targets, label + " act targets")
+	if d != "":
+		return d
+	d = Util.diff(Util.plain(ActFlow.act_list(b)), want.list, label + " act list")
+	if d != "":
+		return d
+	var groups: Array = []
+	for g in ActFlow.GROUPS:
+		groups.append(ActFlow.act_group(b, g))
+	d = Util.diff(Util.plain(groups), want.groups, label + " act groups")
+	if d != "":
+		return d
+	for i in targets.size():
+		var acts: Array = []
+		for a in ActFlow.act_actions(b, targets[i]):
+			var row: Dictionary = a.duplicate()
+			row.best = ActFlow.best_spot(a, b)
+			row.aims = ActFlow.act_aims(a)
+			acts.append(row)
+		d = Util.diff(Util.plain(acts), want.actions[i], "%s act actions %d" % [label, i])
+		if d != "":
+			return d
+	for o in want.only:
+		d = Util.diff(Util.plain(ActFlow.act_targets(b, o.ref)), o.own, "%s only %s" % [label, o.ref.id])
+		if d != "":
+			return d
+		d = Util.diff(Util.plain(ActFlow.act_targets(b, o.ref, true)), o.other, "%s other %s" % [label, o.ref.id])
+		if d != "":
+			return d
 	return ""

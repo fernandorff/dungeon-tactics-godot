@@ -175,3 +175,37 @@ func test_boss_room() -> String:
 		return "boss room %s %s" % [sizes, hps]
 	var loaded := Battle.load_save(b.save())
 	return "" if loaded != null and loaded.state.scenario == cast.scenario.id else "boss save"
+
+
+## a whole battle where the heroes play through the Agir screens (first target, first action on, the spot picked first)
+## and the menu's own reads never fail; the enemies play the AI
+func test_heroes_play_through_the_menu() -> String:
+	var sc := Half.halve(Content.scenarios[Content.data.first_battle])
+	var b := Battle.start(sc, 9)
+	var turns := 0
+	while not b.over() and turns < 300:
+		turns += 1
+		if b.actor().team != "hero":
+			Ai.play_turn(b)
+			continue
+		var rows := Command.menu_rows(b)
+		if not rows.has("act") or Command.start_screen(b).k != "menu":
+			return "menu rows %s" % [rows]
+		Interaction.highlights(b, Interaction.fresh_ui(b))
+		var acted := false
+		for t in ActFlow.act_targets(b):
+			for a in ActFlow.act_actions(b, t):
+				if a.enabled and not acted:
+					var s: Dictionary = a.spots[ActFlow.best_spot(a, b)]
+					var lock := "unit" if Command.needs_lock(b, a.id, s.aim) else ""
+					var r := ActFlow.run_spot(b, a, s, lock)
+					if r.act != null and r.act.is_empty():
+						return "turn %d: %s from %s did nothing" % [turns, a.id, s.pos]
+					acted = true
+			if acted:
+				break
+		if not b.over() and b.state.turn.actor == b.actor().id:
+			Interaction.facing_highlights(b)
+			Command.cancel_step(b, {"k": "facing"})
+			b.end_turn()
+	return "" if b.over() else "no end in 300 turns"
