@@ -107,6 +107,8 @@ func _refresh() -> void:
 		tiles.append({"pos": Vector2i(int(parts[0]), int(parts[1])), "kind": "charge"})
 	tiles.append_array(m.tiles)
 	view.show_marks(tiles, m.get("path"), cursor if is_hero_turn() and (screen.k == "map" or screen.k == "facing") else null, size)
+	# like the web's turnMarks: only while a hero chooses, and not over another unit's painted range
+	view.show_rings(Rings.of_screen(battle, screen, cursor) if is_hero_turn() and not busy and ui.get("inspect", "") == "" else {})
 	_hud.refresh()
 
 

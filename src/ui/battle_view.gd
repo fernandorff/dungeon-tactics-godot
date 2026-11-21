@@ -28,6 +28,7 @@ var _focus := Vector3.ZERO
 var _yaw := 45.0
 var _tiles: Node3D
 var _marks: Node3D
+var _rings: Node3D
 var _units := {} # unit id → Node3D
 var _mats := {}
 var _plates := {} # plate width → its mesh
@@ -58,6 +59,8 @@ func build(g: Grid, state: Dictionary) -> void:
 	add_child(_tiles)
 	_marks = Node3D.new()
 	add_child(_marks)
+	_rings = Node3D.new()
+	add_child(_rings)
 	_float = Node3D.new()
 	add_child(_float)
 	for y in g.height:
@@ -265,6 +268,16 @@ func show_marks(tiles: Array, path: Variant = null, cursor: Variant = null, size
 		for c in Pathing.cells_of(cursor, size):
 			if grid.in_bounds(c):
 				_plate(c, MARK_COLORS.cursor, 0.5, 0.09)
+
+
+## the dotted outlines: {range?: cells, walk?: cells} (Rings.of_screen); {} clears them
+func show_rings(r: Dictionary) -> void:
+	for c in _rings.get_children():
+		c.queue_free()
+	if not r.get("range", {}).is_empty():
+		_rings.add_child(Rings.outline(self, r.range, Rings.RANGE))
+	if not r.get("walk", {}).is_empty():
+		_rings.add_child(Rings.outline(self, r.walk, Rings.WALK))
 
 
 func _plate(p: Vector2i, col: Color, w: float, lift: float) -> void:

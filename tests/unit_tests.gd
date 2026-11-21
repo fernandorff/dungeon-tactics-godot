@@ -136,6 +136,21 @@ func test_battle_faces() -> String:
 	return "" if Portraits.expression_of(hurt) == "wounded" else "a unit under 30% of life is not wounded"
 
 
+## the blue walk outline covers the body's cells from every reachable spot and the unit's own; the gold ring the tiles
+## within the longest range, measured to the whole tile
+func test_walk_and_range_rings() -> String:
+	var gs := _flat([["w", "warrior", "hero", Vector2i(2, 2)], ["s", "soldier", "enemy", Vector2i(5, 5)]])
+	var b := Battle.new(gs[0], gs[1])
+	var walk := Rings.walk_cells(b)
+	if not walk.has(Vector2i(2, 2)) or walk.size() != b.reach().size() + 1:
+		return "walk cells %d for %d spots" % [walk.size(), b.reach().size()]
+	var ring := Rings.ring_cells(gs[0], Pathing.footprint(b.actor()), 1)
+	if not ring.has(Vector2i(2, 3)) or ring.has(Vector2i(2, 4)) or ring.has(Vector2i(2, 2)) != true:
+		return "ring %s" % [ring.keys()]
+	b.state.turn.spent = 999
+	return "" if Rings.walk_cells(b).is_empty() else "a unit that cannot walk still draws its outline"
+
+
 ## the music's volume: the bar × 0.8 × 0.6 × the track's gain, nothing with the master switch off or an unknown track
 func test_music_level() -> String:
 	var keep := [Sound.volume, Sound.levels.music]
