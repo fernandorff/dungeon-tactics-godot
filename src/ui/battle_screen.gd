@@ -62,6 +62,7 @@ func is_hero_turn() -> bool:
 func _start_turn() -> void:
 	if battle.over():
 		_refresh()
+		Sound.jingle(battle.state.outcome == "victory") # as the web's finish: the fanfare as the battle ends
 		await get_tree().create_timer(0.6).timeout
 		finished.emit(battle.state.outcome == "victory")
 		return

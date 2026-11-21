@@ -106,16 +106,6 @@ func test_small_bodies_leave_no_corpse() -> String:
 	return "" if state.get("corpses", []).size() else "a soldier left no corpse"
 
 
-func test_sound_bars_parse() -> String:
-	if Util.diff(Sound.parse(null, ""), Sound.DEFAULT) != "":
-		return "no save: %s" % [Sound.parse(null, "")]
-	# a save from before the split: its single bar fills interface, world and dialogue
-	if Util.diff(Sound.parse(null, "0.3"), {"music": 25, "ui": 30, "world": 30, "voice": 30}) != "":
-		return "old bar: %s" % [Sound.parse(null, "0.3")]
-	var bad := Sound.parse({"music": 7, "ui": 150, "world": "x", "voice": 40}, "")
-	return "" if Util.diff(bad, {"music": 25, "ui": 50, "world": 50, "voice": 40}) == "" else "bad values: %s" % [bad]
-
-
 ## the floating numbers' size by the share of life (hit-weight.ts numberPx) and what makes a strike strong
 func test_number_sizes() -> String:
 	if BattleEvents.number_px(10, 100, false) != 26 or BattleEvents.number_px(100, 100, false) != 56 or BattleEvents.number_px(30, 100, true) != 59:

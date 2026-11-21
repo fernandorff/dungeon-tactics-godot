@@ -1,33 +1,59 @@
 class_name Sound
-## The interface's short sounds (cursor, confirm, cancel, hit), made at run time as plain tones so the port needs no audio
-## files. Four volume bars as in sound.ts since Nov 21 (music, interface, world, dialogue), saved in dt:sound; `volume` is
-## the master switch the test runner and the shot mode turn off.
-## The music bar drives music.gd. shortcut: synthesized beeps stand in for the web game's sound effects, swap for real
-## samples when assets come over; the port has no typed dialogue yet, so the dialogue bar waits for its speech blip
+## The game's sound effects (port of sound.ts): the web's own effect files (assets/sfx, CC0, authors in CREDITS.txt), the
+## victory and defeat fanfares and the dialogue's speech blip made from notes (synth.gd). Four volume bars since Nov 21
+## (music, interface, world, dialogue), saved in dt:sound; `volume` is the master switch the tests and the shot mode turn
+## off. The music bar drives music.gd.
 
 const SOUND_KEY := "dt:sound"
-const OLD_KEY := "dt:sfx" # the single effects bar before the split, 0 to 1
+# music on at 25% and effects at 50% by default (Nov 18, Fernando's request); a saved volume of someone who set it wins
 const DEFAULT := {"music": 25, "ui": 50, "world": 50, "voice": 50}
-const INTERFACE := ["cursor", "confirm", "cancel"] # the menus' sounds; every other one is the world's
-const TONES := {"cursor": [880.0, 0.04], "confirm": [1320.0, 0.07], "cancel": [440.0, 0.08], "hit": [180.0, 0.1]}
+# the old save stored 0, 1 or 2 (off, low, loud): 1 and 2 are not multiples of 5, so they become 45% and 100%
+const LEGACY := {1: 45, 2: 100}
+const INTERFACE := ["cursor", "confirm", "cancel"] # the menus' sounds; every other effect is the world's
+const FILE := {
+	"cursor": "click", "confirm": "confirm", "cancel": "cancel", "step": "step", "swing": "swing", "throw": "throw",
+	"hit": "hit", "miss": "miss", "heal": "heal", "charge": "charge", "spell": "spell", "fire": "fireball", "die": "die",
+}
+# the sound of each battle event, before its animation (before-event.ts); a move steps and an attack swings apart
+const BY_EVENT := {
+	"hit": "hit", "bump": "hit", "fall": "hit", "spike": "hit", "miss": "miss", "heal": "heal", "regen": "heal",
+	"charge": "charge", "fizzle": "miss", "die": "die",
+}
+# each ability's effect look (fx.ts LOOKS): what the strike sounds like; an ability not listed looks like Strike
+const FX := {
+	"strike": "slash", "heavy_strike": "heavy", "shield_bash": "impact", "spin": "spin", "shove": "impact",
+	"shot": "arrow", "aimed_shot": "arrow", "knock_shot": "arrow", "sand": "impact", "focus": "heal", "dagger": "stab",
+	"firebolt": "fire", "blast": "blast", "shadow_wave": "blast", "gust": "wind", "heal": "heal", "stab": "stab",
+	"throwing_knife": "knife", "trip": "impact", "deathblow": "heavy", "cleave": "heavy", "slam": "impact",
+	"lance": "stab", "sweep": "impact", "lance_jump": "heavy",
+}
+const MELEE := ["slash", "heavy", "stab", "impact", "spin", "dash", "debuff"]
+const VOICES := 4 # one effect may sound over itself this many times (steps of two walkers, hits of an area)
 
-static var _player: AudioStreamPlayer
+static var _host: Node
+static var _players := {} # effect file -> its AudioStreamPlayer
 static var volume := 1.0
 static var levels: Dictionary = DEFAULT.duplicate()
 
 
-## trust boundary for the saved bars: whole % from 0 to 100 in steps of 5, else the default; an old save's single
-## effects bar (`old`, 0 to 1) fills the three effect bars
-static func parse(raw: Variant, old: String) -> Dictionary:
-	var pct := func(v: Variant, fallback: int) -> int:
-		return int(v) if typeof(v) in [TYPE_INT, TYPE_FLOAT] and v == int(v) and v >= 0 and v <= 100 and int(v) % 5 == 0 else fallback
-	var sfx: int = pct.call(roundi(float(old) * 100) if old.is_valid_float() else null, DEFAULT.world)
+## trust boundary for the saved bars (parseSound): whole % from 0 to 100 in steps of 5 or an old 1 or 2, else the
+## default; a save from before the split holds one `sfx` bar, which the three effect bars start at
+static func parse(raw: Variant) -> Dictionary:
 	var r: Dictionary = raw if typeof(raw) == TYPE_DICTIONARY else {}
-	return {"music": pct.call(r.get("music"), DEFAULT.music), "ui": pct.call(r.get("ui"), sfx), "world": pct.call(r.get("world"), sfx), "voice": pct.call(r.get("voice"), sfx)}
+	var sfx: int = _pct(r.get("sfx"), DEFAULT.world)
+	return {"music": _pct(r.get("music"), DEFAULT.music), "ui": _pct(r.get("ui"), sfx), "world": _pct(r.get("world"), sfx), "voice": _pct(r.get("voice"), sfx)}
+
+
+static func _pct(v: Variant, fallback: int) -> int:
+	if typeof(v) not in [TYPE_INT, TYPE_FLOAT]:
+		return fallback
+	if LEGACY.has(v):
+		return LEGACY[v]
+	return int(v) if v >= 0 and v <= 100 and v == int(v) and int(v) % 5 == 0 else fallback
 
 
 static func load_levels() -> void:
-	levels = parse(Store.json(SOUND_KEY), Store.get_key(OLD_KEY))
+	levels = parse(Store.json(SOUND_KEY))
 
 
 static func set_level(k: String, pct: int) -> void:
@@ -36,26 +62,69 @@ static func set_level(k: String, pct: int) -> void:
 	Music.apply()
 
 
+## 100% is the web's old "loud" (0.8): the levels measured in dB on the web still hold at maximum
+static func gain(pct: int) -> float:
+	return volume * pct / 100.0 * 0.8
+
+
 static func attach(parent: Node) -> void:
-	_player = AudioStreamPlayer.new()
-	var gen := AudioStreamGenerator.new()
-	gen.mix_rate = 22050
-	gen.buffer_length = 0.3
-	_player.stream = gen
-	parent.add_child(_player)
-	_player.play()
+	_host = parent
+	_players.clear()
+
+
+## the effect's player, made on first use: one per file, a few voices deep
+static func _player(file: String) -> AudioStreamPlayer:
+	if not _players.has(file):
+		var p := AudioStreamPlayer.new()
+		p.stream = load("res://assets/sfx/%s.mp3" % file)
+		p.max_polyphony = VOICES
+		_host.add_child(p)
+		_players[file] = p
+	return _players[file]
 
 
 static func play(kind: String) -> void:
-	var level: float = volume * (levels.ui if kind in INTERFACE else levels.world) / 100.0
-	if _player == null or level <= 0.0 or not TONES.has(kind):
+	var g := gain(levels.ui if kind in INTERFACE else levels.world)
+	if _host == null or g <= 0.0 or not FILE.has(kind):
 		return
-	var pb := _player.get_stream_playback() as AudioStreamGeneratorPlayback
-	if pb == null:
+	var p := _player(FILE[kind])
+	p.volume_db = linear_to_db(g)
+	p.play()
+
+
+## the battle event's own sound (hit, miss, heal, charge, fall); a move's steps and an attack's swing come apart
+static func for_event(e: Dictionary) -> void:
+	if BY_EVENT.has(e.k):
+		play(BY_EVENT[e.k])
+
+
+## the sound of a strike in the air by the ability's look: a blade swings, fire roars, a spell rings, the rest is thrown
+static func attack_kind(ability: String) -> String:
+	var fx: String = FX.get(ability, FX.strike)
+	if fx in MELEE:
+		return "swing"
+	if fx == "fire" or fx == "blast":
+		return "fire"
+	return "spell" if fx in ["heal", "buff", "wind"] else "throw"
+
+
+## the fanfare at a battle's end, at the world bar
+static func jingle(win: bool) -> void:
+	_synth(Synth.jingle(win, gain(levels.world) * 0.4))
+
+
+## one speech beep at the speaker's pitch in Hz, varying a little so it does not sound like an alarm (talk.ts calls it
+## per spoken letter). shortcut: the port has no dialogue box yet, so nothing calls it; talk.ts's port will
+static func blip(pitch: float) -> void:
+	_synth(Synth.blip(pitch * randf_range(0.94, 1.06), gain(levels.voice) * 0.3))
+
+
+## a made sound plays once on its own player, which goes when it ends
+static func _synth(samples: PackedFloat32Array) -> void:
+	if _host == null or volume <= 0.0:
 		return
-	var tone: Array = TONES[kind]
-	var n := int(22050 * tone[1])
-	for i in mini(n, pb.get_frames_available()):
-		var env := 1.0 - float(i) / n
-		var v := sin(TAU * tone[0] * i / 22050.0) * 0.25 * level * env
-		pb.push_frame(Vector2(v, v))
+	var p := AudioStreamPlayer.new()
+	p.stream = Synth.to_wav(samples)
+	p.finished.connect(p.queue_free)
+	_host.add_child(p)
+	p.play()

@@ -8,6 +8,7 @@ const HEAL := Color("#6fdc8c")
 const MISS := Color("#bdbdbd")
 const BIG := 0.25 # a strike of 25% of life or more is strong: bigger number, gold edge
 const WORD_PX := 26 # a word (Miss, an effect) at the web float's default size
+const STEP_S := 0.09 # view.walk's time per tile: keep the two equal or the steps drift off the feet
 
 
 ## the number's size in px, by the share of life it takes (numberPx): 18 to 56, x1.4 when strong
@@ -25,20 +26,30 @@ static func _max_hp(view: BattleView, unit: String) -> int:
 	return Content.units[def].hp if def != "" else 1
 
 
+## a footstep at the start of each tile walked after the first, in time with view.walk's tween
+static func _steps(view: BattleView, tiles: int) -> void:
+	var tw := view.create_tween()
+	for i in range(1, tiles):
+		tw.tween_interval(STEP_S)
+		tw.tween_callback(Sound.play.bind("step"))
+
+
 static func play(view: BattleView, events: Array) -> void:
 	var magic := false # a hit names no ability: the last attack says if it was magic (violet, with a ✦)
 	for e in events:
+		Sound.for_event(e)
 		match e.k:
 			"move":
+				_steps(view, e.path.size())
 				await view.walk(e.unit, e.path)
 			"attack":
+				Sound.play(Sound.attack_kind(e.ability))
 				magic = Content.abilities[e.ability].get("magic", false)
 			"hit", "bump", "fall", "spike":
 				var most := _max_hp(view, e.unit)
 				var big := is_big(e, most)
 				var star: bool = e.k == "hit" and magic
 				view.float_text(e.unit, "-%d%s" % [e.dmg, " ✦" if star else ""], MAGIC if star else PHYS, number_px(e.dmg, most, big), big)
-				Sound.play("hit")
 				await view.get_tree().create_timer(0.25).timeout
 			"miss":
 				view.float_text(e.unit, Texts.t("Errou", "Miss"), MISS, WORD_PX)
