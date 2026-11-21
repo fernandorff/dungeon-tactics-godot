@@ -1,0 +1,10302 @@
+{
+ "units": [
+  {
+   "id": "warrior",
+   "name": "Guerreiro",
+   "en": "Warrior",
+   "hp": 210,
+   "speed": 8,
+   "move": 4,
+   "abilities": [
+    "strike",
+    "heavy_strike",
+    "shield_bash",
+    "spin",
+    "gust"
+   ],
+   "vars": {
+    "stamina": 50,
+    "mana": 30
+   },
+   "regen": {
+    "stamina": 5,
+    "mana": 3
+   },
+   "resist": {
+    "phys": 10
+   },
+   "dodge": 5
+  },
+  {
+   "id": "archer",
+   "name": "Arqueiro",
+   "en": "Archer",
+   "hp": 140,
+   "speed": 10,
+   "move": 4,
+   "abilities": [
+    "shot",
+    "aimed_shot",
+    "knock_shot",
+    "dagger",
+    "gust"
+   ],
+   "vars": {
+    "stamina": 40,
+    "mana": 30
+   },
+   "regen": {
+    "stamina": 5,
+    "mana": 3
+   },
+   "dodge": 10
+  },
+  {
+   "id": "mage",
+   "name": "Mago",
+   "en": "Mage",
+   "hp": 120,
+   "speed": 7,
+   "move": 3,
+   "abilities": [
+    "firebolt",
+    "blast",
+    "gust",
+    "heal",
+    "dagger"
+   ],
+   "vars": {
+    "mana": 30,
+    "stamina": 30
+   },
+   "regen": {
+    "mana": 8,
+    "stamina": 3
+   },
+   "resist": {
+    "phys": -10,
+    "mag": 20
+   }
+  },
+  {
+   "id": "rogue",
+   "name": "Ladino",
+   "en": "Rogue",
+   "hp": 130,
+   "speed": 12,
+   "move": 5,
+   "jump": 2,
+   "abilities": [
+    "stab",
+    "throwing_knife",
+    "trip",
+    "deathblow",
+    "gust"
+   ],
+   "vars": {
+    "stamina": 50,
+    "mana": 30
+   },
+   "regen": {
+    "stamina": 5,
+    "mana": 3
+   },
+   "dodge": 20,
+   "flankDamage": {
+    "front": -25,
+    "back": 50
+   }
+  },
+  {
+   "id": "soldier",
+   "name": "Soldado",
+   "en": "Soldier",
+   "hp": 225,
+   "speed": 8,
+   "move": 4,
+   "abilities": [
+    "strike",
+    "shield_bash",
+    "gust"
+   ],
+   "vars": {
+    "stamina": 40,
+    "mana": 30
+   },
+   "regen": {
+    "stamina": 5,
+    "mana": 3
+   },
+   "resist": {
+    "phys": 25
+   },
+   "dodge": 5
+  },
+  {
+   "id": "skeleton_archer",
+   "name": "Arqueiro esqueleto",
+   "en": "Skeleton archer",
+   "hp": 165,
+   "speed": 10,
+   "move": 4,
+   "abilities": [
+    "shot",
+    "dagger",
+    "gust"
+   ],
+   "vars": {
+    "stamina": 40,
+    "mana": 30
+   },
+   "regen": {
+    "stamina": 5,
+    "mana": 3
+   },
+   "undead": true,
+   "resist": {
+    "light": -50,
+    "shadow": 50
+   },
+   "dodge": 5
+  },
+  {
+   "id": "dark_mage",
+   "name": "Mago sombrio",
+   "en": "Dark mage",
+   "hp": 150,
+   "speed": 7,
+   "move": 3,
+   "abilities": [
+    "firebolt",
+    "blast",
+    "dagger"
+   ],
+   "vars": {
+    "mana": 60,
+    "stamina": 30
+   },
+   "regen": {
+    "mana": 8,
+    "stamina": 3
+   },
+   "resist": {
+    "phys": -10,
+    "mag": 30,
+    "shadow": 50,
+    "light": -25
+   }
+  },
+  {
+   "id": "lancer",
+   "name": "Lanceiro",
+   "en": "Lancer",
+   "hp": 190,
+   "speed": 9,
+   "move": 4,
+   "jump": 3,
+   "abilities": [
+    "lance",
+    "sweep",
+    "lance_jump",
+    "gust"
+   ],
+   "vars": {
+    "stamina": 50,
+    "mana": 30
+   },
+   "regen": {
+    "stamina": 5,
+    "mana": 3
+   },
+   "resist": {
+    "phys": 10
+   },
+   "dodge": 5
+  },
+  {
+   "id": "brute",
+   "name": "Bruto",
+   "en": "Brute",
+   "hp": 410,
+   "speed": 5,
+   "move": 3,
+   "abilities": [
+    "cleave",
+    "slam",
+    "gust"
+   ],
+   "vars": {
+    "stamina": 50,
+    "mana": 30
+   },
+   "regen": {
+    "stamina": 5,
+    "mana": 3
+   },
+   "resist": {
+    "phys": 20,
+    "mag": -10
+   }
+  },
+  {
+   "id": "minion",
+   "name": "Lacaio esqueleto",
+   "en": "Skeleton minion",
+   "hp": 120,
+   "speed": 11,
+   "move": 5,
+   "jump": 2,
+   "abilities": [
+    "stab",
+    "trip",
+    "gust"
+   ],
+   "vars": {
+    "stamina": 30,
+    "mana": 30
+   },
+   "regen": {
+    "stamina": 5,
+    "mana": 3
+   },
+   "undead": true,
+   "resist": {
+    "light": -50,
+    "shadow": 50
+   },
+   "dodge": 10
+  },
+  {
+   "id": "mini_skeleton",
+   "name": "Mini esqueleto",
+   "en": "Mini skeleton",
+   "hp": 100,
+   "speed": 12,
+   "move": 5,
+   "jump": 2,
+   "halfSize": 1,
+   "abilities": [
+    "stab",
+    "trip",
+    "gust"
+   ],
+   "vars": {
+    "stamina": 30,
+    "mana": 30
+   },
+   "regen": {
+    "stamina": 5,
+    "mana": 3
+   },
+   "undead": true,
+   "resist": {
+    "light": -50,
+    "shadow": 50
+   },
+   "dodge": 20
+  },
+  {
+   "id": "snake",
+   "name": "Cobra",
+   "en": "Snake",
+   "hp": 100,
+   "speed": 13,
+   "move": 5,
+   "jump": 1,
+   "halfSize": 1,
+   "halfLength": 2,
+   "abilities": [
+    "stab",
+    "trip"
+   ],
+   "vars": {
+    "stamina": 30,
+    "mana": 30
+   },
+   "regen": {
+    "stamina": 5,
+    "mana": 3
+   },
+   "dodge": 20
+  },
+  {
+   "id": "rat",
+   "name": "Rato",
+   "en": "Rat",
+   "hp": 50,
+   "speed": 13,
+   "move": 5,
+   "jump": 1,
+   "halfSize": 1,
+   "swarm": true,
+   "abilities": [
+    "stab",
+    "trip"
+   ],
+   "vars": {
+    "stamina": 30,
+    "mana": 30
+   },
+   "regen": {
+    "stamina": 5,
+    "mana": 3
+   },
+   "dodge": 20
+  },
+  {
+   "id": "spider",
+   "name": "Aranha",
+   "en": "Spider",
+   "hp": 60,
+   "speed": 11,
+   "move": 4,
+   "jump": 3,
+   "halfSize": 1,
+   "swarm": true,
+   "abilities": [
+    "stab",
+    "trip"
+   ],
+   "vars": {
+    "stamina": 30,
+    "mana": 30
+   },
+   "regen": {
+    "stamina": 5,
+    "mana": 3
+   },
+   "dodge": 10
+  },
+  {
+   "id": "bat",
+   "name": "Morcego",
+   "en": "Bat",
+   "hp": 50,
+   "speed": 14,
+   "move": 6,
+   "jump": 4,
+   "halfSize": 1,
+   "swarm": true,
+   "abilities": [
+    "stab",
+    "gust"
+   ],
+   "vars": {
+    "stamina": 30,
+    "mana": 30
+   },
+   "regen": {
+    "stamina": 5,
+    "mana": 3
+   },
+   "dodge": 25
+  },
+  {
+   "id": "acolyte",
+   "name": "Acólito do Véu",
+   "en": "Veil Acolyte",
+   "hp": 130,
+   "speed": 9,
+   "move": 3,
+   "abilities": [
+    "firebolt",
+    "heal",
+    "dagger"
+   ],
+   "vars": {
+    "mana": 60,
+    "stamina": 30
+   },
+   "regen": {
+    "mana": 8,
+    "stamina": 3
+   },
+   "tint": "#8a5cff",
+   "resist": {
+    "mag": 20,
+    "shadow": 50,
+    "light": -25
+   }
+  },
+  {
+   "id": "veil_knight",
+   "name": "Cavaleiro do Véu",
+   "en": "Veil Knight",
+   "hp": 190,
+   "speed": 8,
+   "move": 4,
+   "abilities": [
+    "strike",
+    "heavy_strike",
+    "gust"
+   ],
+   "vars": {
+    "stamina": 50,
+    "mana": 30
+   },
+   "regen": {
+    "stamina": 5,
+    "mana": 3
+   },
+   "tint": "#ff4a2a",
+   "resist": {
+    "phys": 30,
+    "shadow": 25,
+    "light": -25
+   }
+  },
+  {
+   "id": "colossus",
+   "name": "Colosso de Ossos",
+   "en": "Bone Colossus",
+   "hp": 680,
+   "speed": 6,
+   "move": 0,
+   "abilities": [
+    "shadow_wave",
+    "blast",
+    "dagger"
+   ],
+   "vars": {
+    "mana": 50,
+    "stamina": 30
+   },
+   "regen": {
+    "mana": 10,
+    "stamina": 3
+   },
+   "size": 2,
+   "undead": true,
+   "resist": {
+    "phys": 30,
+    "mag": 20,
+    "shadow": 60,
+    "light": -50
+   }
+  },
+  {
+   "id": "beacon",
+   "name": "Farol",
+   "en": "Beacon",
+   "hp": 250,
+   "speed": 0,
+   "move": 0,
+   "abilities": []
+  }
+ ],
+ "abilities": [
+  {
+   "radius": 0,
+   "heal": [
+    0,
+    0
+   ],
+   "damage": [
+    50,
+    80
+   ],
+   "push": 0,
+   "charge": 0,
+   "heightRange": false,
+   "needsSight": false,
+   "id": "strike",
+   "name": "Golpe",
+   "en": "Strike",
+   "range": [
+    1,
+    1
+   ],
+   "accuracy": 90
+  },
+  {
+   "radius": 0,
+   "heal": [
+    0,
+    0
+   ],
+   "damage": [
+    95,
+    130
+   ],
+   "push": 0,
+   "charge": 0,
+   "heightRange": false,
+   "needsSight": false,
+   "id": "heavy_strike",
+   "name": "Golpe pesado",
+   "en": "Heavy strike",
+   "range": [
+    1,
+    1
+   ],
+   "accuracy": 75,
+   "cost": [
+    "stamina",
+    30
+   ]
+  },
+  {
+   "radius": 0,
+   "heal": [
+    0,
+    0
+   ],
+   "damage": [
+    20,
+    25
+   ],
+   "push": 2,
+   "charge": 0,
+   "heightRange": false,
+   "needsSight": false,
+   "id": "shield_bash",
+   "name": "Escudada",
+   "en": "Shield bash",
+   "range": [
+    1,
+    1
+   ],
+   "accuracy": 95,
+   "cost": [
+    "stamina",
+    10
+   ]
+  },
+  {
+   "radius": 1,
+   "heal": [
+    0,
+    0
+   ],
+   "damage": [
+    35,
+    50
+   ],
+   "push": 0,
+   "charge": 0,
+   "heightRange": false,
+   "needsSight": false,
+   "id": "spin",
+   "name": "Giro",
+   "en": "Spin",
+   "range": [
+    0,
+    0
+   ],
+   "accuracy": 85,
+   "cost": [
+    "stamina",
+    30
+   ]
+  },
+  {
+   "radius": 0,
+   "heal": [
+    0,
+    0
+   ],
+   "damage": [
+    45,
+    70
+   ],
+   "push": 0,
+   "charge": 0,
+   "heightRange": true,
+   "needsSight": true,
+   "id": "shot",
+   "name": "Tiro",
+   "en": "Shot",
+   "range": [
+    2,
+    7
+   ],
+   "arc": true,
+   "accuracy": 85
+  },
+  {
+   "radius": 0,
+   "heal": [
+    0,
+    0
+   ],
+   "damage": [
+    80,
+    105
+   ],
+   "push": 0,
+   "charge": 4,
+   "heightRange": true,
+   "needsSight": true,
+   "id": "aimed_shot",
+   "name": "Tiro mirado",
+   "en": "Aimed shot",
+   "range": [
+    2,
+    7
+   ],
+   "arc": true,
+   "accuracy": 90,
+   "panel": true,
+   "cost": [
+    "stamina",
+    25
+   ]
+  },
+  {
+   "radius": 0,
+   "heal": [
+    0,
+    0
+   ],
+   "damage": [
+    25,
+    35
+   ],
+   "push": 1,
+   "charge": 0,
+   "heightRange": true,
+   "needsSight": true,
+   "id": "knock_shot",
+   "name": "Tiro de recuo",
+   "en": "Knockback shot",
+   "range": [
+    2,
+    5
+   ],
+   "arc": true,
+   "accuracy": 85,
+   "cost": [
+    "stamina",
+    15
+   ]
+  },
+  {
+   "radius": 0,
+   "heal": [
+    0,
+    0
+   ],
+   "damage": [
+    25,
+    35
+   ],
+   "push": 0,
+   "charge": 0,
+   "heightRange": false,
+   "needsSight": false,
+   "id": "dagger",
+   "name": "Adaga",
+   "en": "Dagger",
+   "range": [
+    1,
+    1
+   ],
+   "accuracy": 90,
+   "cost": [
+    "stamina",
+    5
+   ]
+  },
+  {
+   "radius": 0,
+   "heal": [
+    0,
+    0
+   ],
+   "damage": [
+    50,
+    80
+   ],
+   "push": 0,
+   "charge": 0,
+   "heightRange": true,
+   "needsSight": true,
+   "id": "firebolt",
+   "name": "Raio de fogo",
+   "en": "Firebolt",
+   "range": [
+    2,
+    5
+   ],
+   "accuracy": 90,
+   "magic": true,
+   "element": "fire"
+  },
+  {
+   "radius": 1,
+   "heal": [
+    0,
+    0
+   ],
+   "damage": [
+    45,
+    70
+   ],
+   "push": 0,
+   "charge": 4,
+   "heightRange": true,
+   "needsSight": false,
+   "id": "blast",
+   "name": "Explosão",
+   "en": "Blast",
+   "range": [
+    2,
+    5
+   ],
+   "accuracy": 85,
+   "magic": true,
+   "element": "fire",
+   "cost": [
+    "mana",
+    25
+   ]
+  },
+  {
+   "radius": 0,
+   "heal": [
+    0,
+    0
+   ],
+   "damage": [
+    10,
+    20
+   ],
+   "push": 2,
+   "charge": 4,
+   "heightRange": false,
+   "needsSight": true,
+   "id": "gust",
+   "name": "Rajada",
+   "en": "Gust",
+   "range": [
+    1,
+    4
+   ],
+   "accuracy": 85,
+   "magic": true,
+   "element": "wind",
+   "cost": [
+    "mana",
+    15
+   ]
+  },
+  {
+   "radius": 0,
+   "heal": [
+    60,
+    90
+   ],
+   "damage": [
+    0,
+    0
+   ],
+   "push": 0,
+   "charge": 4,
+   "heightRange": false,
+   "needsSight": false,
+   "id": "heal",
+   "name": "Cura",
+   "en": "Heal",
+   "range": [
+    1,
+    4
+   ],
+   "accuracy": 100,
+   "magic": true,
+   "element": "light",
+   "cost": [
+    "mana",
+    20
+   ]
+  },
+  {
+   "radius": 0,
+   "heal": [
+    0,
+    0
+   ],
+   "damage": [
+    45,
+    60
+   ],
+   "push": 0,
+   "charge": 0,
+   "heightRange": false,
+   "needsSight": false,
+   "id": "stab",
+   "name": "Facada",
+   "en": "Stab",
+   "range": [
+    1,
+    1
+   ],
+   "accuracy": 95
+  },
+  {
+   "radius": 0,
+   "heal": [
+    0,
+    0
+   ],
+   "damage": [
+    46,
+    65
+   ],
+   "push": 0,
+   "charge": 0,
+   "heightRange": true,
+   "needsSight": true,
+   "id": "throwing_knife",
+   "name": "Faca arremessada",
+   "en": "Throwing knife",
+   "range": [
+    2,
+    4
+   ],
+   "accuracy": 85,
+   "cost": [
+    "stamina",
+    10
+   ],
+   "bonusShare": 50
+  },
+  {
+   "radius": 0,
+   "heal": [
+    0,
+    0
+   ],
+   "damage": [
+    20,
+    25
+   ],
+   "push": 1,
+   "charge": 0,
+   "heightRange": false,
+   "needsSight": false,
+   "id": "trip",
+   "name": "Rasteira",
+   "en": "Trip",
+   "range": [
+    1,
+    1
+   ],
+   "accuracy": 90,
+   "cost": [
+    "stamina",
+    10
+   ]
+  },
+  {
+   "radius": 0,
+   "heal": [
+    0,
+    0
+   ],
+   "damage": [
+    105,
+    140
+   ],
+   "push": 0,
+   "charge": 0,
+   "heightRange": false,
+   "needsSight": false,
+   "id": "deathblow",
+   "name": "Golpe mortal",
+   "en": "Deathblow",
+   "range": [
+    1,
+    1
+   ],
+   "accuracy": 70,
+   "cost": [
+    "stamina",
+    30
+   ]
+  },
+  {
+   "radius": 2,
+   "heal": [
+    0,
+    0
+   ],
+   "damage": [
+    50,
+    80
+   ],
+   "push": 0,
+   "charge": 6,
+   "heightRange": true,
+   "needsSight": false,
+   "id": "shadow_wave",
+   "name": "Onda sombria",
+   "en": "Shadow wave",
+   "range": [
+    2,
+    5
+   ],
+   "accuracy": 85,
+   "magic": true,
+   "element": "shadow"
+  },
+  {
+   "radius": 0,
+   "heal": [
+    0,
+    0
+   ],
+   "damage": [
+    90,
+    120
+   ],
+   "push": 0,
+   "charge": 0,
+   "heightRange": false,
+   "needsSight": false,
+   "id": "cleave",
+   "name": "Machadada",
+   "en": "Cleave",
+   "range": [
+    1,
+    1
+   ],
+   "accuracy": 80
+  },
+  {
+   "radius": 0,
+   "heal": [
+    0,
+    0
+   ],
+   "damage": [
+    35,
+    50
+   ],
+   "push": 2,
+   "charge": 0,
+   "heightRange": false,
+   "needsSight": false,
+   "id": "slam",
+   "name": "Pancada",
+   "en": "Slam",
+   "range": [
+    1,
+    1
+   ],
+   "accuracy": 85,
+   "cost": [
+    "stamina",
+    15
+   ]
+  },
+  {
+   "radius": 0,
+   "heal": [
+    0,
+    0
+   ],
+   "damage": [
+    55,
+    80
+   ],
+   "push": 0,
+   "charge": 0,
+   "heightRange": false,
+   "needsSight": false,
+   "id": "lance",
+   "name": "Estocada longa",
+   "en": "Long thrust",
+   "range": [
+    1,
+    2
+   ],
+   "accuracy": 90
+  },
+  {
+   "radius": 0,
+   "heal": [
+    0,
+    0
+   ],
+   "damage": [
+    25,
+    35
+   ],
+   "push": 1,
+   "charge": 0,
+   "heightRange": false,
+   "needsSight": false,
+   "id": "sweep",
+   "name": "Derrubar",
+   "en": "Sweep",
+   "range": [
+    1,
+    2
+   ],
+   "accuracy": 85,
+   "cost": [
+    "stamina",
+    15
+   ]
+  },
+  {
+   "radius": 0,
+   "heal": [
+    0,
+    0
+   ],
+   "damage": [
+    95,
+    130
+   ],
+   "push": 0,
+   "charge": 4,
+   "heightRange": false,
+   "needsSight": false,
+   "id": "lance_jump",
+   "name": "Salto",
+   "en": "Jump",
+   "range": [
+    2,
+    4
+   ],
+   "accuracy": 85,
+   "panel": true,
+   "cost": [
+    "stamina",
+    30
+   ]
+  }
+ ],
+ "items": [
+  {
+   "id": "iron_blade",
+   "name": "Lâmina de ferro",
+   "en": "Iron blade",
+   "kind": "main",
+   "rarity": "common",
+   "price": 120,
+   "physPower": 20
+  },
+  {
+   "id": "hunter_bow",
+   "name": "Arco de caça",
+   "en": "Hunter bow",
+   "kind": "main",
+   "rarity": "common",
+   "price": 140,
+   "physPower": 10,
+   "hit": 5
+  },
+  {
+   "id": "ash_staff",
+   "name": "Cajado de freixo",
+   "en": "Ash staff",
+   "kind": "main",
+   "rarity": "common",
+   "price": 150,
+   "magPower": 20
+  },
+  {
+   "id": "watch_spear",
+   "name": "Lança do vigia",
+   "en": "Watch spear",
+   "kind": "main",
+   "rarity": "rare",
+   "price": 300,
+   "physPower": 30,
+   "hit": 5
+  },
+  {
+   "id": "ember_scepter",
+   "name": "Cetro da brasa",
+   "en": "Ember scepter",
+   "kind": "main",
+   "rarity": "epic",
+   "price": 600,
+   "magPower": 40,
+   "resist": {
+    "fire": 40,
+    "ice": -20
+   },
+   "manaRegen": 3
+  },
+  {
+   "id": "buckler",
+   "name": "Broquel",
+   "en": "Buckler",
+   "kind": "off",
+   "rarity": "common",
+   "price": 120,
+   "resist": {
+    "phys": 10
+   },
+   "dodge": 5
+  },
+  {
+   "id": "worn_grimoire",
+   "name": "Grimório gasto",
+   "en": "Worn grimoire",
+   "kind": "off",
+   "rarity": "common",
+   "price": 120,
+   "mana": 20,
+   "manaRegen": 3
+  },
+  {
+   "id": "leather_quiver",
+   "name": "Aljava de couro",
+   "en": "Leather quiver",
+   "kind": "off",
+   "rarity": "rare",
+   "price": 300,
+   "physPower": 20,
+   "hit": 5,
+   "stamina": 20
+  },
+  {
+   "id": "veil_shield",
+   "name": "Escudo do Véu",
+   "en": "Veil shield",
+   "kind": "off",
+   "rarity": "epic",
+   "price": 600,
+   "resist": {
+    "phys": 30,
+    "mag": 30,
+    "shadow": 40
+   },
+   "speed": -1
+  },
+  {
+   "id": "hood",
+   "name": "Capuz",
+   "en": "Hood",
+   "kind": "head",
+   "rarity": "common",
+   "price": 100,
+   "dodge": 5,
+   "hit": 5
+  },
+  {
+   "id": "iron_helm",
+   "name": "Elmo de ferro",
+   "en": "Iron helm",
+   "kind": "head",
+   "rarity": "common",
+   "price": 120,
+   "resist": {
+    "phys": 10
+   },
+   "hp": 25
+  },
+  {
+   "id": "dawn_circlet",
+   "name": "Tiara da aurora",
+   "en": "Dawn circlet",
+   "kind": "head",
+   "rarity": "rare",
+   "price": 300,
+   "resist": {
+    "mag": 10,
+    "light": 40
+   },
+   "manaRegen": 3
+  },
+  {
+   "id": "leather_vest",
+   "name": "Gibão de couro",
+   "en": "Leather vest",
+   "kind": "body",
+   "rarity": "common",
+   "price": 100,
+   "hp": 25,
+   "dodge": 5
+  },
+  {
+   "id": "chain_mail",
+   "name": "Cota de malha",
+   "en": "Chain mail",
+   "kind": "body",
+   "rarity": "rare",
+   "price": 300,
+   "resist": {
+    "phys": 20
+   },
+   "hp": 50
+  },
+  {
+   "id": "warded_robe",
+   "name": "Manto guardado",
+   "en": "Warded robe",
+   "kind": "body",
+   "rarity": "rare",
+   "price": 300,
+   "resist": {
+    "mag": 20
+   },
+   "hp": 25,
+   "mana": 20
+  },
+  {
+   "id": "colossus_plate",
+   "name": "Couraça do colosso",
+   "en": "Colossus plate",
+   "kind": "body",
+   "rarity": "epic",
+   "price": 600,
+   "resist": {
+    "phys": 30
+   },
+   "hp": 125,
+   "hpRegen": 10,
+   "move": -1
+  },
+  {
+   "id": "spring_greaves",
+   "name": "Grevas de mola",
+   "en": "Spring greaves",
+   "kind": "legs",
+   "rarity": "common",
+   "price": 150,
+   "jump": 1
+  },
+  {
+   "id": "padded_trousers",
+   "name": "Calças acolchoadas",
+   "en": "Padded trousers",
+   "kind": "legs",
+   "rarity": "common",
+   "price": 120,
+   "resist": {
+    "phys": 10
+   },
+   "hp": 25
+  },
+  {
+   "id": "swift_boots",
+   "name": "Botas ligeiras",
+   "en": "Swift boots",
+   "kind": "legs",
+   "rarity": "rare",
+   "price": 300,
+   "move": 1,
+   "dodge": 5
+  },
+  {
+   "id": "ember_ring",
+   "name": "Anel de brasa",
+   "en": "Ember ring",
+   "kind": "accessory",
+   "rarity": "common",
+   "price": 130,
+   "resist": {
+    "fire": 20
+   },
+   "magPower": 10
+  },
+  {
+   "id": "sleepstone",
+   "name": "Pedra-do-sono",
+   "en": "Sleepstone",
+   "kind": "accessory",
+   "rarity": "common",
+   "price": 130,
+   "hpRegen": 10,
+   "hp": 25
+  },
+  {
+   "id": "quick_charm",
+   "name": "Amuleto ligeiro",
+   "en": "Quick charm",
+   "kind": "accessory",
+   "rarity": "rare",
+   "price": 300,
+   "speed": 1,
+   "hit": 5,
+   "dodge": 5
+  },
+  {
+   "id": "bone_talisman",
+   "name": "Talismã de osso",
+   "en": "Bone talisman",
+   "kind": "accessory",
+   "rarity": "rare",
+   "price": 300,
+   "resist": {
+    "shadow": 40,
+    "mag": 20
+   }
+  }
+ ],
+ "consumables": [
+  {
+   "id": "life_potion",
+   "name": "Poção de vida",
+   "en": "Life potion",
+   "price": 40,
+   "use": [
+    "cura 100",
+    "heals 100"
+   ],
+   "heal": 100
+  },
+  {
+   "id": "ether",
+   "name": "Éter",
+   "en": "Ether",
+   "price": 60,
+   "use": [
+    "+30 de mana",
+    "+30 mana"
+   ],
+   "mana": 30
+  },
+  {
+   "id": "fire_oil",
+   "name": "Óleo de fogo",
+   "en": "Fire oil",
+   "price": 50,
+   "use": [
+    "ataques físicos viram fogo, +10 de poder físico, 3 turnos",
+    "physical attacks turn to fire, +10 physical power, 3 turns"
+   ],
+   "buff": {
+    "turns": 3,
+    "physPower": 10,
+    "element": "fire"
+   }
+  },
+  {
+   "id": "stone_potion",
+   "name": "Poção de pedra",
+   "en": "Stone potion",
+   "price": 50,
+   "use": [
+    "+30% de resistência física, −2 de movimento, 3 turnos",
+    "+30% physical resistance, −2 move, 3 turns"
+   ],
+   "buff": {
+    "turns": 3,
+    "resist": {
+     "phys": 30
+    },
+    "move": -1
+   }
+  }
+ ],
+ "item_range": 3,
+ "start_bag": {
+  "life_potion": 2,
+  "ether": 1
+ },
+ "jobs": [
+  "warrior",
+  "archer",
+  "mage",
+  "rogue",
+  "lancer"
+ ],
+ "story": [
+  {
+   "id": "warrior",
+   "name": "Bran",
+   "cls": "warrior",
+   "recruit": false
+  },
+  {
+   "id": "archer",
+   "name": "Tess",
+   "cls": "archer",
+   "recruit": false
+  },
+  {
+   "id": "mage",
+   "name": "Odo",
+   "cls": "mage",
+   "recruit": false
+  },
+  {
+   "id": "rogue",
+   "name": "Lia",
+   "cls": "rogue",
+   "recruit": false
+  }
+ ],
+ "starting_weapon": {
+  "warrior": "iron_blade",
+  "archer": "hunter_bow",
+  "mage": "ash_staff",
+  "rogue": "iron_blade"
+ },
+ "recruit_names": [
+  "Ivo",
+  "Nina",
+  "Caio",
+  "Vera",
+  "Rui",
+  "Duda",
+  "Téo",
+  "Mira",
+  "Saulo",
+  "Bia",
+  "Otto",
+  "Lena"
+ ],
+ "maps": [
+  {
+   "id": "skirmish",
+   "name": "Escaramuça",
+   "en": "Skirmish",
+   "grid": {
+    "width": 8,
+    "height": 8,
+    "tiles": [
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "forest",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 1
+     },
+     {
+      "terrain": "wall",
+      "h": 2
+     },
+     {
+      "terrain": "floor",
+      "h": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "h": 2
+     },
+     {
+      "terrain": "floor",
+      "h": 2
+     },
+     {
+      "terrain": "floor",
+      "h": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "forest",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "h": 0
+     }
+    ]
+   },
+   "spawns": [
+    {
+     "id": "beacon",
+     "def": "beacon",
+     "team": "hero",
+     "x": 1,
+     "y": 6
+    },
+    {
+     "id": "h-warrior",
+     "def": "warrior",
+     "team": "hero",
+     "x": 2,
+     "y": 5
+    },
+    {
+     "id": "h-archer",
+     "def": "archer",
+     "team": "hero",
+     "x": 0,
+     "y": 6
+    },
+    {
+     "id": "h-mage",
+     "def": "mage",
+     "team": "hero",
+     "x": 1,
+     "y": 7
+    },
+    {
+     "id": "h-rogue",
+     "def": "rogue",
+     "team": "hero",
+     "x": 3,
+     "y": 6
+    },
+    {
+     "id": "e-soldier",
+     "def": "soldier",
+     "team": "enemy",
+     "x": 5,
+     "y": 0
+    },
+    {
+     "id": "e-archer",
+     "def": "skeleton_archer",
+     "team": "enemy",
+     "x": 7,
+     "y": 1
+    },
+    {
+     "id": "e-mage",
+     "def": "dark_mage",
+     "team": "enemy",
+     "x": 6,
+     "y": 0
+    },
+    {
+     "id": "e-brute",
+     "def": "brute",
+     "team": "enemy",
+     "x": 4,
+     "y": 1
+    }
+   ]
+  },
+  {
+   "id": "beacon_hill",
+   "name": "Colina do Farol",
+   "en": "Beacon Hill",
+   "grid": {
+    "width": 20,
+    "height": 20,
+    "tiles": [
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "forest",
+      "h": 3,
+      "look": "bare1"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "forest",
+      "h": 2,
+      "look": "tree3"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "wall",
+      "h": 1,
+      "look": "brick"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "wall",
+      "h": 1,
+      "look": "brick"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "forest",
+      "h": 3,
+      "look": "bare2"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "forest",
+      "h": 1,
+      "look": "tree2"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "wall",
+      "h": 2,
+      "look": "brick"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "forest",
+      "h": 1,
+      "look": "bare1"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "wall",
+      "h": 2,
+      "look": "brick"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "forest",
+      "h": 3,
+      "look": "tree4"
+     },
+     {
+      "terrain": "forest",
+      "h": 3,
+      "look": "tree3"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "wall",
+      "h": 1,
+      "look": "brick"
+     },
+     {
+      "terrain": "wall",
+      "h": 1,
+      "look": "brick"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "forest",
+      "h": 4,
+      "look": "tree2"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "summit",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "summit",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "summit"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "forest",
+      "h": 1,
+      "look": "tree4"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "summit",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 5,
+      "look": "summit"
+     },
+     {
+      "terrain": "floor",
+      "h": 5,
+      "look": "summit"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "summit",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "brick"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "summit",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 5,
+      "look": "summit"
+     },
+     {
+      "terrain": "floor",
+      "h": 5,
+      "look": "summit"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "summit",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "brick"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "forest",
+      "h": 1,
+      "look": "bare1"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "forest",
+      "h": 0,
+      "look": "tree4"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "summit"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "summit",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "summit",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "summit"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "wall",
+      "h": 0,
+      "look": "brick"
+     },
+     {
+      "terrain": "wall",
+      "h": 0,
+      "look": "brick"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "forest",
+      "h": 2,
+      "look": "tree4"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "forest",
+      "h": 0,
+      "look": "tree3"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "forest",
+      "h": 2,
+      "look": "tree3"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "sand"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "forest",
+      "h": 2,
+      "look": "tree3"
+     },
+     {
+      "terrain": "forest",
+      "h": 0,
+      "look": "tree2"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "wall",
+      "h": 2,
+      "look": "brick"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "sand"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "sand"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "sand"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "wall",
+      "h": 0,
+      "look": "brick"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "sand"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "sand"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "gold"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "sand"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "sand"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "forest",
+      "h": 2,
+      "look": "tree4"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "sand"
+     },
+     {
+      "terrain": "forest",
+      "h": 2,
+      "look": "tree3"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "sand"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "forest",
+      "h": 2,
+      "look": "tree"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "sand",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "wall",
+      "h": 2,
+      "look": "brick"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "forest",
+      "h": 3,
+      "look": "tree3"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "wall",
+      "h": 2,
+      "look": "brick"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "forest",
+      "h": 3,
+      "look": "tree4"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "rock"
+     }
+    ]
+   },
+   "spawns": [
+    {
+     "id": "beacon",
+     "def": "beacon",
+     "team": "hero",
+     "x": 2,
+     "y": 15
+    },
+    {
+     "id": "h-warrior",
+     "def": "warrior",
+     "team": "hero",
+     "x": 4,
+     "y": 14
+    },
+    {
+     "id": "h-archer",
+     "def": "archer",
+     "team": "hero",
+     "x": 3,
+     "y": 16
+    },
+    {
+     "id": "h-mage",
+     "def": "mage",
+     "team": "hero",
+     "x": 1,
+     "y": 16
+    },
+    {
+     "id": "h-rogue",
+     "def": "rogue",
+     "team": "hero",
+     "x": 5,
+     "y": 15
+    },
+    {
+     "id": "e-soldier",
+     "def": "soldier",
+     "team": "enemy",
+     "x": 14,
+     "y": 4
+    },
+    {
+     "id": "e-archer",
+     "def": "skeleton_archer",
+     "team": "enemy",
+     "x": 16,
+     "y": 2
+    },
+    {
+     "id": "e-mage",
+     "def": "dark_mage",
+     "team": "enemy",
+     "x": 17,
+     "y": 3
+    },
+    {
+     "id": "e-brute",
+     "def": "brute",
+     "team": "enemy",
+     "x": 15,
+     "y": 5
+    }
+   ]
+  },
+  {
+   "id": "flooded_crypt",
+   "name": "Cripta Alagada",
+   "en": "Flooded Crypt",
+   "grid": {
+    "width": 14,
+    "height": 14,
+    "tiles": [
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "altar"
+     },
+     {
+      "terrain": "wall",
+      "h": 4,
+      "look": "chest"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "altar"
+     },
+     {
+      "terrain": "wall",
+      "h": 4,
+      "look": "pillar"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "altar"
+     },
+     {
+      "terrain": "wall",
+      "h": 4,
+      "look": "pillar"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "altar",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "altar",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "altar",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "altar",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "altar"
+     },
+     {
+      "terrain": "wall",
+      "h": 2,
+      "look": "brick"
+     },
+     {
+      "terrain": "wall",
+      "h": 2,
+      "look": "brick"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "wall",
+      "h": 2,
+      "look": "brick"
+     },
+     {
+      "terrain": "wall",
+      "h": 2,
+      "look": "brick"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "wall",
+      "h": 2,
+      "look": "crates"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "spikes",
+      "spikes": true
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "spikes",
+      "spikes": true
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "wall",
+      "h": 2,
+      "look": "barrel"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "rubble",
+      "h": 1,
+      "look": "rubble"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "rubble",
+      "h": 1,
+      "look": "rubble"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "bridge"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "bridge"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "bridge"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "bridge"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "bridge"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "bridge"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "bridge"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "bridge"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "rubble",
+      "h": 1,
+      "look": "rubble"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "rubble",
+      "h": 1,
+      "look": "rubble"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "wall",
+      "h": 1,
+      "look": "pillar"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "spikes",
+      "spikes": true
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "spikes",
+      "spikes": true
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "wall",
+      "h": 1,
+      "look": "pillar"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "wall",
+      "h": 1,
+      "look": "brick"
+     },
+     {
+      "terrain": "wall",
+      "h": 1,
+      "look": "brick"
+     },
+     {
+      "terrain": "wall",
+      "h": 1,
+      "look": "brick"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "wall",
+      "h": 1,
+      "look": "brick"
+     },
+     {
+      "terrain": "wall",
+      "h": 1,
+      "look": "brick"
+     },
+     {
+      "terrain": "wall",
+      "h": 1,
+      "look": "brick"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "crypt",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "crypt",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "crypt",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "crypt",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "crypt",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "crypt",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "wall",
+      "h": 2,
+      "look": "barrel"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "crypt",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "crypt",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "wall",
+      "h": 1,
+      "look": "crates"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "crypt",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "crypt",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     }
+    ]
+   },
+   "spawns": [
+    {
+     "id": "beacon",
+     "def": "beacon",
+     "team": "hero",
+     "x": 6,
+     "y": 13
+    },
+    {
+     "id": "h-warrior",
+     "def": "warrior",
+     "team": "hero",
+     "x": 5,
+     "y": 11
+    },
+    {
+     "id": "h-archer",
+     "def": "archer",
+     "team": "hero",
+     "x": 8,
+     "y": 12
+    },
+    {
+     "id": "h-mage",
+     "def": "mage",
+     "team": "hero",
+     "x": 7,
+     "y": 13
+    },
+    {
+     "id": "h-rogue",
+     "def": "rogue",
+     "team": "hero",
+     "x": 9,
+     "y": 11
+    },
+    {
+     "id": "e-soldier",
+     "def": "soldier",
+     "team": "enemy",
+     "x": 5,
+     "y": 2
+    },
+    {
+     "id": "e-archer",
+     "def": "skeleton_archer",
+     "team": "enemy",
+     "x": 8,
+     "y": 1
+    },
+    {
+     "id": "e-mage",
+     "def": "dark_mage",
+     "team": "enemy",
+     "x": 10,
+     "y": 2
+    },
+    {
+     "id": "e-brute",
+     "def": "brute",
+     "team": "enemy",
+     "x": 3,
+     "y": 2
+    }
+   ]
+  },
+  {
+   "id": "crypt_heart",
+   "name": "Coração da Cripta",
+   "en": "Heart of the Crypt",
+   "grid": {
+    "width": 12,
+    "height": 14,
+    "tiles": [
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "brick"
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "brick"
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "brick"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "altar"
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "brick"
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "brick"
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "brick"
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "brick"
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "pillar"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "altar"
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "pillar"
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "brick"
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "brick"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "altar"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "altar"
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "brick"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 2
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 2
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 2
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "bridge"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 2
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 2
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 2
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 2
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "bridge"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 2
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 2
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 2
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "spikes",
+      "spikes": true
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "rubble",
+      "h": 2,
+      "look": "rubble"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "rubble",
+      "h": 2,
+      "look": "rubble"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "spikes",
+      "spikes": true
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "wall",
+      "h": 2,
+      "look": "pillar"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "crypt"
+     },
+     {
+      "terrain": "wall",
+      "h": 2,
+      "look": "pillar"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "crypt"
+     },
+     {
+      "terrain": "wall",
+      "h": 2,
+      "look": "crates"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "wall",
+      "h": 2,
+      "look": "barrel"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "bridge"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "bridge"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "spikes",
+      "spikes": true
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "spikes",
+      "spikes": true
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "wall",
+      "h": 2,
+      "look": "pillar"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "wall",
+      "h": 2,
+      "look": "pillar"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "rubble",
+      "h": 1,
+      "look": "rubble"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "rubble",
+      "h": 1,
+      "look": "rubble"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "crypt"
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "brick"
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "brick"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "crypt",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "crypt"
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "brick"
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "brick"
+     }
+    ]
+   },
+   "spawns": [
+    {
+     "id": "beacon",
+     "def": "beacon",
+     "team": "hero",
+     "x": 5,
+     "y": 13
+    },
+    {
+     "id": "h-warrior",
+     "def": "warrior",
+     "team": "hero",
+     "x": 4,
+     "y": 11
+    },
+    {
+     "id": "h-archer",
+     "def": "archer",
+     "team": "hero",
+     "x": 6,
+     "y": 12
+    },
+    {
+     "id": "h-mage",
+     "def": "mage",
+     "team": "hero",
+     "x": 6,
+     "y": 13
+    },
+    {
+     "id": "h-rogue",
+     "def": "rogue",
+     "team": "hero",
+     "x": 7,
+     "y": 11
+    },
+    {
+     "id": "e-mage",
+     "def": "dark_mage",
+     "team": "enemy",
+     "x": 6,
+     "y": 0
+    },
+    {
+     "id": "e-soldier",
+     "def": "soldier",
+     "team": "enemy",
+     "x": 3,
+     "y": 2
+    },
+    {
+     "id": "e-archer",
+     "def": "skeleton_archer",
+     "team": "enemy",
+     "x": 5,
+     "y": 1
+    },
+    {
+     "id": "e-archer2",
+     "def": "skeleton_archer",
+     "team": "enemy",
+     "x": 8,
+     "y": 2
+    }
+   ]
+  },
+  {
+   "id": "ash_wood",
+   "name": "Bosque das Cinzas",
+   "en": "Ash Wood",
+   "grid": {
+    "width": 12,
+    "height": 12,
+    "tiles": [
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "grass",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "sand"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "sand"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "grass"
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "crates"
+     },
+     {
+      "terrain": "forest",
+      "h": 4,
+      "look": "tree"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "grass"
+     },
+     {
+      "terrain": "forest",
+      "h": 4,
+      "look": "tree"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "grass",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "sand",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "sand",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "corpse",
+      "noStop": true
+     },
+     {
+      "terrain": "forest",
+      "h": 3,
+      "look": "tree2"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "grass",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "wall",
+      "h": 2,
+      "look": "barrel"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "sand",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "sand",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "forest",
+      "h": 2,
+      "look": "tree"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "sand"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "sand"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "wall",
+      "h": 0,
+      "look": "rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "forest",
+      "h": 2,
+      "look": "tree"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 2
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 2
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "bridge"
+     },
+     {
+      "terrain": "rubble",
+      "h": 1,
+      "look": "bridge"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "bridge"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 2
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 2
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 2
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 2
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 2
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 2
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 2
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "bridge"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "bridge"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "bridge"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 2
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 2
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 2
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 2
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "water",
+      "depth": 2
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "forest",
+      "h": 0,
+      "look": "tree"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "sand",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "sand",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "forest",
+      "h": 0,
+      "look": "tree"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "sand"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "sand"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "sand"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "sand"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "sand"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "sand"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "forest",
+      "h": 1,
+      "look": "tree2"
+     },
+     {
+      "terrain": "forest",
+      "h": 2,
+      "look": "tree"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "sand"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "sand"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "sand"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "sand"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "corpse",
+      "noStop": true
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "sand"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "sand"
+     },
+     {
+      "terrain": "wall",
+      "h": 0,
+      "look": "barrel"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "sand"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "forest",
+      "h": 0,
+      "look": "tree"
+     },
+     {
+      "terrain": "wall",
+      "h": 0,
+      "look": "crates"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "sand"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "forest",
+      "h": 2,
+      "look": "tree"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "forest",
+      "h": 2,
+      "look": "tree2"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "sand"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "corpse",
+      "noStop": true
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "forest",
+      "h": 2,
+      "look": "tree3"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "sand",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 0,
+      "look": "grass"
+     },
+     {
+      "terrain": "forest",
+      "h": 1,
+      "look": "tree2"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "grass",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "grass",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "grass"
+     }
+    ]
+   },
+   "spawns": [
+    {
+     "id": "h-warrior",
+     "def": "warrior",
+     "team": "hero",
+     "x": 3,
+     "y": 11
+    },
+    {
+     "id": "h-archer",
+     "def": "archer",
+     "team": "hero",
+     "x": 5,
+     "y": 10
+    },
+    {
+     "id": "h-mage",
+     "def": "mage",
+     "team": "hero",
+     "x": 6,
+     "y": 11
+    },
+    {
+     "id": "h-rogue",
+     "def": "rogue",
+     "team": "hero",
+     "x": 8,
+     "y": 10
+    },
+    {
+     "id": "e-soldier",
+     "def": "soldier",
+     "team": "enemy",
+     "x": 2,
+     "y": 0
+    },
+    {
+     "id": "e-archer",
+     "def": "skeleton_archer",
+     "team": "enemy",
+     "x": 5,
+     "y": 1
+    },
+    {
+     "id": "e-mage",
+     "def": "dark_mage",
+     "team": "enemy",
+     "x": 8,
+     "y": 0
+    },
+    {
+     "id": "e-brute",
+     "def": "brute",
+     "team": "enemy",
+     "x": 9,
+     "y": 2
+    }
+   ]
+  },
+  {
+   "id": "frost_pass",
+   "name": "Passo Gelado",
+   "en": "Frost Pass",
+   "grid": {
+    "width": 12,
+    "height": 14,
+    "tiles": [
+     {
+      "terrain": "wall",
+      "h": 6,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 6,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "summit"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "summit"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "summit"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "summit"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "summit"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "summit"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "summit"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "summit"
+     },
+     {
+      "terrain": "wall",
+      "h": 6,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 6,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 6,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 6,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "summit"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "summit"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "summit"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "summit"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "summit"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "summit"
+     },
+     {
+      "terrain": "wall",
+      "h": 6,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 6,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 6,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 5,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "snow"
+     },
+     {
+      "terrain": "wall",
+      "h": 5,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 6,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 6,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 5,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "forest",
+      "h": 3,
+      "look": "bare2"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow"
+     },
+     {
+      "terrain": "forest",
+      "h": 3,
+      "look": "bare2"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 4,
+      "look": "snow"
+     },
+     {
+      "terrain": "wall",
+      "h": 5,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 6,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 6,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 6,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 4,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "wall",
+      "h": 4,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 6,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 6,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 6,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 6,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 4,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "wall",
+      "h": 4,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 6,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 6,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 6,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 5,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 3,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "water",
+      "depth": 1
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 5,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 5,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 4,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "forest",
+      "h": 1,
+      "look": "bare2"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "forest",
+      "h": 1,
+      "look": "bare2"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "wall",
+      "h": 4,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 5,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 4,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 4,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow",
+      "ramp": [
+       0,
+       1
+      ]
+     },
+     {
+      "terrain": "wall",
+      "h": 4,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 4,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 4,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow",
+      "ramp": [
+       2,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 4,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "forest",
+      "h": 1,
+      "look": "bare1"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "forest",
+      "h": 1,
+      "look": "bare1"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "snow_rock"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow",
+      "ramp": [
+       3,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 1,
+      "look": "snow",
+      "ramp": [
+       1,
+       1
+      ]
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "floor",
+      "h": 2,
+      "look": "snow"
+     },
+     {
+      "terrain": "wall",
+      "h": 3,
+      "look": "snow_rock"
+     }
+    ]
+   },
+   "spawns": [
+    {
+     "id": "h-warrior",
+     "def": "warrior",
+     "team": "hero",
+     "x": 4,
+     "y": 13
+    },
+    {
+     "id": "h-archer",
+     "def": "archer",
+     "team": "hero",
+     "x": 5,
+     "y": 12
+    },
+    {
+     "id": "h-mage",
+     "def": "mage",
+     "team": "hero",
+     "x": 6,
+     "y": 13
+    },
+    {
+     "id": "h-rogue",
+     "def": "rogue",
+     "team": "hero",
+     "x": 7,
+     "y": 12
+    },
+    {
+     "id": "e-soldier",
+     "def": "soldier",
+     "team": "enemy",
+     "x": 3,
+     "y": 0
+    },
+    {
+     "id": "e-archer",
+     "def": "skeleton_archer",
+     "team": "enemy",
+     "x": 5,
+     "y": 0
+    },
+    {
+     "id": "e-mage",
+     "def": "dark_mage",
+     "team": "enemy",
+     "x": 7,
+     "y": 0
+    },
+    {
+     "id": "e-brute",
+     "def": "brute",
+     "team": "enemy",
+     "x": 8,
+     "y": 1
+    }
+   ]
+  }
+ ],
+ "first_battle": "beacon_hill",
+ "crawl": {
+  "version": "crawl10",
+  "party": [
+   "warrior",
+   "archer",
+   "mage",
+   "rogue"
+  ],
+  "groups": [
+   {
+    "name": [
+     "Patrulha de lacaios",
+     "Minion patrol"
+    ],
+    "depth": 1,
+    "enemies": [
+     "minion",
+     "minion",
+     "minion"
+    ]
+   },
+   {
+    "name": [
+     "Arqueiro e escolta",
+     "Archer and escort"
+    ],
+    "depth": 1,
+    "enemies": [
+     "minion",
+     "minion",
+     "skeleton_archer"
+    ]
+   },
+   {
+    "name": [
+     "Ninho de ratos",
+     "Rat nest"
+    ],
+    "depth": 1,
+    "enemies": [
+     "rat",
+     "rat",
+     "rat",
+     "rat",
+     "minion"
+    ]
+   },
+   {
+    "name": [
+     "Covil de aranhas",
+     "Spider den"
+    ],
+    "depth": 1,
+    "enemies": [
+     "spider",
+     "spider",
+     "spider",
+     "spider",
+     "minion"
+    ]
+   },
+   {
+    "name": [
+     "Revoada de morcegos",
+     "Bat flock"
+    ],
+    "depth": 1,
+    "enemies": [
+     "bat",
+     "bat",
+     "bat",
+     "bat",
+     "minion"
+    ]
+   },
+   {
+    "name": [
+     "Ninho de cobras",
+     "Snake nest"
+    ],
+    "depth": 1,
+    "enemies": [
+     "snake",
+     "snake",
+     "minion"
+    ]
+   },
+   {
+    "name": [
+     "Mago na retaguarda",
+     "Mage at the rear"
+    ],
+    "depth": 2,
+    "enemies": [
+     "soldier",
+     "dark_mage"
+    ]
+   },
+   {
+    "name": [
+     "Cavaleiro e arqueiro",
+     "Knight and archer"
+    ],
+    "depth": 2,
+    "enemies": [
+     "veil_knight",
+     "skeleton_archer"
+    ]
+   },
+   {
+    "name": [
+     "Bruto sozinho",
+     "Lone brute"
+    ],
+    "depth": 2,
+    "enemies": [
+     "brute"
+    ]
+   },
+   {
+    "name": [
+     "Acólito que cura",
+     "Healing acolyte"
+    ],
+    "depth": 3,
+    "enemies": [
+     "soldier",
+     "acolyte"
+    ]
+   },
+   {
+    "name": [
+     "Tropa do Véu",
+     "Veil troop"
+    ],
+    "depth": 3,
+    "enemies": [
+     "veil_knight",
+     "acolyte",
+     "minion"
+    ]
+   }
+  ],
+  "boss": {
+   "name": [
+    "Colosso de Ossos",
+    "Bone Colossus"
+   ],
+   "enemies": [
+    "colossus",
+    "minion"
+   ]
+  },
+  "themes": {
+   "dungeon": {
+    "floors": [
+     "stone",
+     "stone",
+     "summit",
+     "summit"
+    ],
+    "props": [
+     {
+      "terrain": "wall",
+      "look": "boulder"
+     },
+     {
+      "terrain": "wall",
+      "look": "boulder"
+     },
+     {
+      "terrain": "wall",
+      "look": "crates"
+     },
+     {
+      "terrain": "wall",
+      "look": "barrel"
+     },
+     {
+      "terrain": "rubble",
+      "look": "rubble"
+     }
+    ],
+    "border": [
+     {
+      "terrain": "wall",
+      "look": "rock"
+     }
+    ],
+    "road": "summit",
+    "hazard": {
+     "terrain": "floor",
+     "look": "spikes",
+     "spikes": true
+    }
+   },
+   "forest": {
+    "floors": [
+     "grass"
+    ],
+    "props": [
+     {
+      "terrain": "forest",
+      "look": "tree2"
+     },
+     {
+      "terrain": "forest",
+      "look": "tree3"
+     },
+     {
+      "terrain": "forest",
+      "look": "tree4"
+     },
+     {
+      "terrain": "wall",
+      "look": "boulder"
+     },
+     {
+      "terrain": "wall",
+      "look": "crates"
+     },
+     {
+      "terrain": "wall",
+      "look": "barrel"
+     }
+    ],
+    "border": [
+     {
+      "terrain": "forest",
+      "look": "tree2"
+     },
+     {
+      "terrain": "forest",
+      "look": "tree3"
+     },
+     {
+      "terrain": "forest",
+      "look": "tree4"
+     }
+    ],
+    "road": "sand"
+   },
+   "mountain": {
+    "floors": [
+     "snow",
+     "snow",
+     "snow",
+     "summit"
+    ],
+    "props": [
+     {
+      "terrain": "forest",
+      "look": "bare1"
+     },
+     {
+      "terrain": "forest",
+      "look": "bare2"
+     },
+     {
+      "terrain": "wall",
+      "look": "boulder"
+     },
+     {
+      "terrain": "wall",
+      "look": "boulder"
+     }
+    ],
+    "border": [
+     {
+      "terrain": "forest",
+      "look": "bare1"
+     },
+     {
+      "terrain": "wall",
+      "look": "snow_rock"
+     }
+    ],
+    "road": "stone"
+   }
+  },
+  "run": {
+   "floors": 3,
+   "rows": 2,
+   "width": [
+    2,
+    3
+   ],
+   "roomHeal": 25,
+   "floorHeal": 50,
+   "fallen": 25,
+   "chest": [
+    80,
+    150
+   ]
+  },
+  "gold": {
+   "soldier": [
+    30,
+    50
+   ],
+   "dark_mage": [
+    40,
+    60
+   ],
+   "acolyte": [
+    40,
+    60
+   ],
+   "veil_knight": [
+    60,
+    90
+   ],
+   "brute": [
+    50,
+    80
+   ],
+   "colossus": [
+    300,
+    300
+   ]
+  }
+ },
+ "town": {
+  "places": [
+   {
+    "id": "gate",
+    "name": [
+     "Portão da masmorra",
+     "Dungeon gate"
+    ],
+    "at": {
+     "x": 6,
+     "y": 0
+    },
+    "door": {
+     "x": 6,
+     "y": 1
+    }
+   },
+   {
+    "id": "guild",
+    "name": [
+     "Guilda dos Aventureiros",
+     "Adventurers’ Guild"
+    ],
+    "at": {
+     "x": 2,
+     "y": 2
+    },
+    "door": {
+     "x": 2,
+     "y": 4
+    }
+   },
+   {
+    "id": "enchanter",
+    "name": [
+     "Encantadora",
+     "Enchantress"
+    ],
+    "at": {
+     "x": 10,
+     "y": 2
+    },
+    "door": {
+     "x": 10,
+     "y": 4
+    },
+    "soon": [
+     "A encantadora está viajando. Encantar equipamento chega numa próxima versão.",
+     "The enchantress is away. Enchanting equipment comes in a later version."
+    ]
+   },
+   {
+    "id": "shop",
+    "name": [
+     "Loja",
+     "Shop"
+    ],
+    "at": {
+     "x": 3,
+     "y": 6
+    },
+    "door": {
+     "x": 3,
+     "y": 8
+    }
+   },
+   {
+    "id": "tavern",
+    "name": [
+     "Taverna",
+     "Tavern"
+    ],
+    "at": {
+     "x": 10,
+     "y": 6
+    },
+    "door": {
+     "x": 10,
+     "y": 8
+    }
+   },
+   {
+    "id": "smithy",
+    "name": [
+     "Ferreiro",
+     "Blacksmith"
+    ],
+    "at": {
+     "x": 3,
+     "y": 10
+    },
+    "door": {
+     "x": 3,
+     "y": 12
+    },
+    "soon": [
+     "A forja espera o ferro. Melhorar equipamento chega numa próxima versão.",
+     "The forge waits for its iron. Upgrading equipment comes in a later version."
+    ]
+   }
+  ],
+  "start": {
+   "x": 6,
+   "y": 11
+  },
+  "guild_spots": [
+   {
+    "x": 4,
+    "y": 3
+   },
+   {
+    "x": 4,
+    "y": 2
+   },
+   {
+    "x": 4,
+    "y": 1
+   },
+   {
+    "x": 5,
+    "y": 5
+   },
+   {
+    "x": 5,
+    "y": 6
+   },
+   {
+    "x": 5,
+    "y": 7
+   },
+   {
+    "x": 8,
+    "y": 5
+   }
+  ],
+  "guild_line": [
+   "Pronto quando você estiver.",
+   "Ready when you are."
+  ],
+  "class_voice": {
+   "warrior": 247,
+   "archer": 392,
+   "mage": 330,
+   "rogue": 440,
+   "lancer": 294
+  },
+  "townsfolk": [
+   {
+    "id": "guard",
+    "def": "lancer",
+    "name": "Aldo",
+    "pitch": 262,
+    "home": {
+     "x": 7,
+     "y": 2
+    },
+    "lines": [
+     [
+      "A estrada ao norte acaba no portão da masmorra. Ninguém desce sozinho.",
+      "The north road ends at the dungeon gate. Nobody goes down alone."
+     ],
+     [
+      "Quem volta ferido é cuidado aqui. Quem não volta, a gente lembra.",
+      "Whoever comes back hurt is cared for here. Whoever doesn’t, we remember."
+     ]
+    ]
+   },
+   {
+    "id": "smith",
+    "def": "brute",
+    "name": "Hugo",
+    "pitch": 196,
+    "home": {
+     "x": 5,
+     "y": 10
+    },
+    "lines": [
+     [
+      "A forja está fria até o ferro chegar. Volte mais tarde.",
+      "The forge is cold until the iron arrives. Come back later."
+     ],
+     [
+      "Esqueleto não sangra: bata onde os ossos se juntam.",
+      "Skeletons don’t bleed: hit them where the bones meet."
+     ]
+    ]
+   },
+   {
+    "id": "apprentice",
+    "def": "mage",
+    "name": "Selene",
+    "pitch": 494,
+    "home": {
+     "x": 12,
+     "y": 3
+    },
+    "lines": [
+     [
+      "A mestra encantadora está viajando. Quando voltar, suas armas vão brilhar.",
+      "The enchantress is away. When she returns, your weapons will glow."
+     ],
+     [
+      "O chefe lá embaixo é feito dos ossos de muitos. Leve quem cure.",
+      "The boss down there is made of many people’s bones. Bring a healer."
+     ]
+    ]
+   },
+   {
+    "id": "hunter",
+    "def": "archer",
+    "name": "Mira",
+    "pitch": 349,
+    "home": {
+     "x": 8,
+     "y": 10
+    },
+    "lines": [
+     [
+      "Lacaios são rápidos, mas quebram fácil. Arqueiro adora.",
+      "Minions are fast but brittle. Archers love them."
+     ],
+     [
+      "Na taverna tem gente para contratar, 200 de ouro cada.",
+      "The tavern has hands for hire, 200 gold each."
+     ]
+    ]
+   }
+  ],
+  "map": {
+   "id": "vauclair",
+   "name": "Vila de Vauclair",
+   "en": "Vauclair Village",
+   "grid": {
+    "width": 14,
+    "height": 14,
+    "tiles": [
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree4",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "gate",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree4",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree3",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "sand",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "guild",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "sand",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "enchanter",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "forest",
+      "look": "tree4",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "sand",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree3",
+      "h": 1
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "sand",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "stone",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "sand",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "stone",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "stone",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "shop",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "stone",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "stone",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "stone",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "stone",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "tavern",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "crates",
+      "h": 0
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "stone",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "stone",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "well",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "stone",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "barrel",
+      "h": 0
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "stone",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "stone",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "stone",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "stone",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "stone",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "forest",
+      "look": "tree4",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "sand",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "wall",
+      "look": "boulder",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "smithy",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "sand",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "home",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "sand",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "lot",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "sand",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "floor",
+      "look": "grass",
+      "h": 0
+     },
+     {
+      "terrain": "wall",
+      "look": "crates",
+      "h": 0
+     },
+     {
+      "terrain": "forest",
+      "look": "tree3",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree4",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "floor",
+      "look": "sand",
+      "h": 0
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree3",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree4",
+      "h": 1
+     },
+     {
+      "terrain": "forest",
+      "look": "tree2",
+      "h": 1
+     }
+    ]
+   },
+   "spawns": [
+    {
+     "id": "f-guard",
+     "def": "lancer",
+     "team": "hero",
+     "x": 7,
+     "y": 2
+    },
+    {
+     "id": "f-smith",
+     "def": "brute",
+     "team": "hero",
+     "x": 5,
+     "y": 10
+    },
+    {
+     "id": "f-apprentice",
+     "def": "mage",
+     "team": "hero",
+     "x": 12,
+     "y": 3
+    },
+    {
+     "id": "f-hunter",
+     "def": "archer",
+     "team": "hero",
+     "x": 8,
+     "y": 10
+    }
+   ]
+  }
+ },
+ "residents": [
+  {
+   "id": "hesk",
+   "name": "Hesk",
+   "role": [
+    "Carcereiro",
+    "Warden"
+   ],
+   "place": "gate",
+   "lines": [
+    {
+     "when": "milestone1",
+     "text": [
+      "Eu conto quem entra e quem sai. Facilite a minha conta.",
+      "I count who goes in and who comes out. Keep my count easy."
+     ]
+    },
+    {
+     "when": "milestone3",
+     "text": [
+      "A mata não está na sua pena. Mas o conselho paga pelo que vier de lá.",
+      "The woods aren’t in your sentence. But the council pays for whatever comes from there."
+     ]
+    },
+    {
+     "when": "fall",
+     "text": [
+      "Caído conta como voltou. Por pouco.",
+      "Fallen counts as back. Barely."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "marta",
+   "name": "Marta Penhale",
+   "role": [
+    "Lojista",
+    "Shopkeeper"
+   ],
+   "place": "shop",
+   "lines": [
+    {
+     "when": "milestone1",
+     "text": [
+      "Preso não compra fiado. Mas o que você trouxer lá de baixo, eu pago.",
+      "Prisoners get no credit. But whatever you bring up from below, I pay for."
+     ]
+    },
+    {
+     "when": "milestone2",
+     "text": [
+      "O conselho me paga pouco. Me traz coisa boa e a gente se entende.",
+      "The council pays me little. Bring me good things and we’ll get along."
+     ]
+    },
+    {
+     "when": "fall",
+     "text": [
+      "Remédio tem preço. Hoje eu arredondo para baixo.",
+      "Medicine has a price. Today I round it down."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "garrick",
+   "name": "Garrick Ode",
+   "role": [
+    "Ferreiro",
+    "Blacksmith"
+   ],
+   "place": "smith",
+   "lines": [
+    {
+     "when": "milestone2",
+     "text": [
+      "Tem ferro bom no fundo do segundo andar. Ferro velho, de quem trabalhava aqui antes.",
+      "There’s good iron at the bottom of the second floor. Old iron, from those who worked here before."
+     ]
+    },
+    {
+     "when": "milestone3",
+     "text": [
+      "Segura o ferro aqui para mim. Só hoje.",
+      "Hold the iron here for me. Just today."
+     ]
+    },
+    {
+     "when": "fall",
+     "text": [
+      "Armadura amassada eu conserto. Gente, não. Cuidado lá embaixo.",
+      "Dented armour I can mend. People, I can’t. Careful down there."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "sela",
+   "name": "Sela",
+   "role": [
+    "Taverneira",
+    "Tavern keeper"
+   ],
+   "place": "tavern",
+   "lines": [
+    {
+     "when": "milestone1",
+     "text": [
+      "Não precisa dizer nada. A sopa está quente.",
+      "No need to say a thing. The soup is hot."
+     ]
+    },
+    {
+     "when": "milestone2",
+     "text": [
+      "Quem sobe da mina sempre pede sopa quente. Quem vem da montanha pede duas.",
+      "Everyone up from the mine asks for hot soup. Those from the mountain ask for two."
+     ]
+    },
+    {
+     "when": "fall",
+     "text": [
+      "Mais uma tigela, então.",
+      "One more bowl, then."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "wren",
+   "name": "Wren",
+   "role": [
+    "Cozinheira e herbalista",
+    "Cook and herbalist"
+   ],
+   "place": "kitchen",
+   "lines": [
+    {
+     "when": "milestone1",
+     "text": [
+      "Me traz qualquer coisa verde que cresça lá embaixo. Até a feia.",
+      "Bring me anything green that grows down there. Even the ugly ones."
+     ]
+    },
+    {
+     "when": "milestone2",
+     "text": [
+      "Faltam páginas no livro de receitas da minha mãe. O que você traz vai preenchendo.",
+      "My mother’s recipe book is missing pages. What you bring fills them in."
+     ]
+    },
+    {
+     "when": "fall",
+     "text": [
+      "Senta. Come primeiro, conta depois.",
+      "Sit. Eat first, tell me after."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "pip",
+   "name": "Pip",
+   "role": [
+    "Criança",
+    "Child"
+   ],
+   "place": "square",
+   "lines": [
+    {
+     "when": "milestone2",
+     "text": [
+      "Eu vi uma luz na montanha. Juro.",
+      "I saw a light on the mountain. I swear."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ysolde",
+   "name": "Ysolde",
+   "role": [
+    "Anciã",
+    "Elder"
+   ],
+   "place": "well",
+   "lines": [
+    {
+     "when": "milestone1",
+     "text": [
+      "Antes da mina, a gente colhia cogumelo na mata. Ninguém volta lá desde que as árvores começaram a cantar.",
+      "Before the mine we picked mushrooms in the woods. Nobody goes back since the trees started singing."
+     ]
+    }
+   ]
+  },
+  {
+   "id": "tobin",
+   "name": "Tobin",
+   "role": [
+    "Sineiro",
+    "Bell ringer"
+   ],
+   "place": "tower",
+   "lines": [
+    {
+     "when": "milestone2",
+     "text": [
+      "Toco o sino quando vocês vão e quando voltam. O segundo eu toco com mais gosto.",
+      "I ring the bell when you go and when you come back. The second one I ring more gladly."
+     ]
+    }
+   ]
+  }
+ ],
+ "other_prisoners": [
+  {
+   "id": "dace",
+   "name": "Dace",
+   "fate": "left"
+  },
+  {
+   "id": "rook",
+   "name": "Rook",
+   "fate": "stayed"
+  },
+  {
+   "id": "nell",
+   "name": "Nell",
+   "fate": "lost"
+  }
+ ],
+ "crypt_key": {
+  "f": {
+   "terrain": "floor",
+   "h": 1,
+   "look": "crypt"
+  },
+  "d": {
+   "terrain": "floor",
+   "h": 2,
+   "look": "altar"
+  },
+  "w": {
+   "terrain": "floor",
+   "h": 0,
+   "look": "water",
+   "depth": 1
+  },
+  "W": {
+   "terrain": "floor",
+   "h": 0,
+   "look": "water",
+   "depth": 2
+  },
+  "b": {
+   "terrain": "floor",
+   "h": 1,
+   "look": "bridge"
+  },
+  "B": {
+   "terrain": "wall",
+   "h": 1,
+   "look": "brick"
+  },
+  "p": {
+   "terrain": "wall",
+   "h": 1,
+   "look": "pillar"
+  },
+  "P": {
+   "terrain": "wall",
+   "h": 2,
+   "look": "pillar"
+  },
+  "c": {
+   "terrain": "wall",
+   "h": 1,
+   "look": "crates"
+  },
+  "r": {
+   "terrain": "wall",
+   "h": 1,
+   "look": "barrel"
+  },
+  "x": {
+   "terrain": "wall",
+   "h": 2,
+   "look": "chest"
+  },
+  "u": {
+   "terrain": "rubble",
+   "h": 1,
+   "look": "rubble"
+  },
+  "s": {
+   "terrain": "floor",
+   "h": 1,
+   "look": "spikes",
+   "spikes": true
+  }
+ },
+ "faces": {
+  "barbarian": {
+   "sheet": "px/barbarian.webp",
+   "frames": 8,
+   "frameSize": 128,
+   "expressions": {
+    "neutral": 0,
+    "talk1": 1,
+    "talk2": 2,
+    "shout": 3,
+    "hurt": 4,
+    "wounded": 5,
+    "smile": 6,
+    "angry": 7
+   },
+   "mouthFrames": [
+    1,
+    2
+   ]
+  },
+  "knight": {
+   "sheet": "px/knight.webp",
+   "frames": 8,
+   "frameSize": 128,
+   "expressions": {
+    "neutral": 0,
+    "talk1": 1,
+    "talk2": 2,
+    "shout": 3,
+    "hurt": 4,
+    "wounded": 5,
+    "smile": 6,
+    "angry": 7
+   },
+   "mouthFrames": [
+    1,
+    2
+   ]
+  },
+  "lancer": {
+   "sheet": "px/lancer.webp",
+   "frames": 8,
+   "frameSize": 128,
+   "expressions": {
+    "neutral": 0,
+    "talk1": 1,
+    "talk2": 2,
+    "shout": 3,
+    "hurt": 4,
+    "wounded": 5,
+    "smile": 6,
+    "angry": 7
+   },
+   "mouthFrames": [
+    1,
+    2
+   ]
+  },
+  "mage": {
+   "sheet": "px/mage.webp",
+   "frames": 8,
+   "frameSize": 128,
+   "expressions": {
+    "neutral": 0,
+    "talk1": 1,
+    "talk2": 2,
+    "shout": 3,
+    "hurt": 4,
+    "wounded": 5,
+    "smile": 6,
+    "angry": 7
+   },
+   "mouthFrames": [
+    1,
+    2
+   ]
+  },
+  "ranger": {
+   "sheet": "px/ranger.webp",
+   "frames": 8,
+   "frameSize": 128,
+   "expressions": {
+    "neutral": 0,
+    "talk1": 1,
+    "talk2": 2,
+    "shout": 3,
+    "hurt": 4,
+    "wounded": 5,
+    "smile": 6,
+    "angry": 7
+   },
+   "mouthFrames": [
+    1,
+    2
+   ]
+  },
+  "rogue_hooded": {
+   "sheet": "px/rogue_hooded.webp",
+   "frames": 8,
+   "frameSize": 128,
+   "expressions": {
+    "neutral": 0,
+    "talk1": 1,
+    "talk2": 2,
+    "shout": 3,
+    "hurt": 4,
+    "wounded": 5,
+    "smile": 6,
+    "angry": 7
+   },
+   "mouthFrames": [
+    1,
+    2
+   ]
+  },
+  "skeleton_mage": {
+   "sheet": "px/skeleton_mage.webp",
+   "frames": 8,
+   "frameSize": 128,
+   "expressions": {
+    "neutral": 0,
+    "talk1": 1,
+    "talk2": 2,
+    "shout": 3,
+    "hurt": 4,
+    "wounded": 5,
+    "smile": 6,
+    "angry": 7
+   },
+   "mouthFrames": [
+    1,
+    2
+   ]
+  },
+  "skeleton_minion": {
+   "sheet": "px/skeleton_minion.webp",
+   "frames": 4,
+   "frameSize": 64,
+   "mouthFrames": [
+    1,
+    2,
+    3
+   ]
+  },
+  "skeleton_rogue": {
+   "sheet": "px/skeleton_rogue.webp",
+   "frames": 4,
+   "frameSize": 64,
+   "mouthFrames": [
+    1,
+    2,
+    3
+   ]
+  },
+  "skeleton_warrior": {
+   "sheet": "px/skeleton_warrior.webp",
+   "frames": 4,
+   "frameSize": 64,
+   "mouthFrames": [
+    1,
+    2,
+    3
+   ]
+  }
+ }
+}
