@@ -91,24 +91,7 @@ func _play(events: Array) -> void:
 	if log != "":
 		last_log = log
 	_hud.refresh()
-	for e in events:
-		match e.k:
-			"move":
-				await view.walk(e.unit, e.path)
-			"hit":
-				view.float_text(e.unit, "−%d" % e.dmg, Color(1, 0.4, 0.35))
-				Sound.play("hit")
-				await get_tree().create_timer(0.25).timeout
-			"miss":
-				view.float_text(e.unit, Texts.t("Errou", "Miss"), Color(0.85, 0.85, 0.9))
-				await get_tree().create_timer(0.2).timeout
-			"heal", "regen":
-				view.float_text(e.unit, "+%d" % e.amount, Color(0.4, 1, 0.5))
-			"bump", "fall", "spike":
-				view.float_text(e.unit, "−%d" % e.dmg, Color(1, 0.6, 0.2))
-				await get_tree().create_timer(0.2).timeout
-			"die":
-				await get_tree().create_timer(0.2).timeout
+	await view.play_events(events)
 	view.sync_units(battle.state)
 
 
@@ -194,7 +177,8 @@ func key(a: String) -> void:
 	match screen.k:
 		"menu":
 			if a == "up" or a == "down":
-				var on: Array = Command.COMMANDS.map(func(c: String) -> bool: return Command.menu_rows(b).has(c) and Command.enabled(b, c))
+				# every row shown takes the cursor, a greyed Move included (Fernando, Nov 21: it must not be skipped)
+				var on: Array = Command.COMMANDS.map(func(c: String) -> bool: return Command.menu_rows(b).has(c))
 				screen = {"k": "menu", "index": Command.step_index(screen.index, -1 if a == "up" else 1, on)}
 				Sound.play("cursor")
 				_refresh()
@@ -210,7 +194,8 @@ func key(a: String) -> void:
 		"map":
 			if a in ["up", "down", "left", "right"]:
 				var size: int = Content.units[b.actor().def].get("size", 1)
-				var st := view.grid_step(a) * b.grid.sub
+				# one half tile per press; the selector keeps the unit's 2x2 (Fernando, Nov 21)
+				var st := view.grid_step(a)
 				var next := Vector2i(mini(cursor.x + st.x, b.grid.width - size), mini(cursor.y + st.y, b.grid.height - size))
 				if b.grid.in_bounds(next) and next != cursor:
 					cursor = next

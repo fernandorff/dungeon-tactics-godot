@@ -231,6 +231,33 @@ func float_text(unit: String, text: String, col: Color) -> void:
 	tw.tween_callback(l.queue_free)
 
 
+## the events in order: walks tweened, numbers and words floating (moved from battle_screen.gd, at its 400 lines)
+func play_events(events: Array) -> void:
+	for e in events:
+		match e.k:
+			"move":
+				await walk(e.unit, e.path)
+			"hit":
+				float_text(e.unit, "−%d" % e.dmg, Color(1, 0.4, 0.35))
+				Sound.play("hit")
+				await get_tree().create_timer(0.25).timeout
+			"miss":
+				float_text(e.unit, Texts.t("Errou", "Miss"), Color(0.85, 0.85, 0.9))
+				await get_tree().create_timer(0.2).timeout
+			"effect":
+				# an ability's effect says its word, as a miss says Miss (Nov 21: stunned, blinded, focused); items stay quiet
+				if Content.abilities.has(e.item):
+					float_text(e.unit, Texts.effect_word(e.item), Color(0.85, 0.85, 0.9))
+					await get_tree().create_timer(0.25).timeout
+			"heal", "regen":
+				float_text(e.unit, "+%d" % e.amount, Color(0.4, 1, 0.5))
+			"bump", "fall", "spike":
+				float_text(e.unit, "−%d" % e.dmg, Color(1, 0.6, 0.2))
+				await get_tree().create_timer(0.2).timeout
+			"die":
+				await get_tree().create_timer(0.2).timeout
+
+
 ## the marks: [{pos, kind}] plus an optional path and the cursor cell
 func show_marks(tiles: Array, path: Variant = null, cursor: Variant = null, size: int = 1) -> void:
 	for c in _marks.get_children():

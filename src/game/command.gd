@@ -40,14 +40,10 @@ static func enabled(b: Battle, c: String) -> bool:
 	return true
 
 
-## Move leaves once the unit moved with no movement left; "Undo move" only while there is a move to take back
+## Move always stays, greyed with its gauge at zero once spent or boxed in (Fernando, Nov 21: it used to leave); "Undo
+## move" only while there is a move to take back
 static func menu_rows(b: Battle) -> Array:
-	return COMMANDS.filter(func(c: String) -> bool:
-		if c == "move":
-			return not b.state.turn.moved or b.reach().size() > 0
-		if c == "undo":
-			return can_undo_move(b)
-		return true)
+	return COMMANDS.filter(func(c: String) -> bool: return c != "undo" or can_undo_move(b))
 
 
 ## Move if it can still move, else Agir, else Wait; "Undo move" never takes the cursor
@@ -68,8 +64,8 @@ static func _row_of(rows: Array, pred: Callable) -> int:
 static func cancel_step(b: Battle, s: Dictionary) -> Variant:
 	match s.k:
 		"menu":
-			# Esc on the bare menu opens the settings menu (Fernando, Nov 21); undoing a move stays on Z
-			return {}
+			# after a free move Esc undoes it, like Tactics Ogre; on the bare menu nothing, the screen opens Options (Nov 21)
+			return "undo" if can_undo_move(b) else {}
 		"map":
 			return {"k": "menu", "index": index_of("move")}
 		"facing":
