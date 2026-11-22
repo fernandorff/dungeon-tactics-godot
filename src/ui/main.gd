@@ -209,7 +209,11 @@ func _open_shot(shot: String) -> void:
 		"options", "help":
 			skirmish(Content.data.first_battle)
 		_:
-			title()
+			# battle:<map id>: that map's skirmish, to set the look beside the web's ?scenario=<map id>
+			if what.begins_with("battle:"):
+				skirmish(what.substr(7))
+			else:
+				title()
 	await get_tree().create_timer(2.5).timeout
 	if what == "act" and _screen is BattleScreen:
 		var bs: BattleScreen = _screen
@@ -239,6 +243,13 @@ func _open_shot(shot: String) -> void:
 		if what == "help":
 			w._rows[n].opt.run.call(w._rows[n])
 		await get_tree().create_timer(0.5).timeout
+	# --keys up,confirm,...: the battle screen's keys pressed in order before the shot (to compare a screen with the web's)
+	var args := OS.get_cmdline_user_args()
+	var k := args.find("--keys")
+	if k >= 0 and k + 1 < args.size() and _screen is BattleScreen:
+		for a in args[k + 1].split(","):
+			(_screen as BattleScreen).key(a)
+			await get_tree().create_timer(0.6).timeout
 	var img := get_viewport().get_texture().get_image()
 	img.save_png(_shot[1])
 	print("shot saved: ", _shot[1])

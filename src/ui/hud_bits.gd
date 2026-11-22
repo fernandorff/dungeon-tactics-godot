@@ -1,12 +1,5 @@
 class_name HudBits
-## The battle HUD's small pieces, like the web game's: thin gauges for life, mana, stamina and CT, a turn-list entry, the
-## acting unit's card and the tile line under the cursor (port of tile-info.ts).
-
-const HP := Color(0.45, 0.75, 0.3)
-const MP := Color(0.85, 0.45, 0.35)
-const ST := Color(0.9, 0.5, 0.4)
-const CT := Color(0.85, 0.65, 0.2)
-const MANA := Color(0.3, 0.55, 0.95)
+## The tile line under the cursor (port of tile-info.ts): the tile's height and what it is, for the Height corner.
 
 const LOOK_NAME := {
 	"grass": ["grama", "grass"], "stone": ["pedra", "stone"], "water": ["água", "water"], "bridge": ["ponte", "bridge"],
@@ -19,90 +12,6 @@ const LOOK_NAME := {
 	"spikes": ["armadilha de espinhos", "spike trap"], "boulder": ["rochedo", "boulder"], "corpse": ["corpo", "body"],
 }
 const TERRAIN_NAME := {"floor": ["chão", "ground"], "forest": ["árvore", "tree"], "rubble": ["entulho (cobertura)", "rubble (cover)"], "wall": ["muro", "wall"]}
-
-
-static func bar(value: int, most: int, col: Color, width: float = 110.0) -> ProgressBar:
-	var b := ProgressBar.new()
-	b.show_percentage = false
-	b.max_value = maxi(1, most)
-	b.value = clampi(value, 0, maxi(1, most))
-	b.custom_minimum_size = Vector2(width, 5)
-	var bg := StyleBoxFlat.new()
-	bg.bg_color = Color(0, 0, 0, 0.45)
-	var fill := StyleBoxFlat.new()
-	fill.bg_color = col
-	b.add_theme_stylebox_override("background", bg)
-	b.add_theme_stylebox_override("fill", fill)
-	return b
-
-
-## "HP 120/120 · MP 30/30" over its two gauges, then "ST 30/30 · CT 63/100" over theirs
-static func _gauges(u: Dictionary, size: int, width: float) -> VBoxContainer:
-	var def: Dictionary = Content.units[u.def]
-	var mp_max: int = def.get("vars", {}).get("mana", 0)
-	var st_max: int = def.get("vars", {}).get("stamina", 0)
-	var rows := [
-		[["HP", u.hp, def.hp, HP], ["MP", Pools.pool_of(u, "mana"), mp_max, MANA]],
-		[["ST", Pools.pool_of(u, "stamina"), st_max, ST], ["CT", mini(u.ct, TurnQueue.THRESHOLD), TurnQueue.THRESHOLD, CT]],
-	]
-	var v := VBoxContainer.new()
-	v.add_theme_constant_override("separation", 1)
-	for row in rows:
-		var parts: Array = []
-		var bars := HBoxContainer.new()
-		for g in row:
-			if g[2] <= 0:
-				continue
-			parts.append("%s %d/%d" % [g[0], g[1], g[2]])
-			bars.add_child(bar(g[1], g[2], g[3], width))
-		if parts.is_empty():
-			continue
-		v.add_child(Kit.label(" · ".join(parts), size))
-		v.add_child(bars)
-	return v
-
-
-## a row of the turn list: the face (36 px, as the web's .queue-row) beside the name and gauges; a charge row shows the
-## caster's face too
-static func turn_entry(u: Dictionary, ability: String) -> Control:
-	var v := VBoxContainer.new()
-	v.add_theme_constant_override("separation", 0)
-	var col: Color = Kit.HERO if u.team == "hero" else Kit.FOE
-	if ability != "":
-		v.add_child(Kit.label("⏳ %s: %s" % [Texts.unit_name(u.def), Texts.ability_name(ability)], 14, col))
-	else:
-		v.add_child(Kit.label(Texts.unit_name(u.def), 15, col))
-		v.add_child(_gauges(u, 12, 104.0))
-	return _with_face(u, 36, v)
-
-
-## the unit's painted face (Portraits) left of `body`; a unit without a sheet keeps the body alone
-static func _with_face(u: Dictionary, px: int, body: Control) -> Control:
-	var f := Portraits.face(u, px)
-	if f == null:
-		return body
-	var h := HBoxContainer.new()
-	h.add_theme_constant_override("separation", 8)
-	f.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	h.add_child(f)
-	h.add_child(body)
-	return h
-
-
-static func card(parent: Control, u: Dictionary, turn: Dictionary) -> void:
-	for c in parent.get_children():
-		c.queue_free()
-	var head := Texts.unit_name(u.def)
-	var cls := Roster.class_of(u.def)
-	var v := VBoxContainer.new()
-	v.add_child(Kit.label(head, 20, Kit.HERO if u.team == "hero" else Kit.FOE))
-	if cls != "" and Texts.unit_name(cls) != head:
-		v.add_child(Kit.label(Texts.unit_name(cls), 14, Kit.MUTED))
-	v.add_child(_gauges(u, 15, 140.0))
-	var acts := Texts.t("principal ", "main ") + ("✗" if turn.main else "✓") + " · " + Texts.t("secundária ", "bonus ") + ("✗" if turn.bonus else "✓")
-	v.add_child(Kit.label(acts, 14, Kit.MUTED))
-	# the acting unit's face at 64 px, half the 128 px paint, so it stays crisp (the web's .battle-face)
-	parent.add_child(_with_face(u, 64, v))
 
 
 ## the height the tile line shows: in shallow water the one a unit stands at (port of tileHeight)

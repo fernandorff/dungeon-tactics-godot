@@ -1,7 +1,7 @@
 class_name BattleView
 extends Node3D
-## The battle in simple 3D: each cell a box at its height, each unit a capsule with its facing and a life label, the
-## marks as thin plates on the tiles, an orbit camera that turns in steps of 90° (like FFT) and picks the cell under the
+## The battle in 3D: the board (board.gd: the painted ground and what stands on it), the units' KayKit bodies with their
+## rings and bars (units_view.gd), the marks as thin plates on the tiles, an orbit camera that turns in steps of 90° (like FFT) and picks the cell under the
 ## mouse. Only draws: the battle screen says what to show.
 
 const MARK_COLORS := {
@@ -10,62 +10,42 @@ const MARK_COLORS := {
 	"nogo": Color(0.4, 0.4, 0.4, 0.7), "counter": Color(0.85, 0.1, 0.5, 0.6), "charge": Color(0.6, 0.25, 0.9, 0.5),
 	"path": Color(1, 1, 1, 0.7), "cursor": Color(1, 1, 1, 0.9),
 }
-const LOOK_COLORS := {
-	"grass": Color(0.36, 0.55, 0.28), "snow": Color(0.88, 0.9, 0.95), "snow_rock": Color(0.7, 0.72, 0.78),
-	"rock": Color(0.42, 0.4, 0.38), "summit": Color(0.55, 0.52, 0.47), "sand": Color(0.8, 0.72, 0.5),
-	"gold": Color(0.85, 0.7, 0.25), "altar": Color(0.7, 0.65, 0.8), "crypt": Color(0.35, 0.34, 0.4),
-	"stone": Color(0.47, 0.47, 0.5), "spikes": Color(0.55, 0.2, 0.2), "water": Color(0.2, 0.4, 0.7),
-	"bridge": Color(0.55, 0.4, 0.25), "corpse": Color(0.45, 0.35, 0.3), "brick": Color(0.5, 0.3, 0.25),
-	"chest": Color(0.6, 0.45, 0.2), "pillar": Color(0.6, 0.6, 0.62), "crates": Color(0.6, 0.45, 0.28),
-	"barrel": Color(0.5, 0.33, 0.2), "boulder": Color(0.38, 0.37, 0.36), "rubble": Color(0.5, 0.45, 0.38),
-}
-
 var grid: Grid
+var space: TileSpace
+var board: Board
 var camera: Camera3D
 var heading := 0 # 0..3: quarter turns of the camera
 var zoom := 1.0
 var _focus := Vector3.ZERO
 var _yaw := 45.0
-var _tiles: Node3D
 var _marks: Node3D
+var _crown_marks := PackedVector4Array()
 var _rings: Node3D
 var _units := {} # unit id → Node3D
 var _mats := {}
 var _plates := {} # plate width → its mesh
 var _float: Node3D
 var names := {} # unit id → a label in place of name and life (the town's people)
+var units_view: UnitsView
 
 
 func build(g: Grid, state: Dictionary) -> void:
 	grid = g
-	var env := WorldEnvironment.new()
-	var e := Environment.new()
-	e.background_mode = Environment.BG_COLOR
-	e.background_color = Color(0.08, 0.09, 0.12)
-	e.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	e.ambient_light_color = Color(0.55, 0.58, 0.65)
-	e.ambient_light_energy = 0.6
-	env.environment = e
-	add_child(env)
-	var sun := DirectionalLight3D.new()
-	sun.rotation_degrees = Vector3(-55, 35, 0)
-	sun.shadow_enabled = true
-	sun.light_energy = 1.1
-	add_child(sun)
+	space = TileSpace.new(g)
+	Stage.light(self, Vector3(g.width / 2.0, 0, g.height / 2.0), Moods.kind_of(str(state.get("scenario", ""))))
 	camera = Camera3D.new()
 	camera.fov = 35
 	add_child(camera)
-	_tiles = Node3D.new()
-	add_child(_tiles)
+	board = Board.new()
+	add_child(board)
+	board.build(space)
 	_marks = Node3D.new()
 	add_child(_marks)
 	_rings = Node3D.new()
 	add_child(_rings)
 	_float = Node3D.new()
 	add_child(_float)
-	for y in g.height:
-		for x in g.width:
-			_tile_box(Vector2i(x, y))
+	units_view = UnitsView.new()
 	sync_units(state)
 	_focus = Vector3(g.width / 2.0, 0, g.height / 2.0)
 	_place_camera()
@@ -83,115 +63,61 @@ func _mat(c: Color) -> StandardMaterial3D:
 	return _mats[k]
 
 
-func level() -> float:
-	return grid.level_height if grid.level_height > 0 else 0.5
-
-
-## the top of a cell where a unit stands
+## the top of a cell where marks lie (on a ramp, midway up; on deep water, lowered like the drawing)
 func top_of(p: Vector2i) -> float:
-	var t := grid.tile(p)
-	return maxf(0.0, t.h * level()) + 0.1
+	return space.world(p).y
 
 
+## where a token of `size` cells with its corner on p stands
 func cell_center(p: Vector2i, size: int = 1) -> Vector3:
-	return Vector3(p.x + size / 2.0, top_of(p), p.y + size / 2.0)
+	return space.square_top(p, size, true)
 
 
-func _tile_box(p: Vector2i) -> void:
-	var t := grid.tile(p)
-	var h := maxf(0.0, t.h * level()) + 0.1
-	var col: Color = LOOK_COLORS.get(t.get("look", ""), Color(0.45, 0.45, 0.45))
-	if t.terrain == "floor" and not t.has("look"):
-		col = Color(0.45, 0.5, 0.42)
-	# a checker so the cells read apart; a whole tile (2x2 cells) keeps one shade
-	var sub := maxi(1, grid.sub)
-	if ((p.x / sub) + (p.y / sub)) % 2 == 0:
-		col = col.darkened(0.08)
-	_box(Vector3(p.x + 0.5, h / 2.0, p.y + 0.5), Vector3(0.98, h, 0.98), col)
-	if t.get("depth", 0):
-		var w: float = t.depth * level() * 0.5
-		_box(Vector3(p.x + 0.5, h + w / 2.0, p.y + 0.5), Vector3(1.0, w, 1.0), Color(0.2, 0.45, 0.85, 0.55))
-	var blocks := Grid.blocks_of(t)
-	if t.terrain == "wall" or t.terrain == "forest" or t.terrain == "rubble":
-		var tall: float = blocks * level() * 0.5
-		var c2: Color = col.darkened(0.25) if t.terrain != "forest" else Color(0.2, 0.42, 0.2)
-		var w2 := 0.9 if t.terrain == "wall" else 0.7
-		_box(Vector3(p.x + 0.5, h + tall / 2.0, p.y + 0.5), Vector3(w2, tall, w2), c2)
-	if t.get("spikes", false):
-		_box(Vector3(p.x + 0.5, h + 0.12, p.y + 0.5), Vector3(0.5, 0.25, 0.5), Color(0.75, 0.75, 0.8))
-
-
-func _box(at: Vector3, size: Vector3, col: Color) -> void:
-	var mi := MeshInstance3D.new()
-	var bm := BoxMesh.new()
-	bm.size = size
-	mi.mesh = bm
-	mi.material_override = _mat(col)
-	mi.position = at
-	_tiles.add_child(mi)
-
-
-func _team_color(u: Dictionary) -> Color:
-	if Content.is_objective(u.def):
-		return Color(1.0, 0.85, 0.3)
-	return Color(0.25, 0.5, 0.95) if u.team == "hero" else Color(0.85, 0.25, 0.22)
-
-
-func _unit_node(u: Dictionary) -> Node3D:
-	var n := Node3D.new()
-	var size: int = Content.units[u.def].get("size", 1)
-	var r := 0.3 * size
-	var body := MeshInstance3D.new()
-	var cap := CapsuleMesh.new()
-	cap.radius = r
-	cap.height = maxf(2.0 * r + 0.2, 0.9 * size)
-	body.mesh = cap
-	body.material_override = _mat(_team_color(u))
-	body.position.y = cap.height / 2.0
-	n.add_child(body)
-	# the facing: a small nose on the front
-	var nose := MeshInstance3D.new()
-	var nb := BoxMesh.new()
-	nb.size = Vector3(0.18 * size, 0.18 * size, 0.25 * size)
-	nose.mesh = nb
-	nose.material_override = _mat(Color(0.95, 0.95, 0.9))
-	nose.position = Vector3(0, cap.height * 0.7, r)
-	nose.name = "Nose"
-	n.add_child(nose)
-	var label := Label3D.new()
-	label.name = "Label"
-	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	label.no_depth_test = true
-	label.font_size = 36
-	label.pixel_size = 0.006
-	label.outline_size = 8
-	label.position.y = cap.height + 0.35
-	n.add_child(label)
-	n.set_meta("size", size)
-	n.set_meta("height", cap.height)
-	n.set_meta("def", u.def)
-	return n
-
-
-## the units as the state has them: new ones appear, the fallen leave, the rest move to their tiles
+## the units as the state has them: new ones appear, the rest move to their tiles; one that fell stays down where it
+## died without its marks (Nov 13: "the bodies must stay on the ground"), the others that left go
 func sync_units(state: Dictionary) -> void:
 	var alive := {}
 	for u in state.units:
 		alive[u.id] = true
 		if not _units.has(u.id):
-			_units[u.id] = _unit_node(u)
+			_units[u.id] = units_view.make(u, names.get(u.id, ""))
 			add_child(_units[u.id])
 		var n: Node3D = _units[u.id]
+		if n.has_meta("fell"): # back on its feet (an undo)
+			n.remove_meta("fell")
+			UnitMarks.show(n, true)
+			UnitsView.idle(n)
 		n.position = cell_center(u.pos, n.get_meta("size"))
 		n.rotation.y = _facing_yaw(u.get("facing", 0))
-		var def: Dictionary = Content.units[u.def]
-		var lbl: Label3D = n.get_node("Label")
-		lbl.text = names[u.id] if names.has(u.id) else "%s %d/%d" % [Texts.unit_name(u.def), u.hp, def.hp]
-		lbl.modulate = _team_color(u).lightened(0.4)
+		UnitMarks.set_life(n, float(u.hp) / Content.units[u.def].hp)
+		if names.has(u.id):
+			(n.get_node("Label") as Label3D).text = names[u.id]
 	for id in _units.keys():
-		if not alive.has(id):
-			_units[id].queue_free()
-			_units.erase(id)
+		if alive.has(id):
+			continue
+		if _units[id].has_meta("fell"):
+			UnitMarks.show(_units[id], false)
+			continue
+		_units[id].queue_free()
+		_units.erase(id)
+
+
+## a unit's body plays `clip` once and goes back to Idle; `die` leaves it down
+func gesture(unit: String, clip: String) -> void:
+	if _units.has(unit):
+		UnitsView.gesture(_units[unit], clip)
+
+
+## a looping clip that stays until another replaces it (a charge's gesture)
+func hold(unit: String, clip: String) -> void:
+	if _units.has(unit):
+		UnitsView.play(_units[unit], clip)
+
+
+func fall(unit: String) -> void:
+	if _units.has(unit):
+		_units[unit].set_meta("fell", true)
+		UnitsView.play(_units[unit], "Death_A")
 
 
 func _facing_yaw(f: int) -> float:
@@ -206,6 +132,7 @@ func walk(unit: String, path: Array, speed: float = 0.09) -> void:
 	var n: Node3D = _units[unit]
 	var size: int = n.get_meta("size")
 	var tw := create_tween()
+	UnitsView.walk(n)
 	for i in path.size():
 		var p: Vector2i = path[i]
 		if i > 0:
@@ -215,6 +142,7 @@ func walk(unit: String, path: Array, speed: float = 0.09) -> void:
 				tw.tween_callback(func() -> void: n.rotation.y = _facing_yaw(f))
 		tw.tween_property(n, "position", cell_center(p, size), speed)
 	await tw.finished
+	UnitsView.idle(n)
 
 
 ## a floating number or word over a unit's chest (port of float-numbers.ts): `px` is its height in screen px at 1080p,
@@ -257,10 +185,17 @@ func show_marks(tiles: Array, path: Variant = null, cursor: Variant = null, size
 	for c in _marks.get_children():
 		c.queue_free()
 	var seen := {}
+	_crown_marks.clear()
+	if cursor != null and grid.in_bounds(cursor):
+		var point := cell_center(cursor, size)
+		_crown_marks.append(Vector4(point.x, point.y + 0.3, point.z, 0.8))
 	for m in tiles:
 		seen[m.pos] = m.kind # later marks win, as the web game's map
 	for p in seen:
 		_plate(p, MARK_COLORS.get(seen[p], Color(1, 1, 1, 0.4)), 0.92, 0.04)
+		if _crown_marks.size() < 64 and grid.in_bounds(p):
+			var point := space.world(p)
+			_crown_marks.append(Vector4(point.x, point.y + 0.05, point.z, 0.55))
 	if path != null:
 		for p in path:
 			_plate(p, MARK_COLORS.path, 0.35, 0.07)
@@ -300,7 +235,10 @@ func place_free(unit: String, at: Vector2, dir: Vector2) -> void:
 	if not _units.has(unit):
 		return
 	var n: Node3D = _units[unit]
-	n.position = Vector3(at.x, top_of(TownMap.cell_under(at)), at.y)
+	var to := Vector3(at.x, top_of(TownMap.cell_under(at)), at.y)
+	if not to.is_equal_approx(n.position):
+		units_view.stepped(n)
+	n.position = to
 	if dir != Vector2.ZERO:
 		n.rotation.y = atan2(dir.x, dir.y)
 	_focus = Vector3(at.x, 0, at.y)
@@ -325,6 +263,9 @@ func zoom_by(f: float) -> void:
 
 func _process(delta: float) -> void:
 	_place_camera(minf(1.0, delta * 6.0))
+	if units_view:
+		units_view.update(_units, camera)
+		board.update(_units, camera, _crown_marks)
 
 
 func _place_camera(weight: float = 1.0) -> void:

@@ -45,11 +45,14 @@ static func play(view: BattleView, events: Array) -> void:
 			"attack":
 				Sound.play(Sound.attack_kind(e.ability))
 				magic = Content.abilities[e.ability].get("magic", false)
+				view.gesture(e.unit, UnitClips.gesture(e.ability))
+				await view.get_tree().create_timer(0.25).timeout # the windup: the blow lands mid-gesture
 			"hit", "bump", "fall", "spike":
 				var most := _max_hp(view, e.unit)
 				var big := is_big(e, most)
 				var star: bool = e.k == "hit" and magic
 				view.float_text(e.unit, "-%d%s" % [e.dmg, " ✦" if star else ""], MAGIC if star else PHYS, number_px(e.dmg, most, big), big)
+				view.gesture(e.unit, "Hit_A")
 				await view.get_tree().create_timer(0.25).timeout
 			"miss":
 				view.float_text(e.unit, Texts.t("Errou", "Miss"), MISS, WORD_PX)
@@ -61,5 +64,9 @@ static func play(view: BattleView, events: Array) -> void:
 					await view.get_tree().create_timer(0.25).timeout
 			"heal", "regen":
 				view.float_text(e.unit, "+%d" % e.amount, HEAL, number_px(e.amount, _max_hp(view, e.unit), false))
+			"charge":
+				# starts charging: the long gesture loops while the charge waits in the queue
+				view.hold(e.unit, UnitClips.charge(e.ability))
 			"die":
-				await view.get_tree().create_timer(0.2).timeout
+				view.fall(e.unit)
+				await view.get_tree().create_timer(0.6).timeout

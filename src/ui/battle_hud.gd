@@ -1,232 +1,165 @@
 class_name BattleHud
 extends Control
-## The battle's HUD: the turn list, the acting unit's card, the menu of the screen in play (commands, the Agir lists, the
-## lock and slot steps), the strike preview, the help line and the last action's summary; the Status and pause windows.
-## Only shows and passes clicks along to the battle screen.
+## The battle's HUD in the web game's parchment look (src/ui/hud/*): the turn list on the left, the combat bar along the
+## bottom, the command menu and the Agir lists on the bottom right with the action sheet above them, the Height corner,
+## the banner, the key hints, the corner buttons and the charge lines; the Status, peek and menu windows. Only shows and
+## passes clicks along to the battle screen. Each piece redraws only when what it shows changes, so a cursor step that
+## changes nothing on it costs a hash.
 
 var screen_ref: BattleScreen
-var _turns: VBoxContainer
-var _card: VBoxContainer
-var _height: Label
-var _tile: Label
-var _menu: VBoxContainer
-var _menu_title: Label
-var _info: Label
-var _log: Label
-var _help: Label
+var _turns: TurnList
+var _bar: CombatBar
+var _hints: HudHints
+var _main := MenuColumn.new()
+var _sub := MenuColumn.new()
+var _sheet := ActionSheet.new()
+var _glove := Glove.new()
+var _lines: ChargeLines
 var _window: Control
-var _drawn := 0 # the state hash the turn list and the card show
+var _view := {} # the menu view on screen
 
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(PRESET_FULL_RECT)
 	mouse_filter = MOUSE_FILTER_IGNORE
-	var tl := Kit.panel(self, Vector2(16, 16), Vector2(250, 0))
-	tl.add_child(Kit.label(Texts.t("Ordem dos turnos", "Turn order"), 14, Kit.MUTED))
-	_turns = VBoxContainer.new()
-	tl.add_child(_turns)
-	_card = Kit.panel(self, Vector2(16, -16), Vector2(330, 0), PRESET_BOTTOM_LEFT)
-	# the menu by the bottom right, as the web game's; the top right keeps the map's name and the tile under the cursor
-	var menu := Kit.panel(self, Vector2(-16, -16), Vector2(360, 0), PRESET_BOTTOM_RIGHT)
-	_menu_title = Kit.label("", 15, Kit.MUTED)
-	menu.add_child(_menu_title)
-	_menu = VBoxContainer.new()
-	menu.add_child(_menu)
-	var info := Kit.panel(self, Vector2(-10, -16), Vector2(500, 0), PRESET_CENTER_BOTTOM)
-	_info = Kit.label("", 15)
-	info.add_child(_info)
-	_log = Kit.label("", 14, Kit.ACCENT)
-	info.add_child(_log)
-	_help = Kit.label("", 13, Kit.MUTED)
-	info.add_child(_help)
-	var top := Kit.panel(self, Vector2(-16, 16), Vector2(360, 0), PRESET_TOP_RIGHT)
-	var title := Kit.label("", 15)
-	title.name = "Title"
-	top.add_child(title)
-	var pause := Kit.button(Texts.t("Menu (Esc)", "Menu (Esc)"), open_pause)
-	top.add_child(pause)
-	var where := Kit.panel(self, Vector2(-16, 132), Vector2(360, 0), PRESET_TOP_RIGHT)
-	_height = Kit.label("", 30, Kit.ACCENT)
-	where.add_child(_height)
-	_tile = Kit.label("", 14)
-	where.add_child(_tile)
+	_lines = ChargeLines.new()
+	_lines.view = screen_ref.view
+	add_child(_lines)
+	_turns = TurnList.new()
+	add_child(_turns)
+	_turns.peek.connect(func(id: String) -> void:
+		if screen_ref.is_hero_turn() and not screen_ref.busy:
+			open_peek(id))
+	_bar = CombatBar.new()
+	add_child(_bar)
+	_hints = HudHints.new()
+	add_child(_hints)
+	_hints.pressed.connect(func(what: String) -> void: screen_ref.key(what))
+	for c in [_main, _sub, _sheet, _glove]:
+		c.visible = false
+		add_child(c)
+	_main.picked.connect(_pick_main)
+	_main.hovered.connect(_hover_main)
+	_sub.picked.connect(func(i: int) -> void: _list_pick(i))
+	_sub.hovered.connect(func(i: int) -> void: _list_hover(i))
+	_sheet.turned.connect(func(dir: int) -> void: screen_ref._apply(ActTurn.page(screen_ref.screen, dir)))
+
+
+func _exit_tree() -> void:
+	HudSkin.release()
 
 
 func refresh() -> void:
 	if screen_ref == null or _turns == null:
 		return
-	var b := screen_ref.battle
-	var name := Texts.t(screen_ref.scenario.get("name", ""), screen_ref.scenario.get("en", ""))
-	if String(screen_ref.scenario.get("id", "")).begins_with(Survival.ID):
-		name += Texts.t(" · amanhece em %d turnos", " · dawn in %d turns") % Survival.turns_left(b.state)
-	(find_child("Title", true, false) as Label).text = name
-	var at: Vector2i = screen_ref.cursor
-	if b.grid.in_bounds(at):
-		_height.text = Texts.t("Altura %d", "Height %d") % HudBits.tile_height(b.grid, at)
-		_tile.text = HudBits.tile_info(b.grid, at)
-	# the turn list and the card only change with the state (and the language), not with the cursor: rebuilt once each
-	var key := hash([b.state.hash(), Texts.current()])
-	if key != _drawn:
-		_drawn = key
-		for c in _turns.get_children():
-			c.queue_free()
-		for e in TurnQueue.preview_order(b.state, 6):
-			var u := Combat.find_unit(b.state, e.unit)
-			if u.is_empty():
-				continue
-			_turns.add_child(HudBits.turn_entry(u, e.get("ability", "")))
-		if not b.over():
-			HudBits.card(_card, b.actor(), b.state.turn)
-	_log.text = screen_ref.last_log
-	_draw_menu()
-
-
-func _row(text: String, on: bool, focused: bool, note: String, pick: Callable, hover: Callable) -> void:
-	var b := Kit.button(text + ("" if note == "" else "\n   " + note), pick)
-	b.disabled = false
-	b.alignment = HORIZONTAL_ALIGNMENT_LEFT
-	b.modulate = Color(1, 1, 1) if on else Color(0.6, 0.6, 0.62)
-	if focused:
-		b.add_theme_stylebox_override("normal", Kit.focus_box())
-		b.add_theme_stylebox_override("hover", Kit.focus_box())
-	b.mouse_entered.connect(hover)
-	_menu.add_child(b)
-
-
-func _draw_menu() -> void:
-	for c in _menu.get_children():
-		c.queue_free()
 	var sr := screen_ref
 	var b := sr.battle
-	_info.text = ""
-	_help.text = Texts.t("Setas/clique: escolher · Enter/A: confirmar · Esc/B: voltar · Q/E: girar · F: virar · Z: desfazer", "Arrows/click: choose · Enter/A: confirm · Esc/B: back · Q/E: turn · F: face · Z: undo")
-	if b.over() or not sr.is_hero_turn():
-		_menu_title.text = Texts.t("Vez do inimigo", "Enemy turn") if not b.over() else ""
-		return
-	# while a hero's action plays, the screen it came from is stale: drawing it rebuilt the Agir lists (~450 ms)
-	if sr.busy:
-		_menu_title.text = ""
-		return
 	var s := sr.screen
-	match s.k:
-		"menu":
-			_menu_title.text = Texts.unit_name(b.actor().def)
-			var rows := Command.menu_rows(b)
-			for c in rows:
-				var i := Command.index_of(c)
-				_row(Texts.command_name(c), Command.enabled(b, c), s.index == i, "", func() -> void: sr.choose(i), func() -> void: pass)
-				if c == "move":
-					_move_gauge(b)
-		"map":
-			_menu_title.text = Texts.t("Mover: escolha a casa", "Move: pick the tile")
-			_info.text = Texts.t("Enter ou clique de novo para andar até lá.", "Enter or click again to walk there.")
-		"facing":
-			_menu_title.text = Texts.t("Virar: escolha o lado", "Face: pick the side")
-			_info.text = Texts.t("Setas para virar · Enter termina o turno", "Arrows to turn · Enter ends the turn")
-		_:
-			_draw_act(s)
+	var open := sr.is_hero_turn() and not sr.busy
+	var struck := {}
+	var p: Variant = sr.preview() if open else null
+	if p != null and p.get("ok", false):
+		for t in p.targets:
+			struck[t.unit] = true
+	_turns.show_queue(b, TurnRows.aim_of(b, s) if open else {}, struck)
+	_draw_bar(b, s, p)
+	_draw_menu(MenuView.of(b, s, open))
+	var height := HintRows.height_shown(b, s, sr.cursor)
+	var line := HudBits.tile_info(b.grid, sr.cursor) if height >= 0 else ""
+	var banner := sr.last_log
+	if String(sr.scenario.get("id", "")).begins_with(Survival.ID):
+		banner = Texts.t("Amanhece em %d turnos", "Dawn in %d turns") % Survival.turns_left(b.state) + ("" if banner == "" else " · " + banner)
+	_hints.show_hints(height, line, banner, HintRows.hints_for(b, s, open), open and b.can_undo())
+	_lines.show_charges(b)
 
 
-## under Move: the half tiles still walkable this turn against the turn's full movement (Fernando, Nov 21)
-func _move_gauge(b: Battle) -> void:
-	var most: int = Effects.move_of(b.state, b.actor())
-	var left := maxi(0, most - b.state.turn.get("spent", 0))
-	_menu.add_child(Kit.label(Texts.t("Movimento: %d de %d meias casas", "Movement: %d of %d half tiles") % [left, most], 13, Kit.MUTED))
-	_menu.add_child(HudBits.bar(left, most, Kit.HERO, 330.0))
-
-
-func _draw_act(s: Dictionary) -> void:
-	var sr := screen_ref
-	var b := sr.battle
-	var titles := {"acts": Texts.t("Agir", "Act"), "group": "", "targets": Texts.t("Escolher alvo", "Pick a target"), "actions": Texts.t("Ações no alvo", "Actions on the target"), "aim": Texts.t("Onde cai", "Where it lands"), "spot": Texts.t("De onde agir", "Where to act from")}
-	_menu_title.text = titles.get(s.k, "")
-	if s.k == "group":
-		_menu_title.text = {"skills": Texts.t("Técnicas", "Skills"), "magic": Texts.t("Magias", "Magic"), "items": Texts.t("Itens", "Items")}[s.group]
-	var st := ActTurn.step_of(s)
-	if not st.is_empty():
-		for i in st.rows.size():
-			var r: String = st.rows[i]
-			var label: String = {"unit": Texts.t("Travar no personagem", "Lock on the character"), "tile": Texts.t("Travar na casa", "Lock on the tile"), "main": Texts.t("Ação principal", "Main action"), "bonus": Texts.t("Ação secundária (metade)", "Bonus action (half)")}[r]
-			var idx: int = i
-			_row(label, true, r == st.at, "", func() -> void: sr._apply(ActTurn.pick(b, sr.screen, idx)), func() -> void: sr._apply(ActTurn.hover(b, sr.screen, idx)))
-		_info.text = _preview_text(sr.preview())
+## the acting unit's sheet, the aimed strike's plate and the target's sheet (the unit under the cursor otherwise)
+func _draw_bar(b: Battle, s: Dictionary, p: Variant) -> void:
+	if b.over():
+		_bar.show_bar({"sheet": {}, "plate": {}, "target": {}})
 		return
-	if s.k == "aim" or s.k == "spot":
+	var me := b.actor()
+	var under := Pathing.unit_at(b.state, screen_ref.cursor)
+	var other: Dictionary = under if not under.is_empty() and under.id != me.id else {}
+	var fs: Array = []
+	var ability := ""
+	if p != null and p.get("ok", false):
 		var a := ActTurn.screen_action(b, s)
-		var pts: Array = ActFlow.act_aims(a) if s.k == "aim" else ActTurn.map_points(b, s)
-		var name := _action_name(a)
-		_menu.add_child(Kit.label("%s · %d %s" % [name, pts.size(), Texts.t("opções", "options")], 15))
-		_menu.add_child(Kit.label(Texts.t("Setas ou clique no mapa · Enter confirma", "Arrows or click on the map · Enter confirms"), 13, Kit.MUTED))
-		_info.text = _preview_text(sr.preview())
+		if not a.is_empty() and a.k == "ability":
+			ability = a.id
+			fs = BarView.forecast(b, ability, p)
+			# the one under the cursor first
+			fs = Util.stable_sort(fs, func(x: Dictionary, y: Dictionary) -> bool: return x.unit.id == other.get("id", "") and y.unit.id != other.get("id", ""))
+	_bar.show_bar(BarView.of(b.state, me, other, fs, ability))
+
+
+## the command menu and the Agir lists, standing on the menu region's foot (menu-layout.ts): the list beside the menu
+## opens LEAD px to the right of it; the glove points at the focused row of the column the player moves
+func _draw_menu(v: Dictionary) -> void:
+	_view = v
+	var shown := not v.is_empty()
+	_main.visible = shown
+	_glove.visible = shown
+	_sub.visible = shown and not v.sub.is_empty()
+	_sheet.visible = shown and not v.sheet.is_empty()
+	if not shown:
 		return
-	var rows := ActTurn.rows_of(b, s)
-	for i in rows.size():
-		var r: Dictionary = rows[i]
-		var idx := i
-		var on: bool = r.get("enabled", true)
-		_row(_row_text(b, r), on, s.index == i, "" if on else Texts.act_reason(r), func() -> void: sr._apply(ActTurn.pick(b, sr.screen, idx)), func() -> void: sr._apply(ActTurn.hover(b, sr.screen, idx)))
-	if s.index < rows.size():
-		var r: Dictionary = rows[s.index]
-		if r.k == "ability":
-			_info.text = Texts.ability_detail(r.id)
-		elif r.k == "item":
-			_info.text = Texts.item_detail(r.id)
-		elif r.k == "unit":
-			_info.text = _unit_line(b, r.unit)
+	var r := HudSkin.region("menu")
+	var foot := r.end.y
+	var lead := HudSkin.region("submenu").position.x - r.position.x
+	var listing: bool = not v.sub.is_empty()
+	_main.show_rows(v.head, v.rows, v.index, not listing)
+	_main.position = Vector2(r.position.x, foot - _main.size.y)
+	var col := _main
+	var at: int = v.index
+	if listing:
+		_sub.show_rows(v.sub_title, v.sub, v.sub_index, true)
+		_sub.position = Vector2(r.position.x + lead, foot - _sub.size.y)
+		col = _sub
+		at = v.sub_index
+	if not v.sheet.is_empty():
+		_sheet.show_sheet(v.sheet)
+		_sheet.position = HudSkin.region("detail").position
+	if at >= 0:
+		_glove.point_at(col.position + Vector2(2, HudSkin.px(MenuColumn.HEAD + (at + 0.5) * MenuColumn.ROW)))
+	else:
+		_glove.visible = false
 
 
-func _action_name(a: Dictionary) -> String:
-	if a.is_empty():
-		return ""
-	return Texts.ability_name(a.id) if a.k == "ability" else Texts.item_name(a.id)
+## a click on the menu column: a command on the bare menu; once a list is open, the column holds the list before it,
+## and a click there goes back to it
+func _pick_main(i: int) -> void:
+	var sr := screen_ref
+	if _view.get("sub", []).is_empty():
+		sr.choose(_view.commands[i])
+		return
+	if _view.depth <= 1:
+		var c: int = _view.commands[i]
+		if c != Command.index_of("act"):
+			sr.screen = {"k": "menu", "index": c}
+			sr.choose(c)
+		return
+	var back: Variant = Command.cancel_step(sr.battle, sr.screen)
+	if typeof(back) == TYPE_DICTIONARY and not back.is_empty():
+		sr._apply({"screen": back, "sound": "cancel"})
 
 
-func _row_text(b: Battle, r: Dictionary) -> String:
-	match r.k:
-		"pick":
-			return Texts.t("Escolher alvo", "Pick a target")
-		"group":
-			return "%s (%d)" % [{"skills": Texts.t("Técnicas", "Skills"), "magic": Texts.t("Magias", "Magic"), "items": Texts.t("Itens", "Items")}[r.group], r.reach]
-		"unit":
-			var u := Combat.find_unit(b.state, r.unit)
-			return "%s  %d/%d · %s" % [Texts.unit_name(u.def), u.hp, Content.units[u.def].hp, Texts.distance_text(ActFlow.distance_to(b, r.unit), b.grid.sub > 1)]
-		"direct":
-			return "%s (%s)" % [Texts.ability_name(r.ability), Texts.t("no chão", "on the ground")]
-		"side":
-			return Texts.t("Escolher aliados", "Pick allies") if r.side == "ally" else Texts.t("Escolher inimigos", "Pick foes")
-		"ability":
-			var a: Dictionary = Content.abilities[r.id]
-			var tag := Texts.kind_tag(r)
-			var cost := Texts.cost_text(a)
-			var extra := ", ".join([cost, tag].filter(func(x: String) -> bool: return x != ""))
-			return Texts.ability_name(r.id) + ("" if extra == "" else "  (%s)" % extra)
-		"item":
-			return "%s ×%d" % [Texts.item_name(r.id), r.get("count", 0)]
-	return ""
+func _hover_main(i: int) -> void:
+	var sr := screen_ref
+	if _view.get("sub", []).is_empty() and sr.screen.k == "menu" and _view.commands[i] != sr.screen.index:
+		sr.screen = {"k": "menu", "index": _view.commands[i]}
+		Sound.play("cursor")
+		sr._refresh()
 
 
-func _unit_line(b: Battle, id: String) -> String:
-	var u := Combat.find_unit(b.state, id)
-	return "%s · %s %d/%d" % [Texts.unit_name(u.def), Texts.t("vida", "HP"), u.hp, Content.units[u.def].hp]
+func _list_pick(i: int) -> void:
+	var sr := screen_ref
+	sr._apply(ActTurn.pick(sr.battle, sr.screen, i))
 
 
-func _preview_text(p: Variant) -> String:
-	if p == null or not p.get("ok", false):
-		return ""
-	var lines: Array = []
-	var b := screen_ref.battle
-	for t in p.targets:
-		var u := Combat.find_unit(b.state, t.unit)
-		var name: String = Texts.unit_name(u.def) if not u.is_empty() else t.unit
-		var parts: Array = []
-		if t.dmgMax > 0:
-			parts.append(Texts.t("%d%% · dano %s", "%d%% · damage %s") % [t.chance, Texts.range_text([t.dmgMin, t.dmgMax])])
-		if t.healMax > 0:
-			parts.append(Texts.t("cura %s", "heal %s") % Texts.range_text([t.healMin, t.healMax]))
-		if t.get("side", "") in ["side", "back"]:
-			parts.append(Texts.t("pelas costas", "from behind") if t.side == "back" else Texts.t("pelo lado", "from the side"))
-		lines.append("%s: %s" % [name, ", ".join(parts)])
-	return "\n".join(lines)
+func _list_hover(i: int) -> void:
+	var sr := screen_ref
+	sr._apply(ActTurn.hover(sr.battle, sr.screen, i))
 
 
 # --- windows --------------------------------------------------------------------------------------
@@ -238,30 +171,51 @@ func _close_window() -> void:
 	screen_ref.paused = false
 
 
-func open_status(id: String) -> void:
+func _open(title: String, rows: Array, buttons: Array) -> void:
 	_close_window()
 	screen_ref.paused = true
-	var rows := Texts.unit_status(screen_ref.battle.state, id)
-	var lines: Array = []
-	for r in rows:
-		lines.append("%s: %s" % [r[0], r[1]])
-	_window = Kit.dialog(self, "Status · " + Texts.unit_name(Combat.find_unit(screen_ref.battle.state, id).def), "\n".join(lines), [[Texts.t("Fechar", "Close"), _close_window]])
+	_window = PaperWindow.open(self, title, rows, buttons, func() -> void:
+		_window = null
+		screen_ref.paused = false)
+
+
+func open_status(id: String) -> void:
+	var u := Combat.find_unit(screen_ref.battle.state, id)
+	_open("Status · " + Texts.unit_name(u.def), Texts.unit_status(screen_ref.battle.state, id), [[Texts.t("Fechar", "Close"), _close_window]])
+
+
+## the look-only menu of another unit (port of unit-peek.ts): its Status, its abilities and its range on the map
+func open_peek(id: String) -> void:
+	var u := Combat.find_unit(screen_ref.battle.state, id)
+	if u.is_empty():
+		return
+	var name := Texts.unit_name(u.def)
+	_open("%s · %s" % [name, Texts.side_name(u.team)], [], [
+		["Status", func() -> void: open_status(id)],
+		[Texts.t("Habilidades", "Abilities"), func() -> void: _open(Texts.t("Habilidades: %s", "Abilities: %s") % name, ability_rows(u.def), [[Texts.t("Fechar", "Close"), _close_window]])],
+		[Texts.t("Mostrar alcance", "Show range"), func() -> void:
+			_close_window()
+			# paints where the unit walks and strikes until the next tap or key
+			screen_ref.ui = Interaction.fresh_ui(screen_ref.battle).merged({"mode": "idle", "inspect": id}, true)
+			screen_ref._refresh()],
+		[Texts.t("Fechar", "Close"), _close_window],
+	])
+
+
+## one row per ability: its name, then its range (or "around you"), its cost and its charge ticks
+static func ability_rows(def: String) -> Array:
+	var out: Array = []
+	for id: String in Content.units[def].get("abilities", []):
+		var a: Dictionary = Content.abilities[id]
+		var charge := Texts.t("carrega %d tiq.", "charges %d tk") % a.charge if a.charge else ""
+		var parts := [Texts.ability_pages(id)[0][0], Texts.cost_text(a), charge].filter(func(x: String) -> bool: return x != "")
+		out.append([Texts.ability_name(id), " · ".join(parts)])
+	return out
 
 
 func open_pause() -> void:
-	_close_window()
 	screen_ref.paused = true
-	var leave := Texts.t("Sair da sala (perde a expedição)", "Leave the room (loses the expedition)") if screen_ref.room != null else Texts.t("Voltar ao título", "Back to the title")
-	_window = Kit.dialog(self, Texts.t("Menu", "Menu"), "", [
-		[Texts.t("Continuar", "Resume"), _close_window],
-		[Texts.t("Opções", "Options"), func() -> void:
-			_close_window()
-			screen_ref.paused = true
-			_window = OptionsWindow.open(self, _close_window)],
-		[Texts.t("Recomeçar a batalha", "Restart the battle"), func() -> void:
-			_close_window()
-			screen_ref.restart()],
-		[leave, func() -> void:
-			_close_window()
-			screen_ref.left_battle.emit()],
-	])
+	_window = OptionsWindow.open(self, func() -> void:
+		_window = null
+		screen_ref.paused = false
+		refresh())

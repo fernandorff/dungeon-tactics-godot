@@ -351,6 +351,12 @@ func tap(p: Vector2i) -> void:
 		_map_confirm()
 		return
 	cursor = p
+	var other := Pathing.unit_at(battle.state, p)
+	if screen.k == "menu" and not other.is_empty() and other.id != battle.actor().id:
+		# a tap on another unit opens its look-only menu (the web's unit peek, Nov 18 night)
+		_refresh()
+		_hud.open_peek(other.id)
+		return
 	if screen.k == "map":
 		ui = Interaction.tap_tile(battle, ui, p)
 	else:

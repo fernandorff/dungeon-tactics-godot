@@ -58,7 +58,7 @@ static func set_tutorial(on: bool) -> void:
 	_save_flag(TUTORIAL_KEY, on)
 
 
-## when the battle's footer shows the key hints. shortcut: the port has no key-hint footer yet (key-hints.ts)
+## The battle footer follows the last input in automatic mode.
 static func hints() -> String:
 	return _pick(HINTS_KEY, ["always", "never"], "auto")
 
@@ -134,8 +134,7 @@ static func touch_device() -> bool:
 	return DisplayServer.is_touchscreen_available()
 
 
-## Undo and the camera pair on screen: on for a finger, off on a PC, unless set. shortcut: the port has no screen
-## buttons yet (screen-buttons.ts)
+## Undo and the camera buttons default to visible on a touchscreen.
 static func screen_buttons() -> bool:
 	return _flag(BUTTONS_KEY, touch_device())
 

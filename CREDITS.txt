@@ -47,3 +47,27 @@ assets/sfx/die.mp3 (creature_die_01.ogg)
   Licence read on the page on Nov 12, 2026: CC0.
 Victory and defeat fanfares and dialogue speech blips: notes generated at run time (src/ui/synth.gd, a port of the web's
   sound.ts jingle and blip), no file; created by the project.
+
+== Textures (assets/tex/*.jpg, the web game's public/tex, since Nov 21, 2026) ==
+assets/tex/grass, leaves, dirt, snow, cliff, wood, bark and paint.jpg (the painted ground, bridge planks and painted pieces)
+  Our own design, painted by the web game's scripts/assets/paint-textures.py.
+
+== 3D models: characters (assets/models/*.glb, the web game's public/models, since Nov 21, 2026) ==
+assets/models/mage, knight, barbarian, rogue, rogue_hooded and skeleton_*.glb, KAYKIT-LICENSE.txt and KAYKIT-SKELETONS-LICENSE.txt
+  KayKit Adventurers Character Pack 1.0 and KayKit Character Pack: Skeletons 1.0, by Kay Lousberg (www.kaylousberg.com), CC0
+  As the web game ships them (trimmed by its scripts/slim-character.mjs, hood by scripts/assets/hood.mjs), stored without
+  meshopt compression by tools/unpack-models.mjs, which Godot does not read.
+assets/models/ranger.glb and lancer.glb
+  The web game's Archer and Lancer, assembled from KayKit Adventurers 1.0, KayKit Fantasy Weapons Bits 1.0 and KayKit
+  Character Animations 1.1 by its scripts/assets/ranger.mjs and lancer.mjs, by Kay Lousberg (www.kaylousberg.com). All CC0.
+assets/models/animations.glb (ability gestures, walk and jump)
+  KayKit Character Animations 1.1 (Free), by Kay Lousberg (www.kaylousberg.com), CC0 - https://kaylousberg.itch.io/kaykit-character-animations
+  Rig_Medium clips merged by the web game's scripts/assets/anim-pack.mjs.
+assets/models/snake.glb, rat.glb, spider.glb and bat.glb
+  "Snake", "Rat", "Spider" and "Bat" by Quaternius, Public Domain (CC0) - https://poly.pizza/m/x9x0viZs8V,
+  https://poly.pizza/m/iltq5bVNaV, https://poly.pizza/m/yRYJiAJyiM and https://poly.pizza/m/hNO9XvjlKa
+
+== Ability icons (assets/ui/atlas-32.png, the web game's public/ui/fft/atlas-32.png, since Nov 15, 2026) ==
+  27 pixel-art icons of 32 px (the 22 abilities, Move and Wait, then Shove, Throw sand and Focus), approved by Fernando
+  in the design lab on Nov 15. AI-generated in the design lab, reduced to 32 px there; the Nov 21 row is drawn from the
+  cells above. Generator and its licence terms still to be confirmed before launch.
