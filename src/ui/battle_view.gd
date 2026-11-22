@@ -4,6 +4,8 @@ extends Node3D
 ## rings and bars (units_view.gd), the marks as thin plates on the tiles, an orbit camera that turns in steps of 90° (like FFT) and picks the cell under the
 ## mouse. Only draws: the battle screen says what to show.
 
+signal announced(text: String) # an ability about to play: the banner names it (before-event.ts hud.banner)
+
 const MARK_COLORS := {
 	"actor": Color(1.0, 0.85, 0.2, 0.75), "move": Color(0.25, 0.55, 1.0, 0.55), "range": Color(0.95, 0.55, 0.15, 0.45),
 	"threat": Color(0.9, 0.2, 0.2, 0.4), "area": Color(1.0, 0.35, 0.2, 0.6), "target": Color(1.0, 0.2, 0.2, 0.8),

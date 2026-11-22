@@ -7,16 +7,17 @@ extends Control
 ## changes nothing on it costs a hash.
 
 var screen_ref: BattleScreen
-var _turns: TurnList
-var _bar: CombatBar
+var _turns: Turn3d
+var _queue := {} # the last TurnRows.queue and its key: the projection is redone only when the state or the aim changes
+var _bar: Bar3d
 var _hints: HudHints
-var _main := MenuColumn.new()
-var _sub := MenuColumn.new()
-var _sheet := ActionSheet.new()
-var _glove := Glove.new()
+var _hints3d: Hints3d
+var _result: Result3d
+var _said := "" # the ability playing now: it takes the banner (Hints3d) until the play ends
+var _layer := Layer3d.new()
+var _menu: Menu3d
 var _lines: ChargeLines
 var _window: Control
-var _view := {} # the menu view on screen
 
 
 func _ready() -> void:
@@ -25,24 +26,31 @@ func _ready() -> void:
 	_lines = ChargeLines.new()
 	_lines.view = screen_ref.view
 	add_child(_lines)
-	_turns = TurnList.new()
-	add_child(_turns)
-	_turns.peek.connect(func(id: String) -> void:
-		if screen_ref.is_hero_turn() and not screen_ref.busy:
-			open_peek(id))
-	_bar = CombatBar.new()
-	add_child(_bar)
 	_hints = HudHints.new()
 	add_child(_hints)
 	_hints.pressed.connect(func(what: String) -> void: screen_ref.key(what))
-	for c in [_main, _sub, _sheet, _glove]:
-		c.visible = false
-		add_child(c)
-	_main.picked.connect(_pick_main)
-	_main.hovered.connect(_hover_main)
-	_sub.picked.connect(func(i: int) -> void: _list_pick(i))
-	_sub.hovered.connect(func(i: int) -> void: _list_hover(i))
-	_sheet.turned.connect(func(dir: int) -> void: screen_ref._apply(ActTurn.page(screen_ref.screen, dir)))
+	add_child(_layer)
+	_bar = Bar3d.new(_layer)
+	_hints3d = Hints3d.new(_layer)
+	_hints.device_changed.connect(refresh)
+	screen_ref.view.announced.connect(announce)
+	_turns = Turn3d.new(_layer, func(id: String) -> void:
+		if screen_ref.is_hero_turn() and not screen_ref.busy:
+			open_peek(id))
+	_menu = Menu3d.new(_layer, {
+		"command": func(i: int) -> void: screen_ref.choose(i),
+		"pick": _list_pick,
+		"page": func(dir: int) -> void:
+			if not screen_ref.busy and screen_ref.is_hero_turn():
+				screen_ref._apply(ActTurn.page(screen_ref.screen, dir)),
+		"hover": _hover_row,
+	})
+	_result = Result3d.new(_layer) # last: over every other screen of the layer
+
+
+## the end of the battle (BattleEnd's board)
+func board(b: Dictionary) -> void:
+	_result.show(b)
 
 
 func _exit_tree() -> void:
@@ -56,28 +64,42 @@ func refresh() -> void:
 	var b := sr.battle
 	var s := sr.screen
 	var open := sr.is_hero_turn() and not sr.busy
-	var struck := {}
 	var p: Variant = sr.preview() if open else null
-	if p != null and p.get("ok", false):
-		for t in p.targets:
-			struck[t.unit] = true
-	_turns.show_queue(b, TurnRows.aim_of(b, s) if open else {}, struck)
-	_draw_bar(b, s, p)
+	var fs := _draw_bar(b, s, p)
+	var aim := TurnRows.aim_of(b, s) if open else {}
+	var key := hash([b.state.hash(), aim])
+	if _queue.get("key") != key:
+		_queue = {"key": key, "q": TurnRows.queue(b, aim)}
+	# the battle over: the list empties, as the web's queued = null (the result takes the screen)
+	_turns.update(b, {"rows": [], "at": -1} if b.over() else _queue.q, fs, "" if b.over() else b.actor().id)
 	_draw_menu(MenuView.of(b, s, open))
 	var height := HintRows.height_shown(b, s, sr.cursor)
 	var line := HudBits.tile_info(b.grid, sr.cursor) if height >= 0 else ""
 	var banner := sr.last_log
 	if String(sr.scenario.get("id", "")).begins_with(Survival.ID):
 		banner = Texts.t("Amanhece em %d turnos", "Dawn in %d turns") % Survival.turns_left(b.state) + ("" if banner == "" else " · " + banner)
-	_hints.show_hints(height, line, banner, HintRows.hints_for(b, s, open), open and b.can_undo())
+	if _said != "":
+		banner = _said
+	elif b.over():
+		banner = "" # the end screen says who won; the pill leaves like the Height and the hints
+	var rows := HintRows.hints_for(b, s, open) if _hints.rows_shown() else {"left": [], "right": []}
+	_hints3d.update(height, line, banner, rows)
+	_hints.show_hints(open and b.can_undo())
 	_lines.show_charges(b)
 
 
+## the ability name the banner shows while it plays; "" gives the pill back to the summary
+func announce(text: String) -> void:
+	_said = text
+	refresh()
+
+
 ## the acting unit's sheet, the aimed strike's plate and the target's sheet (the unit under the cursor otherwise)
-func _draw_bar(b: Battle, s: Dictionary, p: Variant) -> void:
+## returns the aimed strike on each target, the one under the cursor first
+func _draw_bar(b: Battle, s: Dictionary, p: Variant) -> Array:
 	if b.over():
-		_bar.show_bar({"sheet": {}, "plate": {}, "target": {}})
-		return
+		_bar.update({"sheet": {}, "plate": {}, "target": {}})
+		return []
 	var me := b.actor()
 	var under := Pathing.unit_at(b.state, screen_ref.cursor)
 	var other: Dictionary = under if not under.is_empty() and under.id != me.id else {}
@@ -90,70 +112,37 @@ func _draw_bar(b: Battle, s: Dictionary, p: Variant) -> void:
 			fs = BarView.forecast(b, ability, p)
 			# the one under the cursor first
 			fs = Util.stable_sort(fs, func(x: Dictionary, y: Dictionary) -> bool: return x.unit.id == other.get("id", "") and y.unit.id != other.get("id", ""))
-	_bar.show_bar(BarView.of(b.state, me, other, fs, ability))
+	_bar.update(BarView.of(b.state, me, other, fs, ability))
+	return fs
 
 
-## the command menu and the Agir lists, standing on the menu region's foot (menu-layout.ts): the list beside the menu
-## opens LEAD px to the right of it; the glove points at the focused row of the column the player moves
+## the command menu, the Agir lists and the action sheet, drawn in 3D (Menu3d, port of the web's menu3d/)
 func _draw_menu(v: Dictionary) -> void:
-	_view = v
-	var shown := not v.is_empty()
-	_main.visible = shown
-	_glove.visible = shown
-	_sub.visible = shown and not v.sub.is_empty()
-	_sheet.visible = shown and not v.sheet.is_empty()
-	if not shown:
-		return
-	var r := HudSkin.region("menu")
-	var foot := r.end.y
-	var lead := HudSkin.region("submenu").position.x - r.position.x
-	var listing: bool = not v.sub.is_empty()
-	_main.show_rows(v.head, v.rows, v.index, not listing)
-	_main.position = Vector2(r.position.x, foot - _main.size.y)
-	var col := _main
-	var at: int = v.index
-	if listing:
-		_sub.show_rows(v.sub_title, v.sub, v.sub_index, true)
-		_sub.position = Vector2(r.position.x + lead, foot - _sub.size.y)
-		col = _sub
-		at = v.sub_index
-	if not v.sheet.is_empty():
-		_sheet.show_sheet(v.sheet)
-		_sheet.position = HudSkin.region("detail").position
-	if at >= 0:
-		_glove.point_at(col.position + Vector2(2, HudSkin.px(MenuColumn.HEAD + (at + 0.5) * MenuColumn.ROW)))
-	else:
-		_glove.visible = false
+	_layer.finger = _hints._finger
+	_menu.update(v)
 
 
-## a click on the menu column: a command on the bare menu; once a list is open, the column holds the list before it,
-## and a click there goes back to it
-func _pick_main(i: int) -> void:
+## the mouse over a 3D menu row moves the focus there (hero-turn.ts hoverRow): a command's place in COMMANDS on the
+## bare menu, a row of the list in play otherwise
+func _hover_row(list: String, index: int) -> void:
 	var sr := screen_ref
-	if _view.get("sub", []).is_empty():
-		sr.choose(_view.commands[i])
+	if list == "abilities":
+		if ActTurn.is_act(sr.screen) and not sr.busy:
+			_list_hover(index)
 		return
-	if _view.depth <= 1:
-		var c: int = _view.commands[i]
-		if c != Command.index_of("act"):
-			sr.screen = {"k": "menu", "index": c}
-			sr.choose(c)
+	if sr.busy or not sr.is_hero_turn() or sr.screen.k != "menu" or sr.screen.index == index:
 		return
-	var back: Variant = Command.cancel_step(sr.battle, sr.screen)
-	if typeof(back) == TYPE_DICTIONARY and not back.is_empty():
-		sr._apply({"screen": back, "sound": "cancel"})
-
-
-func _hover_main(i: int) -> void:
-	var sr := screen_ref
-	if _view.get("sub", []).is_empty() and sr.screen.k == "menu" and _view.commands[i] != sr.screen.index:
-		sr.screen = {"k": "menu", "index": _view.commands[i]}
-		Sound.play("cursor")
-		sr._refresh()
+	if not Command.menu_rows(sr.battle).has(Command.COMMANDS[index]):
+		return
+	Sound.play("cursor")
+	sr.screen = {"k": "menu", "index": index}
+	sr._refresh()
 
 
 func _list_pick(i: int) -> void:
 	var sr := screen_ref
+	if not ActTurn.is_act(sr.screen) or sr.busy:
+		return
 	sr._apply(ActTurn.pick(sr.battle, sr.screen, i))
 
 

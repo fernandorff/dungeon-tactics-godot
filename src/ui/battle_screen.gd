@@ -19,6 +19,8 @@ var busy := false
 var paused := false
 var last_log := ""
 var _last_act := {}
+var tally := Tally.new() # damage and takedowns per unit, for the result's rows (memory only, as the web's)
+var _roster := {} # each unit's side and sheet as the screen opened: the fallen leave the state
 var _hud: BattleHud
 
 
@@ -43,6 +45,7 @@ func _ready() -> void:
 	view = BattleView.new()
 	vp.add_child(view)
 	view.build(battle.grid, battle.state)
+	_roster = Tally.roster_of(battle.state.units)
 	_hud = BattleHud.new()
 	_hud.screen_ref = self
 	add_child(_hud)
@@ -53,6 +56,16 @@ func _ready() -> void:
 func _save() -> void:
 	if save_key != "":
 		Store.set_key(save_key, battle.save())
+
+
+## the heroes' rows for the result: life left, damage, takedowns and the highlight
+func end_heroes() -> Array:
+	return tally.end_heroes(_roster, battle.state.units)
+
+
+## the end of the battle drawn over it (Result3d): BattleEnd's board
+func board(b: Dictionary) -> void:
+	_hud.board(b)
 
 
 func is_hero_turn() -> bool:
@@ -89,11 +102,17 @@ func _play(events: Array) -> void:
 	if events.is_empty():
 		return
 	var log := Texts.event_log(events, battle.state)
-	if log != "":
-		last_log = log
+	var team := {}
+	for id: String in _roster:
+		team[id] = _roster[id].team
+	tally.add_events(events, team)
 	_hud.refresh()
 	await view.play_events(events)
 	view.sync_units(battle.state)
+	# the summary takes the banner once the play is over, as the web's main.ts after hud.banner(null)
+	if log != "":
+		last_log = log
+	_hud.announce("")
 
 
 ## redraws the marks and the HUD from the screen and the ui

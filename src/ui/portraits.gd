@@ -25,7 +25,7 @@ static func sheet_of(def: String) -> String:
 	var base := cls if cls != "" else Content.base_def(def)
 	var id: String = BY_CLASS.get(base, "")
 	if id == "":
-		id = MODEL.get(Content.base_def(def), Content.units.get(def, {}).get("model", ""))
+		id = MODEL.get(base, Content.units.get(def, {}).get("model", "")) # a Roster sheet (dev-h0) takes its class's model, as dev-roster.ts gives it
 	return id if Content.data.get("faces", {}).has(id) else ""
 
 

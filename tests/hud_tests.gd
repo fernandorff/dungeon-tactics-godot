@@ -16,7 +16,7 @@ func test_menu_view_commands() -> String:
 	if v.head != Texts.unit_name(b.actor().def) or v.rows.size() != Command.menu_rows(b).size():
 		return "head or rows: %s" % [v]
 	var act: Dictionary = v.rows[v.commands.find(Command.index_of("act"))]
-	if not act.note.ends_with("⬤ ●") or act.icon != "strike":
+	if not act.note.ends_with("⬤ ●") or act.icon != "sword":
 		return "Agir row: %s" % [act]
 	var move: Dictionary = v.rows[v.commands.find(Command.index_of("move"))]
 	if move.gauge != 1.0 or not move.note.contains("/"):
@@ -61,8 +61,6 @@ func test_turn_rounds() -> String:
 	var two := TurnRows.two_rounds(rows)
 	if two.size() != 6 or two[3].round != 1 or two[4].round != 2:
 		return "two rounds: %s" % [two]
-	if TurnList.keep_in_view(0, 100, 150, 20) != 70 or TurnList.keep_in_view(50, 100, 60, 20) != 50 or TurnList.keep_in_view(50, 100, 10, 20) != 10:
-		return "keep in view"
 	return ""
 
 

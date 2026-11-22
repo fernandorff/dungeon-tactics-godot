@@ -76,6 +76,7 @@ static func release() -> void:
 	_font = null
 	_paper = null
 	Icons.release()
+	Menu3dIcon.release()
 
 
 ## the theme's serif (--font-ui3d): the system's Palatino or its kin, no font file shipped
@@ -115,6 +116,7 @@ static func paper(size: Vector2, head: float = 0.0, foot: float = 0.0, icon_w: f
 	m.set_shader_parameter("shade", SHADE)
 	m.set_shader_parameter("lit", LIT)
 	m.set_shader_parameter("edge", EDGE)
+	m.set_shader_parameter("paint", Layer3d.paint)
 	return m
 
 

@@ -109,18 +109,20 @@ func room(node: int) -> void:
 	var b: Battle = loaded if loaded != null and loaded.state.scenario == cast.scenario.id else CrawlFlow.new_battle(cast.scenario, randi() % 2147483647, cast.room)
 	var s := BattleScreen.new()
 	s.setup(cast.scenario, b, Saves.ROOM_KEY, cast.room)
-	s.finished.connect(func(won: bool) -> void: _room_end(cast.room, won, s.battle.state))
+	s.finished.connect(func(won: bool) -> void: _room_end(cast.room, won, s))
 	s.left_battle.connect(func() -> void: home())
 	Music.play("battle")
 	show_screen(s)
 
 
-func _room_end(r: Dictionary, won: bool, state: Dictionary) -> void:
-	var settled: Variant = CrawlFlow.settle_room(r, won, state)
+func _room_end(r: Dictionary, won: bool, s: BattleScreen) -> void:
+	var settled: Variant = CrawlFlow.settle_room(r, won, s.battle.state)
 	if settled == null:
 		home()
 		return
-	show_screen(EndScreen.new(self, settled))
+	# on to the map while the expedition goes on, else the town
+	var onward := expedition_map if settled.next != null and not settled.done else town
+	s.board(BattleEnd.room(settled, s.end_heroes(), r, onward))
 
 
 ## a standalone battle on one of the game's maps (the title's Battle, the old ?scenario=)
@@ -133,7 +135,7 @@ func skirmish(map_id: String) -> void:
 	s.setup(sc, b, key)
 	s.finished.connect(func(won: bool) -> void:
 		Store.set_key(key, "")
-		var d := Kit.dialog(s, Texts.t("Vitória!", "Victory!") if won else Texts.t("Derrota", "Defeat"), "", [[Texts.t("Voltar ao título", "Back to the title"), title]]))
+		s.board(BattleEnd.battle(won, [], s.end_heroes(), skirmish.bind(map_id), [Texts.t("Voltar ao título", "Back to the title"), title])))
 	s.left_battle.connect(title)
 	Music.play("battle") # every battle plays its own track, Until Dawn too, as the web's entry.ts
 	show_screen(s)
@@ -153,8 +155,7 @@ func survival() -> void:
 		var best := Survival.best()
 		if lasted > best:
 			Store.set_key(Survival.BEST_KEY, str(lasted))
-		var text := Texts.t("Turnos: %d de %d · Recorde: %s", "Turns: %d of %d · Record: %s") % [lasted, Survival.SURVIVE_TURNS, Texts.t("%d, novo!", "%d, new!") % lasted if lasted > best else str(best)]
-		Kit.dialog(s, Texts.t("Amanheceu!", "Dawn came!") if won else Texts.t("Derrota", "Defeat"), text, [[Texts.t("Voltar ao título", "Back to the title"), title]]))
+		s.board(BattleEnd.battle(won, [lasted, best], s.end_heroes(), survival, [Texts.t("Voltar ao título", "Back to the title"), title])))
 	s.left_battle.connect(title)
 	Music.play("battle") # every battle plays its own track, Until Dawn too, as the web's entry.ts
 	show_screen(s)
@@ -169,6 +170,18 @@ func _open_shot(shot: String) -> void:
 		"town":
 			Saves.new_game(1)
 			town()
+		"talk":
+			# the speech box: the first townsperson's rumour, typed out
+			Saves.new_game(1)
+			town()
+			var ts := _screen as TownScreen
+			if not ts.is_node_ready():
+				await ts.ready
+			for u: Dictionary in ts.st.units:
+				if u.id.begins_with("f-"):
+					ts._talk(u)
+					break
+			await get_tree().create_timer(4.0).timeout
 		"battle":
 			skirmish(Content.data.first_battle)
 		"room":
@@ -196,12 +209,14 @@ func _open_shot(shot: String) -> void:
 			Store.set_key(Saves.ROOM_KEY, "{}")
 			home()
 		"end":
-			# the board after the first room, won with everyone down: the life carried and the way on
+			# the board after the first room, won as it opens: the life carried and the way on, over the room
 			Saves.new_game(1)
 			var e := CrawlFlow.depart(7)
-			var node: int = Expedition.open_nodes(Expedition.map_of(e.seed), [])[0]
-			Store.set_key(Saves.ROOM_KEY, "{}")
-			_room_end({"node": node, "heroes": {}}, true, {"units": [], "bag": {}})
+			room(Expedition.open_nodes(Expedition.map_of(e.seed), [])[0])
+			var s := _screen as BattleScreen
+			if not s.is_node_ready():
+				await s.ready
+			_room_end(s.room, true, s)
 		"act", "esc":
 			skirmish(Content.data.first_battle)
 		"dawn":
@@ -248,7 +263,24 @@ func _open_shot(shot: String) -> void:
 	var k := args.find("--keys")
 	if k >= 0 and k + 1 < args.size() and _screen is BattleScreen:
 		for a in args[k + 1].split(","):
-			(_screen as BattleScreen).key(a)
+			# click:x;y and hover:x;y send real mouse events at window px (the 3D menu's buttons sit under a scaled parent)
+			if a.begins_with("click:") or a.begins_with("hover:"):
+				var xy := a.substr(6).split(";")
+				var at := Vector2(float(xy[0]), float(xy[1]))
+				var move := InputEventMouseMotion.new()
+				move.position = at
+				move.global_position = at
+				Input.parse_input_event(move)
+				if a.begins_with("click:"):
+					for down in [true, false]:
+						var press := InputEventMouseButton.new()
+						press.button_index = MOUSE_BUTTON_LEFT
+						press.pressed = down
+						press.position = at
+						press.global_position = at
+						Input.parse_input_event(press)
+			else:
+				(_screen as BattleScreen).key(a)
 			await get_tree().create_timer(0.6).timeout
 	var img := get_viewport().get_texture().get_image()
 	img.save_png(_shot[1])

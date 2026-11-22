@@ -43,6 +43,7 @@ static func play(view: BattleView, events: Array) -> void:
 				_steps(view, e.path.size())
 				await view.walk(e.unit, e.path)
 			"attack":
+				view.announced.emit(Texts.ability_name(e.ability))
 				Sound.play(Sound.attack_kind(e.ability))
 				magic = Content.abilities[e.ability].get("magic", false)
 				view.gesture(e.unit, UnitClips.gesture(e.ability))

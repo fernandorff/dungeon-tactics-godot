@@ -1,11 +1,11 @@
 class_name MenuView
 ## Pure side of the command menu (port of the web game's menu3d/menu-view.ts): the rows the menu, the Agir lists and the
 ## lock and slot steps show, which icon stands for each row, and the action sheet of the focused row. No nodes here.
-## A row: {label, note, off, icon, below, gauge}; `icon` an atlas id (Icons) or "status"; `gauge` -1 for none.
+## A row: {label, note, off, icon, below, gauge}; `icon` the mesh name exported from menu3d/models.ts; `gauge` -1 for none.
 ## A view: {head, rows, commands, index, depth, sub, sub_title, sub_index, sheet}; `sub` empty while the menu is alone.
 
 
-static func _row(label: String, note: String = "", off: bool = false, icon: String = "strike", below: bool = false, gauge: float = -1.0) -> Dictionary:
+static func _row(label: String, note: String = "", off: bool = false, icon: String = "sword", below: bool = false, gauge: float = -1.0) -> Dictionary:
 	return {"label": label, "note": note, "off": off, "icon": icon, "below": below, "gauge": gauge}
 
 
@@ -34,7 +34,7 @@ static func _column(b: Battle) -> Dictionary:
 			var left := maxi(0, most - b.state.turn.get("spent", 0))
 			note = "%d/%d" % [left, most]
 			gauge = float(left) / maxi(1, most)
-		rows.append(_row(Texts.command_name(c), note, not Command.enabled(b, c), Icons.COMMAND.get(c, "status"), false, gauge))
+		rows.append(_row(Texts.command_name(c), note, not Command.enabled(b, c), {"move": "boot", "undo": "boot", "act": "sword", "wait": "hourglass", "status": "scroll"}[c], false, gauge))
 		cmds.append(Command.index_of(c))
 	return {"head": Texts.unit_name(b.actor().def), "rows": rows, "commands": cmds}
 
@@ -64,12 +64,12 @@ static func _list(b: Battle, s: Dictionary) -> Dictionary:
 		if s.get("slot", "") != "":
 			var share: int = Content.abilities.get(id, {}).get("bonusShare", 100)
 			return {"title": Texts.t("%s: qual ação?", "%s: which action?") % name, "index": 1 if s.slot == "bonus" else 0, "rows": [
-				_row(Texts.t("Ação principal · 100%", "Main action · 100%"), "", false, "strike"),
-				_row(Texts.t("Secundária · %d%%", "Bonus · %d%%") % share, "", false, "move"),
+				_row(Texts.t("Ação principal · 100%", "Main action · 100%"), "", false, "sword"),
+				_row(Texts.t("Secundária · %d%%", "Bonus · %d%%") % share, "", false, "boot"),
 			]}
 		return {"title": Texts.t("%s: travar onde?", "%s: lock on?") % name, "index": 1 if s.lock == "tile" else 0, "rows": [
-			_row(Texts.t("No personagem", "On the character"), "", false, "strike"),
-			_row(Texts.t("Na casa", "On the tile"), "", false, "move"),
+			_row(Texts.t("No personagem", "On the character"), "", false, "sword"),
+			_row(Texts.t("Na casa", "On the tile"), "", false, "boot"),
 		]}
 	var rows: Array = []
 	for r in ActTurn.rows_of(b, s):
@@ -147,7 +147,7 @@ static func sheet(b: Battle, a: Dictionary, page: int = 0) -> Dictionary:
 		return {}
 	var owner := Texts.unit_name(b.actor().def)
 	if a.k == "item":
-		return {"owner": owner, "name": Texts.item_name(a.id), "icon": "heal", "page": 0, "pages": [{"title": Texts.t("Descrição", "Description"), "text": Texts.item_detail(a.id)}]}
+		return {"owner": owner, "name": Texts.item_name(a.id), "icon": "potion", "page": 0, "pages": [{"title": Texts.t("Descrição", "Description"), "text": Texts.item_detail(a.id)}]}
 	var titles := [Texts.t("Descrição", "Description"), Texts.t("Efeitos", "Effects"), Texts.t("Custo", "Cost")]
 	var empty := ["", Texts.t("Nenhum efeito além do golpe.", "No effect beyond the strike."), Texts.t("Sem custo; sai na hora.", "No cost; fires at once.")]
 	var pages: Array = []
@@ -157,28 +157,28 @@ static func sheet(b: Battle, a: Dictionary, page: int = 0) -> Dictionary:
 		for f: String in facts_by_page[i]:
 			lines.append(f.left(1).to_upper() + f.substr(1) + ".")
 		pages.append({"title": titles[i], "text": "\n".join(lines) if lines.size() else empty[i]})
-	return {"owner": owner, "name": Texts.ability_name(a.id), "icon": a.id, "page": posmod(page, pages.size()), "pages": pages}
+	return {"owner": owner, "name": Texts.ability_name(a.id), "icon": ability_model(a.id), "page": posmod(page, pages.size()), "pages": pages}
 
 
 ## a row of the target list: who, its life and how far it is now (half tiles, as Move shows)
 static func _target_row(b: Battle, r: Dictionary) -> Dictionary:
 	if r.k == "side":
-		return _row(Texts.t("Escolher aliados", "Pick allies"), "", false, "shield_bash") if r.side == "ally" else _row(Texts.t("Escolher inimigos", "Pick enemies"))
+		return _row(Texts.t("Escolher aliados", "Pick allies"), "", false, "shield") if r.side == "ally" else _row(Texts.t("Escolher inimigos", "Pick enemies"))
 	if r.k == "direct":
-		return _row(Texts.ability_name(r.ability), Texts.t("na área", "on the area"), false, r.ability)
+		return _row(Texts.ability_name(r.ability), Texts.t("na área", "on the area"), false, ability_model(r.ability))
 	var u := Combat.find_unit(b.state, r.unit)
 	var me := b.actor()
 	var far := Texts.t("você", "you") if u.id == me.id else Texts.distance_text(ActFlow.distance_to(b, u.id), b.grid.sub > 1)
 	# the shield or the sword says ally or enemy; the word went so the name keeps its size (web, Nov 19)
-	return _row(Texts.unit_name(u.def), "%d/%d · %s" % [u.hp, Content.units[u.def].hp, far], false, "shield_bash" if u.team == me.team else "strike")
+	return _row(Texts.unit_name(u.def), "%d/%d · %s" % [u.hp, Content.units[u.def].hp, far], false, "shield" if u.team == me.team else "sword")
 
 
 ## a row of the Agir list or of the actions screen: its note (an off one's reason) is a line under the name
 static func list_row(b: Battle, a: Dictionary) -> Dictionary:
 	if a.k == "pick":
-		return _row(Texts.t("Escolher alvo", "Pick a target")) if a.enabled else _row(Texts.t("Escolher alvo", "Pick a target"), Texts.t("sem alvos", "no targets"), true, "strike", true)
+		return _row(Texts.t("Escolher alvo", "Pick a target")) if a.enabled else _row(Texts.t("Escolher alvo", "Pick a target"), Texts.t("sem alvos", "no targets"), true, "sword", true)
 	if a.k == "group":
-		return _row(_group_name(a.group), reach_text(a) if a.enabled else Texts.t("sem alvos", "no targets"), not a.enabled, Icons.GROUP[a.group], true)
+		return _row(_group_name(a.group), reach_text(a) if a.enabled else Texts.t("sem alvos", "no targets"), not a.enabled, {"skills": "axe", "magic": "flame_none", "items": "potion"}[a.group], true)
 	var parts: Array = [Texts.kind_tag(a)]
 	if a.k == "item":
 		parts.append("×%d" % a.get("count", 0) if a.enabled else Texts.act_reason(a))
@@ -190,7 +190,7 @@ static func list_row(b: Battle, a: Dictionary) -> Dictionary:
 		parts.append(note if a.enabled else Texts.act_reason(a))
 	parts.append(reach_text(a))
 	var line := " · ".join(parts.filter(func(x: String) -> bool: return x != ""))
-	return _row(Texts.item_name(a.id) if a.k == "item" else Texts.ability_name(a.id), line, not a.enabled, "heal" if a.k == "item" else a.id, true)
+	return _row(Texts.item_name(a.id) if a.k == "item" else Texts.ability_name(a.id), line, not a.enabled, "potion" if a.k == "item" else ability_model(a.id), true)
 
 
 ## how many targets a row of the Agir list has this turn
@@ -199,3 +199,51 @@ static func reach_text(a: Dictionary) -> String:
 	if n <= 0:
 		return ""
 	return Texts.t("%d alvo%s", "%d target%s") % [n, "s" if n > 1 else ""]
+
+
+## The precedence in menu-view.ts matters when an ability qualifies for two models.
+static func ability_model(id: String) -> String:
+	var ab: Dictionary = Content.abilities[id]
+	if ab.heal[1] != 0:
+		return "potion"
+	if ab.get("magic", false):
+		return "flame_" + str(ab.get("element") if ab.get("element") else "none")
+	if ab.get("needsSight", false) and ab.range[1] > 1:
+		return "bow" if ab.range[1] > 4 or ab.get("push", 0) else "dagger"
+	if ab.get("radius", 0):
+		return "axe"
+	if ab.get("push", 0) or (ab.get("buff") is Dictionary and ab.buff.get("stun", false)):
+		return "shield"
+	return "dagger" if ab.range[1] > 1 else "sword"
+
+
+## what changed from the last draw, for the menu's animations (menu-view.ts changes): it comes in or leaves, the list
+## opens in a cascade or folds back (Esc), a list opened from the one beside the menu or closed back to it (`deeper`,
+## `shallower`: the columns slide), the focus moves, the page turns
+static func changes(prev: Dictionary, next: Dictionary) -> Array[String]:
+	var out: Array[String] = []
+	if prev.is_empty() and next.is_empty():
+		return out
+	if next.is_empty():
+		return ["leave"]
+	var had: bool = not prev.is_empty() and not prev.sub.is_empty()
+	var has: bool = not next.sub.is_empty()
+	if prev.is_empty():
+		out.append("enter")
+		if has:
+			out.append("cascade")
+		return out
+	if not had and has:
+		out.append("cascade")
+	if had and not has:
+		out.append("fold")
+	if had and has and next.depth > prev.depth:
+		out.append("deeper")
+	if had and has and next.depth < prev.depth:
+		out.append("shallower")
+	var focus := func(v: Dictionary) -> String: return "s%d.%d" % [v.depth, v.sub_index] if not v.sub.is_empty() else "m%d" % v.index
+	if focus.call(prev) != focus.call(next):
+		out.append("focus")
+	if not prev.sheet.is_empty() and not next.sheet.is_empty() and prev.sheet.page != next.sheet.page:
+		out.append("page")
+	return out

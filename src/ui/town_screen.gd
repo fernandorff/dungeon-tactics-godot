@@ -14,6 +14,8 @@ var _facing := Vector2(0, -1)
 var _overlay: Control
 var _hint: Label
 var _said := {} # townsfolk id → lines told
+var _layer := Layer3d.new()
+var _talk_box: Talk3d
 
 
 func _init(m: Main) -> void:
@@ -60,6 +62,16 @@ func _ready() -> void:
 	_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	bottom.add_child(_hint)
 	bottom.add_child(Kit.label(Texts.t("WASD ou setas: andar · Enter: falar ou entrar · Q/E: girar · Esc: menu", "WASD or arrows: walk · Enter: talk or go in · Q/E: turn · Esc: menu"), 14, Kit.MUTED))
+	add_child(_layer) # the speech box drawn in 3D (Talk3d), over the town
+	_talk_box = Talk3d.new(_layer)
+	# the town's own panels step out while someone talks, as the web's town HUD does (talk3d.ts layer.solo)
+	var panels: Array = [top.get_parent(), bottom.get_parent()] # Kit.panel hands back the box inside its frame
+	_talk_box.finished.connect(func() -> void:
+		for p: Control in panels:
+			p.visible = true)
+	_talk_box.started.connect(func() -> void:
+		for p: Control in panels:
+			p.visible = false)
 
 
 func _me() -> Dictionary:
@@ -119,7 +131,7 @@ func _recast() -> void:
 
 
 func _busy() -> bool:
-	return is_instance_valid(_overlay)
+	return is_instance_valid(_overlay) or _talk_box.talking()
 
 
 func _process(delta: float) -> void:
@@ -185,6 +197,7 @@ func _act(t: Dictionary) -> void:
 	_open(p)
 
 
+## a townsperson tells the next rumour; a party member greets and opens the Party screen on them (town-folk.ts talkTo)
 func _talk(u: Dictionary) -> void:
 	var f := _folk(u.id)
 	var who: String = view.names.get(u.id, "")
@@ -192,20 +205,20 @@ func _talk(u: Dictionary) -> void:
 		var k: int = _said.get(f.id, 0)
 		var line: Array = f.lines[k % f.lines.size()]
 		_said[f.id] = k + 1
-		_open(Kit.dialog(self, who, Texts.t(line[0], line[1]), [[Texts.t("Ok", "Ok"), _close_overlay]]))
+		_talk_box.say([{"who": {"name": f.name, "def": f.def, "pitch": f.pitch}, "pt": line[0], "en": line[1]}])
+		await _talk_box.finished
 		return
 	if u.id.begins_with("p-"):
 		var id: String = u.id.substr(2)
-		var gl: Array = TownMap.town().guild_line
-		_open(Kit.dialog(self, who, Texts.t(gl[0], gl[1]), [
-			[Texts.t("Ver ficha", "See the sheet"), func() -> void:
-				_overlay.queue_free()
-				var p := Places.open(self, main, "party")
-				p.member(id)
-				p.closed.connect(_close_overlay)
-				_open(p)],
-			[Texts.t("Ok", "Ok"), _close_overlay],
-		]))
+		var town := TownMap.town()
+		var gl: Array = town.guild_line
+		var cls := Content.base_def(u.def)
+		_talk_box.say([{"who": {"name": who, "def": cls, "pitch": town.class_voice.get(cls, 330)}, "pt": gl[0], "en": gl[1]}])
+		await _talk_box.finished
+		var p := Places.open(self, main, "party")
+		p.member(id)
+		p.closed.connect(_close_overlay)
+		_open(p)
 
 
 func _menu() -> void:

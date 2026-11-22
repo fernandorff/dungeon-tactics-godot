@@ -66,6 +66,8 @@ static func sheet(state: Dictionary, u: Dictionary, f: Dictionary = {}) -> Dicti
 		"hp": {"label": Texts.t("Vida", "HP"), "value": maxi(0, u.hp), "max": def.hp}, "change": change, "pools": pools.slice(0, 2),
 		"ct": {"label": "CT", "value": mini(u.ct, TurnQueue.THRESHOLD), "max": TurnQueue.THRESHOLD} if def.get("speed", 0) > 0 else {},
 		"line": " · ".join(line),
+		# the turn list's "+4" after the life: the life back at each of its turns (empty without a piece that gives it)
+		"hp_regen": "+%d" % def.hpRegen if def.get("hpRegen", 0) else "",
 	}
 
 
